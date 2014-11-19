@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="MMK.HashTagSearch.Controls.SearchNavigation"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mmkw="clr-namespace:MMK.Wpf;assembly=WPFTools"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <mmkw:CenterConverter x:Key="centerConverter"/>
+        <mmkw:KeyColorConverter x:Key="keyColorConverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <TreeView x:Name="LeftBar"
+            BorderThickness="0"
+            Style="{StaticResource HighlightStyle}"
+        	ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <TreeViewItem Header="Keys" Style="{StaticResource HighlightStyle}">
+                <ListView ItemsSource="{Binding KeyHashTags}" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+                          BorderThickness="0">
+                    <ListView.View>
+                        <!--TODO : Provide transparent style-->
+                        <GridView AllowsColumnReorder="False">
+                            <GridView.ColumnHeaderContainerStyle>
+                                <Style TargetType="{x:Type GridViewColumnHeader}">
+                                    <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                </Style>
+                            </GridView.ColumnHeaderContainerStyle>
+            
+                            <GridViewColumn Header="Minor"
+                                            DisplayMemberBinding="{Binding Path=Minor}" 
+                                            Width="30pt"/>
+                            <GridViewColumn Header="Major"
+                                            DisplayMemberBinding="{Binding Path=Major}" 
+                                            Width="30pt"/>
+                    </GridView>
+                    </ListView.View>
+                </ListView>
+            </TreeViewItem>
+            
+            <TreeViewItem Header="Styles" ItemsSource="{Binding StyleHashTags}" Style="{StaticResource HighlightStyle}"/>
+        </TreeView>
+    </Grid>
+</UserControl>

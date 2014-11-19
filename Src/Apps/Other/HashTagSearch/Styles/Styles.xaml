@@ -1,0 +1,75 @@
+﻿<ResourceDictionary x:Class="MMK.HashTagSearch.Styles"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <Style x:Key="MainStyle" TargetType="{x:Type Control}">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="Foreground" Value="#2d2d30"/>
+    </Style>
+    
+    <Style x:Key="HighlightStyle" TargetType="{x:Type Control}">
+        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"/>
+    </Style>
+
+    <Style x:Key="MainStyleTextBlock" TargetType="{x:Type TextBlock}">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="Foreground" Value="#2d2d30"/>
+    </Style>
+
+    <Style x:Key="HighlightStyleTextBlock" TargetType="{x:Type TextBlock}">
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"/>
+    </Style>
+
+    <Style x:Key="KeyItemStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource MainStyle}">
+        <Setter Property="FontSize" Value="10pt"/>
+        <Setter Property="TextAlignment" Value="Center"/>
+        <Setter Property="Width" Value="48pt"/>
+        <Setter Property="Padding" Value="5,1,5,1"/>
+    </Style>
+
+    <Style x:Key="ClearListBox" TargetType="{x:Type ListBox}" BasedOn="{StaticResource MainStyle}">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Margin" Value="0"/>
+    </Style>
+   
+    <Style x:Key="ContentStyle" TargetType="{x:Type DataGrid}" BasedOn="{StaticResource MainStyle}">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="ColumnHeaderStyle">
+            <Setter.Value>
+                <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource HighlightStyle}">
+                    <Setter Property="FontSize" Value="10pt"/>
+                    <Setter Property="Padding" Value="3pt,0.25pt,0,1.5pt"/>
+                    <Setter Property="Height" Value="15pt"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="RowStyle">
+            <Setter.Value>
+                <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource MainStyle}">
+                    <Setter Property="FontSize" Value="9pt"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="GridLinesVisibility" Value="None"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="AutoGenerateColumns" Value="False"/>
+        <Setter Property="CanUserResizeRows" Value="False"/>
+        <Setter Property="CanUserSortColumns" Value="False"/>
+    </Style>
+</ResourceDictionary>

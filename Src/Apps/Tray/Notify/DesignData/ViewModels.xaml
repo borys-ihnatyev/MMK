@@ -1,0 +1,30 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:MMK.Notify.ViewModel.HashTagFolders">
+    <vm:HashTagFoldersViewModel x:Key="HashTagFoldersViewModel">
+        <vm:HashTagFoldersViewModel.Folders>
+            <vm:FolderViewModel Path="D:\music\main">
+                <vm:FolderViewModel.Patterns>
+                    <vm:FolderPatternViewModel PatternString="#deep" Priority="3"/>
+                    <vm:FolderPatternViewModel PatternString="#newdisco" Priority="3"/>
+                </vm:FolderViewModel.Patterns>
+            </vm:FolderViewModel>
+
+            <vm:FolderViewModel Path="D:\music\pop">
+                <vm:FolderViewModel.Patterns>
+                    <vm:FolderPatternViewModel PatternString="#pop"/>
+                    <vm:FolderPatternViewModel PatternString="#rus"/>
+                    <vm:FolderPatternViewModel PatternString="#pop #rus"/>
+                </vm:FolderViewModel.Patterns>
+            </vm:FolderViewModel>
+
+            <vm:FolderViewModel Path="D:\music\spec">
+                <vm:FolderViewModel.Patterns>
+                    <vm:FolderPatternViewModel PatternString="#spec" Priority="2"/>
+                    <vm:FolderPatternViewModel PatternString="#rnb" Priority="4"/>
+                    <vm:FolderPatternViewModel PatternString="#trap" Priority="4"/>
+                </vm:FolderViewModel.Patterns>
+            </vm:FolderViewModel>
+        </vm:HashTagFoldersViewModel.Folders>
+    </vm:HashTagFoldersViewModel>
+</ResourceDictionary>
