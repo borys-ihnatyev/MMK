@@ -17,11 +17,11 @@ namespace MMK.HotMark.ViewModel.Main
     public class MainViewModel : Wpf.ViewModel.ViewModel
     {
         private readonly FileHashTagCollection files;
+        private HashTagModelChangeNotify hashTagModelChangeNotify;
+
+        //TODO Remove window with Behavior on view
         private readonly MainView window = Application.Current.Windows.OfType<MainView>().First();
         private string fileItemView;
-
-        private bool hasHashTags;
-        private HashTagModelChangeNotify hashTagModelChangeNotify;
 
         private HashTagViewModel selectedHashTag;
 
@@ -29,7 +29,6 @@ namespace MMK.HotMark.ViewModel.Main
 
         private bool isPianoKeyboardLayout;
         private bool canDirectEditHashTags;
-
 
         public MainViewModel()
         {
@@ -99,23 +98,14 @@ namespace MMK.HotMark.ViewModel.Main
                 if (!(isPianoKeyboardLayout ^ value)) return;
 
                 isPianoKeyboardLayout = value;
-                CanDirectEditHashTags = hasHashTags && !isPianoKeyboardLayout;
-
+                UpdateCanDirectEditHashTags();
                 NotifyPropertyChanged();
             }
         }
 
         public bool HasHashTags
         {
-            get { return hasHashTags; }
-            private set
-            {
-                if (value == hasHashTags) return;
-
-                hasHashTags = value;
-                CanDirectEditHashTags = hasHashTags && !isPianoKeyboardLayout;
-                NotifyPropertyChanged();
-            }
+            get { return HashTags.Count > 0; }
         }
 
         public bool CanDirectEditHashTags
@@ -123,11 +113,16 @@ namespace MMK.HotMark.ViewModel.Main
             get { return canDirectEditHashTags; }
             private set
             {
-                if(!(value ^ canDirectEditHashTags)) return;
-                
+                if(value == canDirectEditHashTags)
+                    return;
                 canDirectEditHashTags = value;
                 NotifyPropertyChanged();
             }
+        }
+
+        private void UpdateCanDirectEditHashTags()
+        {
+            CanDirectEditHashTags = HasHashTags && !isPianoKeyboardLayout;
         }
 
         #region Loading
@@ -139,9 +134,9 @@ namespace MMK.HotMark.ViewModel.Main
             pianoKeyBoardViewModel.PropertyChanged += PianoKeyBoardViewModelOnPropertyChanged;
         }
 
-        private void PianoKeyBoardViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        private void PianoKeyBoardViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if(propertyChangedEventArgs.PropertyName != "RecognizedKey")
+            if(e.PropertyName != "RecognizedKey")
                 return;
             if(!HasHashTags)
                 AddHashTag();
@@ -197,19 +192,26 @@ namespace MMK.HotMark.ViewModel.Main
 
         private void SetHashTagModelChangeNotify()
         {
-            if (HashTags.Count == GetFileItemMaxHashTagCount())
+            if (CalcFileItemMaxHashTagCount() == HashTags.Count)
                 hashTagModelChangeNotify = new RewriteHashTagModel(files.GetPaths(), files.ConjointHashTagModel);
             else
                 hashTagModelChangeNotify = new ChangeHashTagModel(files.GetPaths(), files.ConjointHashTagModel);
         }
 
+        private int CalcFileItemMaxHashTagCount()
+        {
+            return files.Count == 0
+                ? 0
+                : files.Select(fileItem => fileItem.HashTagModel.Count).Max();
+        }
+
         private void TrySelectFirstHashTag()
         {
-            if (HashTags.Count <= 0) return;
+            if (!HasHashTags) return;
 
             SelectedHashTag = HashTags[0];
-            HasHashTags = true;
-            SelectNextOrResetSelectedHashTag();
+            
+            UpdateCanDirectEditHashTags();
         }
 
         #endregion
@@ -230,20 +232,29 @@ namespace MMK.HotMark.ViewModel.Main
         {
             SelectedHashTag = new HashTagViewModel();
             HashTags.Add(SelectedHashTag);
-            HasHashTags = true;
+            UpdateCanDirectEditHashTags();
         }
 
 
         public ICommand RemoveHashTagCommand { get; private set; }
 
-        private void RemoveHashTag(HashTagViewModel item)
+        private void RemoveHashTag(HashTagViewModel hashTag)
         {
-            if (SelectedHashTag == item)
+            HashTags.Remove(hashTag);
+
+            if (SelectedHashTag == hashTag)
                 SelectNextOrResetSelectedHashTag();
 
-            HashTags.Remove(item);
+            UpdateCanDirectEditHashTags();
         }
 
+        private void SelectNextOrResetSelectedHashTag()
+        {
+            if (HasHashTags)
+                SelectNextHashTag();
+            else
+                SelectedHashTag = null;
+        }
         
         public ICommand KeyDownCommand { get; private set; }
 
@@ -317,26 +328,11 @@ namespace MMK.HotMark.ViewModel.Main
 
         #endregion
 
-        private int GetFileItemMaxHashTagCount()
-        {
-            return files.Count == 0
-                ? 0
-                : files.Select(fileItem => fileItem.HashTagModel.Count).Max();
-        }
-
-        private void SelectNextOrResetSelectedHashTag()
-        {
-            if (HashTags.Count > 1)
-                SelectNextHashTag();
-            else
-                ResetSelectedHashTag();
-        }
-
         private void SelectNextHashTag()
         {
             if (!HasHashTags) return;
 
-            int selectedHashTagItemIndex = HashTags.IndexOf(SelectedHashTag);
+            var selectedHashTagItemIndex = HashTags.IndexOf(SelectedHashTag);
 
             if (selectedHashTagItemIndex == HashTags.Count - 1)
                 selectedHashTagItemIndex = 0;
@@ -358,12 +354,6 @@ namespace MMK.HotMark.ViewModel.Main
                 --selectedHashTagItemIndex;
 
             SelectedHashTag = HashTags[selectedHashTagItemIndex];
-        }
-
-        private void ResetSelectedHashTag()
-        {
-            SelectedHashTag = null;
-            HasHashTags = false;
         }
     }
 }
