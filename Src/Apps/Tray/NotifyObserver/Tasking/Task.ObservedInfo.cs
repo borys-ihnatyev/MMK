@@ -7,11 +7,18 @@ namespace MMK.Notify.Observer.Tasking
     {
         public class ObservedInfo : INotifyable
         {
+            private readonly NotifyType originType;
+            
+            private string additionalDescription;
+
+            private string detailedDescription;
+
             public ObservedInfo(INotifyable notifyable)
             {
                 if (!TryInitialize(notifyable))
                     throw new ArgumentException("Unsupported type " + notifyable.GetType().FullName, "notifyable");
-
+                
+                originType = Type;
                 CommonDescription = notifyable.CommonDescription;
                 DetailedDescription = notifyable.DetailedDescription;
                 TargetObject = notifyable.TargetObject;
@@ -70,15 +77,39 @@ namespace MMK.Notify.Observer.Tasking
                 get { return FailureReason == null; }
             }
 
+            public bool IsRerunFailed
+            {
+                get { return IsFailed && Task.RunCount > 1; }
+            }
+
             public bool CanContinue { get; private set; }
 
             public NotifyType Type { get; internal set; }
 
             public string CommonDescription { get; private set; }
 
-            public string DetailedDescription { get; protected internal set; }
+            public string DetailedDescription
+            {
+                get { return detailedDescription + additionalDescription; }
+                protected internal set { detailedDescription = value; }
+            }
 
             public string TargetObject { get; protected internal set; }
+
+
+            internal void MarkRerun()
+            {
+                UnmarkRerun();
+                additionalDescription = "\n Retry once.";
+                Type = NotifyType.Warning;
+            }
+
+            internal void UnmarkRerun()
+            {
+                additionalDescription = String.Empty;
+                Type = originType;
+            }
+
 
             public bool IsSimilarTo(ObservedInfo info)
             {
