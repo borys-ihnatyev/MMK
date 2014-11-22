@@ -8,13 +8,13 @@ using Timer = System.Timers.Timer;
 
 namespace MMK.Notify.Controls
 {
-    public class BalloonTipController
+    public class BalloonTip
     {
         private readonly Timer messageQueueTimer;
         private readonly Queue<BalloonTipViewModel> messageQueue;
         private readonly LinkedList<BalloonTipWindow> activeBallonTipWindows;
 
-        public BalloonTipController()
+        public BalloonTip()
         {
             messageQueueTimer = new Timer(700);
             messageQueueTimer.Elapsed += OnTimerTryPush;

@@ -5,7 +5,7 @@ using MMK.Notify.Observer;
 
 namespace MMK.Notify.Controls.Model
 {
-    public class MessageTypeColorConverter : IValueConverter
+    public class NotifyTypeColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {

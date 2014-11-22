@@ -27,7 +27,7 @@ namespace MMK.Notify
 
         private readonly GroupTaskObserver taskObserver;
         private readonly NotifyObserver notifyObserver;
-        private readonly BalloonTipController notification;
+        private readonly BalloonTip notification;
 
         private readonly GlobalShortcutProviderCollection shortcutProviders;
 
@@ -69,7 +69,7 @@ namespace MMK.Notify
             taskObserver = new GroupTaskObserver();
             notifyObserver = new NotifyObserver(taskObserver);
 
-            notification = new BalloonTipController();
+            notification = new BalloonTip();
 
             MusicDownloadsWatcher = new MusicDownloadsWatcher();
             notifyIcon = new NotifyIcon
@@ -96,7 +96,7 @@ namespace MMK.Notify
             get { return notifyObserver; }
         }
 
-        public BalloonTipController Notification
+        public BalloonTip Notification
         {
             get { return notification; }
         }

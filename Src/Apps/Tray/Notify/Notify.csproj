@@ -136,8 +136,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controls\BalloonTipController.cs" />
-    <Compile Include="Controls\Model\MessageTypeColorConverter.cs" />
+    <Compile Include="Controls\BalloonTip.cs" />
+    <Compile Include="Controls\Model\NotifyTypeColorConverter.cs" />
     <Compile Include="Controls\ViewModel\BalloonTipViewModel.cs" />
     <Compile Include="Controls\View\BalloonTipWindow.xaml.cs">
       <DependentUpon>BalloonTipWindow.xaml</DependentUpon>
