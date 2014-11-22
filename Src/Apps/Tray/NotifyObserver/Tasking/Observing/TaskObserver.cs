@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
@@ -12,7 +13,6 @@ namespace MMK.Notify.Observer.Tasking.Observing
         public const int FailedTaskRerunCount = 10;
         public const int FailedTaskRerunPauseSeconds = 5;
 
-        private readonly ManualResetEvent taskSyncEvent;
         private readonly ManualResetEvent taskRunEvent;
         private readonly AutoResetEvent taskCancelEvent;
 
@@ -21,13 +21,12 @@ namespace MMK.Notify.Observer.Tasking.Observing
         public event Action<INotifyable> TaskFailed;
 
         private Thread thread;
-        private readonly Queue<Task> tasks;
+        private readonly ConcurrentQueue<Task> tasks;
 
         public TaskObserver()
         {
-            tasks = new Queue<Task>();
+            tasks = new ConcurrentQueue<Task>();
 
-            taskSyncEvent = new ManualResetEvent(false);
             taskRunEvent = new ManualResetEvent(false);
             taskCancelEvent = new AutoResetEvent(false);
 
@@ -68,52 +67,48 @@ namespace MMK.Notify.Observer.Tasking.Observing
 
         private void TaskObserverProc()
         {
-            while (HandleEvents())
+            while (!taskCancelEvent.WaitOne(0))
             {
-                ObserveTask(tasks.Dequeue());
+                taskRunEvent.WaitOne();
+                Task task;
+                if (tasks.TryDequeue(out task))
+                    TryObserveTask(task);
                 CheckForTasks();
             }
         }
 
-        private bool HandleEvents()
+        private void TryObserveTask(Task task)
         {
-            taskSyncEvent.Set();
-
-            taskRunEvent.WaitOne();
-
-            taskSyncEvent.Reset();
-
-            return !taskCancelEvent.WaitOne(0);
+            try
+            {
+                ObserveTask(task);
+            }
+            catch (Task.Cancel)
+            {
+            }
         }
 
         private void ObserveTask(Task task)
         {
-            try
+            var observedInfo = task.Run();
+
+            var isNeedRerun = IsNeedRerunTask(observedInfo);
+
+            if (isNeedRerun)
             {
-                var taskObservedInfo = task.Run();
+                observedInfo.MarkRerun();
+                AddTaskWithDeelay(task);
 
-                if (IsNeedRerunTask(taskObservedInfo))
-                {
-                    taskObservedInfo.DetailedDescription += "\n Retry once.";
-                    taskObservedInfo.Type = NotifyType.Warning;
-                    AddTaskWithDeelay(task);
-                }
-                else if (taskObservedInfo.IsFailed)
-                {
-                    taskObservedInfo.DetailedDescription = taskObservedInfo.DetailedDescription.Replace(
-                        "\n Retry once.", "");
-                    taskObservedInfo.Type = NotifyType.Error;
-                }
-
-                OnTaskObserved(taskObservedInfo);
+                if (task.RunCount > 1)
+                    return;
             }
-            catch (Task.Cancel)
-            {
+            else if (observedInfo.IsRerunFailed)
+                observedInfo.UnmarkRerun();
 
-            }
+            OnTaskObserved(observedInfo);
         }
 
-        private bool IsNeedRerunTask(Task.ObservedInfo taskObservedInfo)
+        private static bool IsNeedRerunTask(Task.ObservedInfo taskObservedInfo)
         {
             return taskObservedInfo.IsFailed
                    && taskObservedInfo.CanContinue
@@ -139,8 +134,9 @@ namespace MMK.Notify.Observer.Tasking.Observing
 
         private void CheckForTasks()
         {
-            if (tasks.Count != 0) return;
-            taskRunEvent.Reset();
+            lock (tasks)
+                if (tasks.Count == 0)
+                    taskRunEvent.Reset();
         }
 
         #endregion
@@ -197,36 +193,6 @@ namespace MMK.Notify.Observer.Tasking.Observing
             thread = new Thread(TaskObserverProc);
         }
 
-        protected T Sync<T>(Func<T> func)
-        {
-            T result;
-
-            if (IsRunning)
-            {
-                Pause();
-                taskSyncEvent.WaitOne();
-                result = func();
-                Start();
-            }
-            else
-                result = func();
-
-            return result;
-        }
-
-        protected void Sync(Action action)
-        {
-            if (IsRunning)
-            {
-                Pause();
-                taskSyncEvent.WaitOne();
-                action();
-                Start();
-            }
-            else
-                action();
-        }
-
         #endregion
 
         #region Adding
@@ -238,19 +204,17 @@ namespace MMK.Notify.Observer.Tasking.Observing
 
         public void Add(IEnumerable<Task> newTasks)
         {
-            Sync(() =>
-            {
-                newTasks = BeforeQueue(newTasks);
+            newTasks = BeforeQueue(newTasks);
 
-                var taskArray = newTasks as Task[] ?? newTasks.ToArray();
+            var taskArray = newTasks as Task[] ?? newTasks.ToArray();
 
-                foreach (var task in taskArray)
-                    tasks.Enqueue(task);
+            foreach (var task in taskArray)
+                tasks.Enqueue(task);
 
-                AfterQueue(taskArray);
+            AfterQueue(taskArray);
 
+            lock (tasks)
                 taskRunEvent.Set();
-            });
         }
 
         protected virtual IEnumerable<Task> BeforeQueue(IEnumerable<Task> newTasks)
@@ -269,7 +233,6 @@ namespace MMK.Notify.Observer.Tasking.Observing
             Cancell();
             taskRunEvent.Dispose();
             taskCancelEvent.Dispose();
-            taskSyncEvent.Dispose();
         }
     }
 }
