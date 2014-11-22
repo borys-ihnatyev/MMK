@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
-using System.Windows.Threading;
 using MMK.Notify.Controls;
 using MMK.Notify.Model;
 using MMK.Notify.Model.Launchers;
@@ -32,14 +31,41 @@ namespace MMK.Notify
 
         private readonly GlobalShortcutProviderCollection shortcutProviders;
 
+#if !DEBUG
+
+        static App()
+        {
+            AppDomain.CurrentDomain.UnhandledException += DomainUnhandledException;
+        }
+
+        private static void DomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            TryLogException(e.ExceptionObject);
+            Current.Shutdown();
+        }
+
+        private static void TryLogException(object error)
+        {
+            if (!(error is Exception))
+                return;
+            LogException((Exception) error);
+        }
+
+        private static void LogException(Exception exception)
+        {
+            using (var log = new StreamWriter(typeof (App).FullName + ".Error.log"))
+            {
+                log.WriteLine(exception.Message);
+                log.WriteLine(exception.StackTrace);
+            }
+        }
+#endif
+
         public App()
         {
             if (!AppGuard.IsSingleInstance())
                 Shutdown();
 
-#if !DEBUG
-            Dispatcher.UnhandledException += Dispatcher_UnhandledException;
-#endif
             taskObserver = new GroupTaskObserver();
             notifyObserver = new NotifyObserver(taskObserver);
 
@@ -174,20 +200,6 @@ namespace MMK.Notify
             ViewModel.IsVisible = true;
             MainWindow.Activate();
         }
-
-#if !DEBUG
-        private void Dispatcher_UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
-        {
-            try
-            {
-                notification.Push(NotifyType.Error, "Что-то пошло не так", e.Exception.Message);
-            }
-            finally
-            {
-                e.Handled = false;
-            }
-        }
-#endif
 
         #endregion
 
