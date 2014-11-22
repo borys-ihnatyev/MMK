@@ -38,6 +38,10 @@ namespace MMK.Notify.Observer.Tasking.Common.Base
             {
                 OnFileChange();
             }
+            catch (FileNotFoundException)
+            {
+                throw new Cancel();
+            }
             catch (IOException ex)
             {
                 ThrowAsNotifyableException(ex, true);
