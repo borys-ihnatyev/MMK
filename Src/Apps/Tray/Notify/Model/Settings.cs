@@ -61,7 +61,7 @@ namespace MMK.Notify.Model
             var houseFolderPath = PathExtension.Normalize(@"D:\music\house\");
             var electronicFolderPath = PathExtension.Normalize(@"D:\music\electronic\");
             var urbanFolderPath = PathExtension.Normalize(@"D:\music\urban\");
-            var mainFolderPath = PathExtension.Normalize(@"D:\music\main\");
+            var deepFolderPath = PathExtension.Normalize(@"D:\music\deep\");
             var specFolderPath = PathExtension.Normalize(@"D:\music\spec\");
             var mixesFolderPath = PathExtension.Normalize(@"D:\music\mixes\");
 
@@ -70,8 +70,8 @@ namespace MMK.Notify.Model
                 {mixesFolderPath, "#mix", 100},
                 {mixesFolderPath, "#mixes", 100},
                 
-                {mainFolderPath, "#deep", 3},
-                {mainFolderPath, "#newdisco", 3},
+                {deepFolderPath, "#deep", 3},
+                {deepFolderPath, "#newdisco", 3},
                 
                 {urbanFolderPath, "#urban", 3},
                 {urbanFolderPath, "#trap", 3},
