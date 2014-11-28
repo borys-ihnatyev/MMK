@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 // ReSharper disable once CheckNamespace
@@ -17,8 +18,18 @@ namespace MMK.Marking.Representation
 
             #region Constants
 
-            private static readonly string[] ArtistsSeparators =
+            private static readonly string[] FeatureArtistsSeparators =
             {
+                " feat. ",
+                " feat.",
+                " feat ",
+                " ft. ",
+                " ft.",
+            };
+
+            private static readonly string[] ArtistsSeparators = 
+            {
+
                 " feat. ",
                 " feat.",
                 " feat ",
@@ -87,9 +98,19 @@ namespace MMK.Marking.Representation
                 trackName = NormalizeTrackName(trackName).ToLower();
 
                 model.HashTagModel = HashTagModel.Parser.All(ref trackName);
+                
                 model.AddArtists(ExtractArtists());
-                model.Title = ExtractTitle();
+
+                string title; 
+
+                var titleArtists = ExtractTitleAndArtists(out title);
+
+                model.AddArtists(titleArtists);
+
+                model.Title = title;
+
                 model.MixType = ExtractRemixType();
+                
                 model.AddRemixArtists(ExtractRemixArtists());
             }
 
@@ -107,6 +128,22 @@ namespace MMK.Marking.Representation
                 trackName = trackName.Substring(artistsStringLength - 1 + ArtistTitleSeparator.Length);
 
                 return artists;
+            }
+
+            private IEnumerable<string> ExtractTitleAndArtists(out string title)
+            {
+                title = ExtractTitle();
+                
+                var titleArtists = title.Split(FeatureArtistsSeparators,StringSplitOptions.None);
+
+                if (titleArtists.Length <= 1)
+                    return new string[0];
+
+                title = titleArtists[0];
+
+                return titleArtists.Skip(1) //skeeps title
+                    .SelectMany(ta => ta.Split(ArtistsSeparators, StringSplitOptions.RemoveEmptyEntries))
+                    .ToArray();
             }
 
             private string ExtractTitle()
@@ -131,7 +168,6 @@ namespace MMK.Marking.Representation
 
                 return title;
             }
-
 
             private string ExtractRemixType()
             {
