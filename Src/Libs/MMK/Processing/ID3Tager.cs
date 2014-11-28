@@ -3,9 +3,10 @@ using System.IO;
 using MMK.Marking.Representation;
 using MMK.Utils;
 using TagLib;
-using Tag = TagLib.Id3v2.Tag;
-using IOFile = System.IO.File;
+using TagLib.Id3v2;
 using File = TagLib.File;
+using IOFile = System.IO.File;
+using Tag = TagLib.Tag;
 
 namespace MMK.Processing
 {
@@ -63,7 +64,6 @@ namespace MMK.Processing
 
         private void TrySetId3Tag()
         {
-            
             using (var mp3File = File.Create(filePath))
             {
                 SetId3Tag(mp3File);
@@ -88,13 +88,14 @@ namespace MMK.Processing
 
         private static Tag ReadOrCreateId3Tag(File mp3File)
         {
-            var tag = mp3File.GetTag(TagTypes.Id3v2, true) as Tag;
+            var tag = mp3File.GetTag(TagTypes.Id3v1 | TagTypes.Id3v2, true);
 
-            if (tag != null) return tag;
-            
-            tag = new Tag();
+            if (tag != null)
+                return tag;
+
+            tag = new TagLib.Id3v2.Tag();
             tag.CopyTo(mp3File.Tag, true);
-            tag = (Tag) mp3File.Tag;
+            tag = mp3File.Tag;
 
             return tag;
         }
@@ -110,7 +111,12 @@ namespace MMK.Processing
         {
             SetTagCoverArt(tag);
 
-            var tagKeyFrame = TagLib.Id3v2.TextInformationFrame.Get(tag, "TKEY", true);
+            var id3V2Tag = tag as TagLib.Id3v2.Tag;
+
+            if (id3V2Tag == null)
+                return;
+
+            var tagKeyFrame = TextInformationFrame.Get(id3V2Tag , "TKEY", true);
 
             tagKeyFrame.Text = new[]
             {
