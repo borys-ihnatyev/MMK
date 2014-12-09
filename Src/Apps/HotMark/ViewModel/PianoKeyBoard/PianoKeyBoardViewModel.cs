@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Windows.Input;
 using MMK.HotMark.Model.PianoKeyBoard;
@@ -35,8 +34,7 @@ namespace MMK.HotMark.ViewModel.PianoKeyBoard
             keyRecognizer = new KeyRecognizer();
             keyRecognizer.KeyRecognized += KeyRecognizerOnKeyRecognized;
 
-            var midiInstrumentValues = Enum.GetValues(typeof (MidiInstrument)) as IEnumerable<MidiInstrument>;
-            Contract.Assume(midiInstrumentValues != null);
+            var midiInstrumentValues = (MidiInstrument[])Enum.GetValues(typeof (MidiInstrument));
             MidiInstruments = new ObservableCollection<MidiInstrument>(midiInstrumentValues);
 
             KeyDownCommand = new Command<KeyEventArgs>(KeyDown);
