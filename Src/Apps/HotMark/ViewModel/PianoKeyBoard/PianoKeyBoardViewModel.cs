@@ -151,9 +151,8 @@ namespace MMK.HotMark.ViewModel.PianoKeyBoard
 
             var midiNotes = mapper.Press(e.Key);
             midiNotes.ForEach(NoteOn);
-            midiNotes
-                .Select(midiNote => keyViewModels.First(key => key.MidiNote == midiNote))
-                .ForEach(key => key.IsPressed = true);
+            
+            GetKeyViewModels(midiNotes).ForEach(key => key.IsPressed = true);
         }
 
 
@@ -165,9 +164,15 @@ namespace MMK.HotMark.ViewModel.PianoKeyBoard
             
             var midiNotes = mapper.Release(e.Key);
             midiNotes.ForEach(NoteOff);
-            midiNotes
-                .Select(midiNote => keyViewModels.First(vm => vm.MidiNote == midiNote))
-                .ForEach(keyVm => keyVm.Release());
+
+            GetKeyViewModels(midiNotes).ForEach(key => key.IsPressed = false);
+        }
+
+        private IEnumerable<PianoKeyViewModel> GetKeyViewModels(IEnumerable<int> midiNotes)
+        {
+            return midiNotes
+                .Select(midiNote => keyViewModels.FirstOrDefault(key => key.MidiNote == midiNote))
+                .Where(key => key != null);
         }
 
         #endregion
