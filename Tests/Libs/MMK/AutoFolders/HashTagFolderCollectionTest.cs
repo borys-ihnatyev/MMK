@@ -18,7 +18,7 @@ namespace MMK.Tests.AutoFolders
             new HashTagFolderCollection
             {
                 {@"D:\music\pop\", "#pop"},
-                {@"D:\music\main\", "#pop"},
+                {@"D:\music\deep\", "#pop"},
             };
         }
 
@@ -43,7 +43,7 @@ namespace MMK.Tests.AutoFolders
             new HashTagFolderCollection
             {
                 {@"D:\music\pop\", "#pop #house"},
-                {@"D:\music\main\", "#house #pop"}
+                {@"D:\music\deep\", "#house #pop"}
             };
         }
 
@@ -57,7 +57,7 @@ namespace MMK.Tests.AutoFolders
             {
                 {@"D:\music\pop\", "#pop #house"}
             };
-            collection.Add(@"D:\music\main\", "#pop");
+            collection.Add(@"D:\music\deep\", "#pop");
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace MMK.Tests.AutoFolders
         {
             var popFolderPath = PathExtension.Normalize(@"D:\music\pop\");
             var houseFolderPath = PathExtension.Normalize(@"D:\music\house\");
-            var mainFolderPath = PathExtension.Normalize(@"D:\music\main\");
+            var mainFolderPath = PathExtension.Normalize(@"D:\music\deep\");
             var specFolderPath = PathExtension.Normalize(@"D:\music\spec\");
 
             var collection = new HashTagFolderCollection
@@ -102,7 +102,7 @@ namespace MMK.Tests.AutoFolders
         {
             const string popPath = @"d:\music\pop";
             const string housePath = @"d:\music\house";
-            const string mainPath = @"d:\music\main";
+            const string mainPath = @"d:\music\deep";
 
             var collection = new HashTagFolderCollection
             {
@@ -151,7 +151,7 @@ namespace MMK.Tests.AutoFolders
         {
             var popFolderPath = PathExtension.Normalize(@"D:\music\pop\");
             var houseFolderPath = PathExtension.Normalize(@"D:\music\house\");
-            var mainFolderPath = PathExtension.Normalize(@"D:\music\main\");
+            var mainFolderPath = PathExtension.Normalize(@"D:\music\deep\");
             var specFolderPath = PathExtension.Normalize(@"D:\music\spec\");
             var mixesFolderPath = PathExtension.Normalize(@"D:\music\mixes\");
 
