@@ -7,11 +7,12 @@ namespace MMK.Marking
     {
         public new class Parser : HashTag.Parser
         {
-
             #region Const
+
             public const string HashString = "#";
-            private static readonly string[] MinorTones = {"moll", "minor", "min"};
+            private static readonly string[] MinorTones = {"moll", "minor", "min", "m"};
             private static readonly string[] MajorTones = {"dur", "major", "maj"};
+
             #endregion
 
             public static Note ToNote(string noteString)
@@ -91,7 +92,8 @@ namespace MMK.Marking
                 {
                     Reset();
 
-                    if (!IsValidStartIndex()) return null;
+                    if (!IsValidStartIndex())
+                        return null;
 
                     ExtractHashTagEntryStrings();
 
@@ -103,18 +105,15 @@ namespace MMK.Marking
 
                     ChangeNoteIfIsSharp();
 
-                    if (HasHashTagEntryCutNoteWithoutTone())
-                        return BuildEntry(Tone.Dur);
-
-                    return TryExtractToneFromHashTagEntryCutAndBuildEntry();
+                    return hashTagEntryCut.Length == 0
+                        ? BuildEntry(Tone.Dur)
+                        : TryExtractToneFromHashTagEntryCutAndBuildEntry();
                 }
 
                 private void Reset()
                 {
                     startIndex = hashTags.IndexOf(Hash, startIndex, StringComparison.Ordinal);
-
                     noteString = string.Empty;
-
                     hashTagEntry = string.Empty;
                     hashTagEntryCut = string.Empty;
                 }
@@ -127,9 +126,7 @@ namespace MMK.Marking
                 private void ExtractHashTagEntryStrings()
                 {
                     ++startIndex;
-                    hashTagEntry = hashTags.Substring(startIndex);
-                    hashTagEntry = hashTagEntry.Substring(0, CalcHashTagEntryLength());
-                    hashTagEntryCut = hashTagEntry;
+                    hashTagEntryCut = hashTagEntry = FirstWord(hashTags.Substring(startIndex));
                     noteString = hashTagEntryCut.Substring(0, 1);
                 }
 
@@ -171,37 +168,37 @@ namespace MMK.Marking
                     if (hashTagEntryCut[0] == '-')
                         hashTagEntryCut = hashTagEntryCut.Substring(1);
 
-                    if (MinorTones.FirstOrDefault(t => hashTagEntryCut.StartsWith(t)) == null)
-                        if (MajorTones.FirstOrDefault(t => hashTagEntryCut.StartsWith(t)) == null)
-                            if (hashTagEntryCut.StartsWith("m")) tone = Tone.Moll;
-                            else throw new ToneNotFoundException();
-                        else tone = Tone.Dur;
-                    else tone = Tone.Moll;
+                    if (MatchMinorTone(hashTagEntryCut))
+                        tone = Tone.Moll;
+                    else if (MatchMajorTone(hashTagEntryCut))
+                        tone = Tone.Dur;
+                    else
+                        throw new ToneNotFoundException();
                 }
 
-                private Entry BuildEntry(Note note, Tone tone)
+                private static bool MatchMinorTone(string word)
                 {
-                    return new Entry(new Key(note, tone), startIndex, hashTagEntry.Length);
+                    return MinorTones.FirstOrDefault(word.Equals) != null;
                 }
 
-                private Entry BuildEntry(Tone tone)
+                private static bool MatchMajorTone(string word)
                 {
-                    return BuildEntry(note, tone);
+                    return MajorTones.FirstOrDefault(word.Equals) != null;
+                }
+
+                private Entry BuildEntry(Note newNote, Tone newTone)
+                {
+                    return new Entry(new Key(newNote, newTone), startIndex, hashTagEntry.Length);
+                }
+
+                private Entry BuildEntry(Tone newTone)
+                {
+                    return BuildEntry(note, newTone);
                 }
 
                 private Entry BuildEntry()
                 {
                     return BuildEntry(note, tone);
-                }
-
-
-                private int CalcHashTagEntryLength()
-                {
-                    var hashTagEntryLength = hashTagEntry.IndexOf(' ');
-
-                    return hashTagEntryLength == -1
-                        ? hashTagEntry.Length
-                        : hashTagEntryLength + 1;
                 }
 
                 private void ChangeNoteIfIsSharp()
@@ -215,20 +212,15 @@ namespace MMK.Marking
                             if (!hashTagEntryCut.StartsWith(sharpDelimiter))
                                 return;
                         }
+
                         hashTagEntryCut = hashTagEntryCut.Substring(sharpDelimiter.Length);
                         note = ToNote(noteString + HashString);
                     }
                     catch (NoteNotFoundException)
                     {
-
                     }
                 }
 
-
-                private bool HasHashTagEntryCutNoteWithoutTone()
-                {
-                    return hashTagEntryCut.Length == 0 || Char.IsWhiteSpace(hashTagEntryCut[0]);
-                }
             }
         }
     }

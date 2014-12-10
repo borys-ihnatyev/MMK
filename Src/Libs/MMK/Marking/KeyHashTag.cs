@@ -6,14 +6,6 @@ namespace MMK.Marking
     [Serializable]
     public partial class KeyHashTag : HashTag
     {
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                return ((Key != null ? Key.GetHashCode() : 0)*397) ^ (int) Notation;
-            }
-        }
-
         [NonSerialized]
         public static readonly HashTag Unchecked = new HashTag("unch");
 
@@ -41,24 +33,28 @@ namespace MMK.Marking
             var hashTag = obj as KeyHashTag;
 
             if (hashTag == null) return false;
-            if (hashTag == this) return true;
 
-            return Equals(hashTag);
+            return hashTag == this || Equals(hashTag);
         }
 
         protected override bool Equals(HashTag other)
         {
             var hashTag = other as KeyHashTag;
-
             if (ReferenceEquals(hashTag,null)) return false;
-            if (ReferenceEquals(hashTag,this)) return true;
-
-            return Equals(hashTag);
+            return ReferenceEquals(hashTag,this) || Equals(hashTag);
         }
 
         private bool Equals(KeyHashTag other)
         {
             return other !=null && Equals(Key, other.Key) && Notation == other.Notation;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return ((Key != null ? Key.GetHashCode() : 0)*397) ^ (int) Notation;
+            }
         }
 
         public static implicit operator KeyHashTag(Key key)

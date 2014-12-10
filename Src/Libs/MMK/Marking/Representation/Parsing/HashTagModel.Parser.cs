@@ -1,28 +1,11 @@
-﻿namespace MMK.Marking.Representation
+﻿using System;
+
+namespace MMK.Marking.Representation
 {
     public partial class HashTagModel
     {
         public class Parser
         {
-            /// <summary>
-            /// Write all hash tags from hash tag model in target string
-            /// </summary>
-            /// <param name="value">target string</param>
-            /// <param name="hashTagModel">hash tag model</param>
-            /// <returns>target string with added hash tags from hash tag model</returns>
-            public static string Add(string value, HashTagModel hashTagModel)
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                    return hashTagModel.ToString();
-
-                if (hashTagModel.IsEmpty()) return value;
-
-                value = value.Trim();
-                value += " " + hashTagModel;
-
-                return value;
-            }
-
             /// <summary>
             /// Parsing all hash tag occurence in target string 
             /// </summary>
@@ -44,6 +27,7 @@
                 var hashTagModel = new HashTagModel();
 
                 var hashTagEntry = HashTag.Parser.First(value);
+
                 while (hashTagEntry != null)
                 {
                     hashTagModel.Add(hashTagEntry.HashTag);
@@ -51,9 +35,13 @@
                     hashTagEntry = HashTag.Parser.First(value);
                 }
 
-
                 value = value.Trim();
                 return hashTagModel;
+            }
+
+            private static bool IsHashTag(string value)
+            {
+                return value.StartsWith(HashTag.Hash) && value.Length > 1;
             }
         }
     }
