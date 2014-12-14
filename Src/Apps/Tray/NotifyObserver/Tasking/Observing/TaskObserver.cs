@@ -10,7 +10,6 @@ namespace MMK.Notify.Observer.Tasking.Observing
 {
     public class TaskObserver : IDisposable
     {
-        public const int FailedTaskRerunCount = 10;
         public const int FailedTaskRerunPauseSeconds = 5;
 
         private readonly ManualResetEvent taskRunEvent;
@@ -20,7 +19,10 @@ namespace MMK.Notify.Observer.Tasking.Observing
         public event Action<INotifyable> TaskObserved;
         public event Action<INotifyable> TaskFailed;
 
+        public event Action<INotifyable> Notify;
+
         private Thread thread;
+
         private readonly ConcurrentQueue<Task> tasks;
 
         public TaskObserver()
@@ -37,6 +39,7 @@ namespace MMK.Notify.Observer.Tasking.Observing
         {
             get { return tasks.Count; }
         }
+
 
         protected virtual void OnTaskObserved(Task.ObservedInfo info)
         {
@@ -63,6 +66,15 @@ namespace MMK.Notify.Observer.Tasking.Observing
                 TaskFailed(taskObservedInfo);
         }
 
+
+        protected virtual void OnNotify(INotifyable notifyable)
+        {
+            var handler = Notify;
+            if (handler != null) 
+                handler(notifyable);
+        }
+
+        
         #region Flow
 
         private void TaskObserverProc()
@@ -84,59 +96,53 @@ namespace MMK.Notify.Observer.Tasking.Observing
                 ObserveTask(task);
             }
             catch (Task.Cancel)
-            {
-            }
+            { }
         }
 
         private void ObserveTask(Task task)
         {
             var observedInfo = task.Run();
 
-            var isNeedRerun = IsNeedRerunTask(observedInfo);
-
-            if (isNeedRerun)
+            if (observedInfo.IsNeedRerun)
             {
                 observedInfo.MarkRerun();
-                AddTaskWithDeelay(task);
+                AddTaskWithDeelay(observedInfo.Task);
 
-                if (task.RunCount > 1)
+                if (task.RunCount < 1)
                     return;
             }
-            else if (observedInfo.IsRerunFailed)
-                observedInfo.UnmarkRerun();
+            else {
+                if (observedInfo.IsRerunFailed)
+                    observedInfo.UnmarkRerun();
+            }
 
             OnTaskObserved(observedInfo);
         }
 
-        private static bool IsNeedRerunTask(Task.ObservedInfo taskObservedInfo)
-        {
-            return taskObservedInfo.IsFailed
-                   && taskObservedInfo.CanContinue
-                   && taskObservedInfo.Task.RunCount < FailedTaskRerunCount;
-        }
-
         private void AddTaskWithDeelay(Task task)
         {
-            BeforeRerunTask(task);
-            var deelayTimer = new Timer(TimeSpan.FromSeconds(FailedTaskRerunPauseSeconds).TotalMilliseconds);
-            deelayTimer.Elapsed += delegate
-            {
-                Add(task);
-                deelayTimer.Stop();
-                deelayTimer.Dispose();
-            };
+            var deelayTimer = CreateDeelayTimer();
+            deelayTimer.Elapsed += delegate{ Add(task); };
             deelayTimer.Start();
         }
 
-        protected virtual void BeforeRerunTask(Task task)
+        private static Timer CreateDeelayTimer()
         {
+            return new Timer
+            {
+                Interval = TimeSpan.FromSeconds(FailedTaskRerunPauseSeconds).TotalMilliseconds,
+                AutoReset = true,
+                Enabled = false
+            };
         }
 
         private void CheckForTasks()
         {
             lock (tasks)
+            {
                 if (tasks.Count == 0)
                     taskRunEvent.Reset();
+            }
         }
 
         #endregion

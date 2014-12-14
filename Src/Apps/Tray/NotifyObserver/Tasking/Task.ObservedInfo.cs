@@ -7,10 +7,10 @@ namespace MMK.Notify.Observer.Tasking
     {
         public class ObservedInfo : INotifyable
         {
-            private readonly NotifyType originType;
-            
-            private string additionalDescription;
+            public const int FailedTaskRerunCount = 10;
 
+            private readonly NotifyType originType;
+            private string additionalDescription;
             private string detailedDescription;
 
             public ObservedInfo(INotifyable notifyable)
@@ -63,9 +63,11 @@ namespace MMK.Notify.Observer.Tasking
                 return true;
             }
 
+            
             internal Task Task { get; set; }
 
             public Exception FailureReason { get; private set; }
+
 
             public bool IsFailed
             {
@@ -80,6 +82,16 @@ namespace MMK.Notify.Observer.Tasking
             public bool IsRerunFailed
             {
                 get { return IsFailed && Task.RunCount > 1; }
+            }
+
+            public bool IsNeedRerun
+            {
+                get { return IsFailed && CanContinue && !IsReachRerunLimit; }
+            }
+
+            private bool IsReachRerunLimit
+            {
+                get { return Task.RunCount >= FailedTaskRerunCount; }
             }
 
             public bool CanContinue { get; private set; }
