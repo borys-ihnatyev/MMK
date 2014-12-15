@@ -10,7 +10,8 @@ using MMK.Notify.Model.Launchers;
 using MMK.Notify.Observer;
 using MMK.Notify.Observer.Remoting;
 using MMK.Notify.Observer.Tasking.Observing;
-using MMK.Notify.View;
+using MMK.Notify.Properties;
+using MMK.Notify.View.TrayMenu;
 using MMK.Notify.ViewModel.TrayMenu;
 using MMK.Processing.AutoFolder;
 using MMK.Wpf.Providers;
@@ -101,13 +102,6 @@ namespace MMK.Notify
             get { return notification; }
         }
 
-        private static Settings settings;
-
-        internal static Settings Settings
-        {
-            get { return settings ?? (settings = Settings.Load()); }
-        }
-
         protected override void OnStartup(StartupEventArgs e)
         {
             Initialize();
@@ -155,7 +149,7 @@ namespace MMK.Notify
 
         private void InitializeFolderCollection()
         {
-            FolderCollection = Settings.FolderCollection;
+            FolderCollection = Settings.Default.FolderCollection;
         }
 
         public new static App Current
@@ -214,7 +208,7 @@ namespace MMK.Notify
 
         #region Shortcuts
 
-        internal void LoadShortcuts()
+        private void LoadShortcuts()
         {
             (shortcutProviders as IGlobalShortcutProvider).SetWindow(MainWindow);
 

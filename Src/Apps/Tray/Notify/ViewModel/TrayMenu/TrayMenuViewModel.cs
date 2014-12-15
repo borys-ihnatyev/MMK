@@ -1,8 +1,6 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
-using MMK.Notify.Model;
-using MMK.Notify.Model.Launchers;
+using MMK.Notify.Properties;
 using MMK.Notify.View;
 using MMK.Wpf;
 
@@ -13,16 +11,39 @@ namespace MMK.Notify.ViewModel.TrayMenu
         private bool isVisible = true;
         private Window hashTagFoldersWindow;
 
-        private ToggleMenuItemViewModel enableDisableHotKeysMenuItem;
-        private ToggleMenuItemViewModel startStopMusicDownloadWatching;
+        private bool isEnableHotKeys;
+        private bool isEnableDownloadsWatch;
 
         public TrayMenuViewModel()
         {
-            CloseCommand = new Command(CloseCommandAction);
-            MenuItems = new ObservableCollection<MenuItemViewModel>();
+            OpenHashTagFoldersWindowCommand = new Command(OpenHashTagFoldersWindowCommandAction);
+            
+            StartListenShortcutsCommand = new Command(App.Current.StartListenShortcuts);
+            StopListenShortcutsCommand = new Command(App.Current.StopListenShortcuts);
+            
+            StartDownloadsWatchingCommand = new Command(App.Current.MusicDownloadsWatcher.Start);
+            StopDownloadsWatchingCommand = new Command(App.Current.MusicDownloadsWatcher.Stop);
+
+            ExitCommand = new Command(ExitCommandAction);
+            HideCommand = new Command(HideCommandAction);
         }
 
-        public ObservableCollection<MenuItemViewModel> MenuItems { get; set; }
+        protected override void OnLoadData()
+        {
+            LoadSettings();
+        }
+
+        private void LoadSettings()
+        {
+            IsEnableHotKeys = Settings.Default.IsEnableHotKeys;
+            IsEnableDownloadsWatch = Settings.Default.IsEnableDownloadsWatch;
+
+            if(isEnableHotKeys)
+                StartListenShortcutsCommand.Execute(null);
+
+            if(IsEnableDownloadsWatch)
+                StartDownloadsWatchingCommand.Execute(null);
+        }
 
         public bool IsVisible
         {
@@ -36,107 +57,39 @@ namespace MMK.Notify.ViewModel.TrayMenu
             }
         }
 
-
-        protected override void OnLoadData()
+        public bool IsEnableHotKeys
         {
-            LoadMenuItems();
-        }
-       
-        private void LoadMenuItems()
-        {
-            MenuItems.Add(
-                new MenuItemViewModel("Music collection manager",
-                () => MusicCollectionManagerLauncher.Instance.Launch(),
-                @"pack://siteoforigin:,,,/Resources/musiccollectionmanagerlogo.ico")
-            );
-
-            startStopMusicDownloadWatching = CreateStartStopDownloadsWatchingMenuItem();
-            MenuItems.Add(startStopMusicDownloadWatching);
-
-            enableDisableHotKeysMenuItem = CreateEnableDisableHotKeysMenuItem();
-            MenuItems.Add(enableDisableHotKeysMenuItem);
-
-            MenuItems.Add(new MenuItemViewModel(
-                "Save configuration",
-                SaveCurrentSettingsCommandAction,
-                @"pack://siteoforigin:,,,/Resources/settings-26.png"
-                )
-            );
-
-            MenuItems.Add(new MenuItemViewModel(
-                "Music folder collection manager",
-                OpenHashTagFoldersWindowCommandAction
-                )
-            );
-            
-            MenuItems.Add(new MenuItemViewModel(
-                "Close",
-                ExitCommandAction,
-                @"pack://siteoforigin:,,,/Resources/exit-26.png"
-                )
-            );
+            get { return isEnableHotKeys; }
+            set
+            {
+                if(value == isEnableHotKeys)
+                    return;
+                isEnableHotKeys = value;
+                NotifyPropertyChanged();
+            }
         }
 
-        
-
-        private static ToggleMenuItemViewModel CreateEnableDisableHotKeysMenuItem()
+        public bool IsEnableDownloadsWatch
         {
-            var enableHotKeysMenuItem = new MenuItemViewModel(
-                "Hot keys",
-                App.Current.StartListenShortcuts,
-                @"pack://siteoforigin:,,,/Resources/keyboard-26.png"
-                );
-
-            var disableHotKeysMenuItem = new MenuItemViewModel(
-                "Hot keys",
-                App.Current.StopListenShortcuts,
-                @"pack://siteoforigin:,,,/Resources/keyboard-26.png"
-                );
-
-            var hotKeysMenuItem = new ToggleMenuItemViewModel(
-                enableHotKeysMenuItem,
-                disableHotKeysMenuItem
-                );
-
-            if (App.Settings.IsEnableHotKeysMenuItem)
-                hotKeysMenuItem.Press();
-
-            return hotKeysMenuItem; 
+            get { return isEnableDownloadsWatch; }
+            set
+            {
+                if(value == isEnableDownloadsWatch)
+                    return;
+                isEnableDownloadsWatch = value;
+                NotifyPropertyChanged();
+            }
         }
 
-        private static ToggleMenuItemViewModel CreateStartStopDownloadsWatchingMenuItem()
-        {
-            var startMusicDownloadWatching = new MenuItemViewModel(
-                "Downloads watching",
-                App.Current.MusicDownloadsWatcher.Start,
-                @"pack://siteoforigin:,,,/Resources/glasses-26.png"
-                );
 
-            var stopMusicDownloadWatching = new MenuItemViewModel(
-                "Downloads watching",
-                App.Current.MusicDownloadsWatcher.Stop,
-                @"pack://siteoforigin:,,,/Resources/glasses-26.png"
-                );
+        public ICommand StartListenShortcutsCommand { get; set; }
+        public ICommand StopListenShortcutsCommand { get; set; }
 
-            var musicDownloadWatching = new ToggleMenuItemViewModel(
-                startMusicDownloadWatching,
-                stopMusicDownloadWatching
-            );
+        public ICommand StartDownloadsWatchingCommand { get; private set; }
+        public ICommand StopDownloadsWatchingCommand { get; private set; }
 
-            if (App.Settings.IsStartMusicDownloadWatching)
-                musicDownloadWatching.Press();
 
-            return musicDownloadWatching;
-        }
-
-        private void SaveCurrentSettingsCommandAction()
-        {
-            App.Settings.IsStartMusicDownloadWatching = startStopMusicDownloadWatching.IsPressed;
-            App.Settings.IsEnableHotKeysMenuItem = enableDisableHotKeysMenuItem.IsPressed;
-            App.Settings.FolderCollection = App.Current.FolderCollection;
-
-            App.Settings.Save();
-        }
+        public ICommand OpenHashTagFoldersWindowCommand { get; private set; }
 
         private void OpenHashTagFoldersWindowCommandAction()
         {
@@ -150,15 +103,19 @@ namespace MMK.Notify.ViewModel.TrayMenu
                 hashTagFoldersWindow.Focus();
         }
 
+
+        public ICommand ExitCommand { get; private set; }
+
         private void ExitCommandAction()
         {
             IsVisible = false;
-            App.Current.Shutdown();
+            Application.Current.Shutdown();
         }
 
-        public ICommand CloseCommand { get; private set; }
 
-        private void CloseCommandAction()
+        public ICommand HideCommand { get; private set; }
+
+        private void HideCommandAction()
         {
             IsVisible = false;
         }

@@ -1,4 +1,4 @@
-﻿<wpf:TrayWindow x:Class="MMK.Notify.View.TrayMenuWindow"
+﻿<wpf:TrayWindow x:Class="MMK.Notify.View.TrayMenu.TrayMenuWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -6,67 +6,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:trayMenu="clr-namespace:MMK.Notify.ViewModel.TrayMenu"
+        xmlns:view="clr-namespace:MMK.Notify.View.TrayMenu"
         mc:Ignorable="d"
-        Height="296" 
+        Height="193.537" 
         Width="286" 
         d:DataContext="{d:DesignInstance trayMenu:TrayMenuViewModel}">
-    <!--<wpf:TrayWindow.DataContext>
-        <vm:MainViewModel>
-            <vm:MainViewModel.MenuItems>
-                <vm:MenuItemViewModel Title="Menu 1" Image="pack://siteoforigin:,,,/Resources/keyboard-26.png"/>
-                <vm:MenuItemViewModel Title="Menu 2"/>
-            </vm:MainViewModel.MenuItems>
-        </vm:MainViewModel>
-    </wpf:TrayWindow.DataContext>-->
-
-    <Window.Resources>
-
-        <DataTemplate x:Key="ToggleButtonTemplate" DataType="trayMenu:ToggleMenuItemViewModel">
-            <Grid Height="32px" 
-                  Margin="-7px,0,-7px,0">
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="32px"/>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <Image Grid.Column="0" Source="{Binding Image}" Margin="6px"/>
-
-                <CheckBox Grid.Column="1"
-                          IsChecked="{Binding IsPressed, Mode=OneWay}"
-                                     Command="{Binding Command}"
-                                     VerticalAlignment="Center" 
-                                     HorizontalAlignment="Center">
-                </CheckBox>
-
-
-                <TextBlock Grid.Column="2" FontSize="14px"  VerticalAlignment="Center" Text="{Binding Title}"/>
-            </Grid>
-        </DataTemplate>
-
-        <DataTemplate x:Key="SimpleButtonTemplate" DataType="trayMenu:MenuItemViewModel">
-            <Button Margin="-7px,0,-7px,0" 
-                            Command="{Binding Command}"
-                            HorizontalContentAlignment="Left"
-                            Style="{StaticResource ClearButtonStyle}">
-                <Grid Height="32px">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="32px"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Image Source="{Binding Image}" Margin="6px"/>
-                    <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding Title}"/>
-                </Grid>
-            </Button>
-        </DataTemplate>
-
-        <trayMenu:MenuItemDataTemplateSelector x:Key="MenuItemDataTemplateSelector"
-             MenuItemDataTemplate="{StaticResource SimpleButtonTemplate}"
-             ToggleMenuItemDataTemplate="{StaticResource ToggleButtonTemplate}"
-            />
-
-    </Window.Resources>
 
     <Grid Margin="5px">
         <Grid.RowDefinitions>
@@ -88,7 +32,7 @@
 
             <!--Hide Button-->
             <Button 
-                Command="{Binding CloseCommand}"
+                Command="{Binding HideCommand}"
                 Style="{StaticResource ClearButtonStyle}">
                 <Image 
                     Margin="2px"
@@ -107,15 +51,42 @@
 
         <!--Menu Items-->
         <ListBox Grid.Row="1"
-                 ItemsSource="{Binding MenuItems}"
                  Style="{StaticResource ClearListBoxStyle}"
-                 ItemTemplateSelector="{StaticResource MenuItemDataTemplateSelector}">
+                 VerticalAlignment="Top">
+            <ListBox.Items>
+                <view:MenuItemControl
+                    Title="Music collection manager"
+                    Image="pack://siteoforigin:,,,/Resources/musiccollectionmanagerlogo.ico"
+                    />
+
+                <view:ToggleMenuItemControl
+                    IsPressed="{Binding IsEnableHotKeys}"
+                    Title="Hotkeys"
+                    Image="pack://siteoforigin:,,,/Resources/keyboard-26.png"
+                    PressCommand="{Binding StartListenShortcutsCommand}"
+                    ReleaseCommand="{Binding StopListenShortcutsCommand}"
+                    />
+
+                <view:ToggleMenuItemControl
+                    IsPressed="{Binding IsEnableDownloadsWatch}"
+                    Title="Downloads watching"
+                    Image="pack://siteoforigin:,,,/Resources/glasses-26.png"
+                    PressCommand="{Binding StartDownloadsWatchingCommand}"
+                    ReleaseCommand="{Binding StopDownloadsWatchingCommand}"
+                    />
+                
+                <view:MenuItemControl
+                    Title="Exit"
+                    Image="pack://siteoforigin:,,,/Resources/exit-26.png"
+                    Command="{Binding ExitCommand}"
+                    />
+            </ListBox.Items>
         </ListBox>
     </Grid>
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Deactivated">
-            <i:InvokeCommandAction Command="{Binding CloseCommand}"/>
+            <i:InvokeCommandAction Command="{Binding HideCommand}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
 

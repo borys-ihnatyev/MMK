@@ -1,0 +1,34 @@
+﻿<view:MenuItemControlBase x:Class="MMK.Notify.View.TrayMenu.ToggleMenuItemControl"
+                          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                          xmlns:view="clr-namespace:MMK.Notify.View.TrayMenu"
+                          mc:Ignorable="d">
+    <Button Margin="-7px,0,-7px,0"
+            HorizontalContentAlignment="Left"
+            Command="{Binding Command, RelativeSource={RelativeSource AncestorType={x:Type view:ToggleMenuItemControl}}}"
+            Style="{StaticResource ClearButtonStyle}">
+        <Grid Height="32px">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="32px" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Image Grid.Column="0"
+                   Source="{Binding Image, RelativeSource={RelativeSource AncestorType={x:Type view:ToggleMenuItemControl}}}"
+                   Margin="6px" />
+
+            <CheckBox Name="StateCheckBox" Grid.Column="1"
+                      IsChecked="{Binding IsPressed, RelativeSource={RelativeSource AncestorType={x:Type view:ToggleMenuItemControl}}, Mode=OneWay}"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center" />
+
+            <TextBlock Grid.Column="2" FontSize="14px"
+                       VerticalAlignment="Center"
+                       Text="{Binding Title, RelativeSource={RelativeSource AncestorType={x:Type view:ToggleMenuItemControl}}}" />
+        </Grid>
+    </Button>
+</view:MenuItemControlBase>

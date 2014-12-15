@@ -146,21 +146,18 @@
     <Compile Include="Model\Launchers\HotMarkLauncher.cs" />
     <Compile Include="Model\Launchers\MusicCollectionManagerLauncher.cs" />
     <Compile Include="Model\MusicDownloadsWatcher.cs" />
-    <Compile Include="Model\Settings.cs" />
     <Compile Include="Model\Launchers\SwiftSearchLauncher.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Settings.cs" />
     <Compile Include="Style\CustomizedWindow\VS2012WindowStyle.cs" />
     <Compile Include="ViewModel\HashTagFolders\FolderPatternViewModel.cs" />
     <Compile Include="ViewModel\HashTagFolders\FolderViewModel.cs" />
     <Compile Include="ViewModel\HashTagFolders\HashTagFoldersViewModel.cs" />
     <Compile Include="ViewModel\TrayMenu\TrayMenuViewModel.cs" />
-    <Compile Include="ViewModel\TrayMenu\MenuItemDataTemplateSelector.cs" />
-    <Compile Include="ViewModel\TrayMenu\MenuItemViewModel.cs" />
-    <Compile Include="ViewModel\TrayMenu\ToggleMenuItemViewModel.cs" />
     <Page Include="Controls\View\BalloonTipWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -177,7 +174,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\TrayMenuWindow.xaml">
+    <Page Include="View\TrayMenu\MenuItemControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TrayMenu\ToggleMenuItemControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TrayMenu\TrayMenuWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -188,7 +193,14 @@
     <Compile Include="View\HashTagFoldersWindow.xaml.cs">
       <DependentUpon>HashTagFoldersWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\TrayMenuWindow.xaml.cs">
+    <Compile Include="View\TrayMenu\MenuItemControl.xaml.cs">
+      <DependentUpon>MenuItemControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TrayMenu\MenuItemControlBase.cs" />
+    <Compile Include="View\TrayMenu\ToggleMenuItemControl.xaml.cs">
+      <DependentUpon>ToggleMenuItemControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TrayMenu\TrayMenuWindow.xaml.cs">
       <DependentUpon>TrayMenuWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
