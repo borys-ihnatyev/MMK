@@ -66,7 +66,9 @@ namespace MMK.Marking.Representation
                 if (remixArtists.Count > 0)
                     return string.Format("{0} ({1})", Title, RemixArtistsString);
 
-                return !string.IsNullOrWhiteSpace(MixType) ? string.Format("{0} ({1})", Title, MixType) : Title;
+                return !string.IsNullOrWhiteSpace(MixType) 
+                    ? string.Format("{0} ({1})", Title, MixType) 
+                    : Title;
             }
         }
 
@@ -93,12 +95,10 @@ namespace MMK.Marking.Representation
         {
             get
             {
-                string fullName = string.Format("{0} - {1}", ArtistsString, FullTitle);
+                var fullName = string.Format("{0} - {1}", ArtistsString, FullTitle);
 
                 if (!hashTagModel.IsEmpty())
-                {
                     fullName = string.Format("{0} {1}", fullName, hashTagModel);
-                }
 
                 return fullName;
             }
@@ -108,12 +108,9 @@ namespace MMK.Marking.Representation
         {
             get
             {
-                if (artists.Count > 0)
-                {
-                    return string.Join(", ", artists).ToTitleCase();
-                }
-
-                return Unknown;
+                return artists.Count > 0 
+                    ? string.Join(", ", artists).ToTitleCase() 
+                    : Unknown;
             }
         }
 
@@ -126,8 +123,8 @@ namespace MMK.Marking.Representation
         private void UpdateMainKey()
         {
             var keys = (from hashTag in hashTagModel
-                       where hashTag is KeyHashTag
-                       select ((KeyHashTag) hashTag).Key).ToArray();
+                where hashTag is KeyHashTag
+                select ((KeyHashTag) hashTag).Key).ToArray();
 
             MainKey = keys.Any() ? keys.First() : null;
         }
