@@ -10,12 +10,17 @@ namespace MMK.Notify.Observer.Tasking.Common.Base
     internal abstract class Mp3FileChangeTask : FileChangeTask
     {
         protected Mp3FileChangeTask(string oldPath) : base(oldPath)
-        {
-        }
+        { }
 
         protected Mp3FileChangeTask(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
+        { }
 
+
+        public TrackNameModel NameModel { get; private set; }
+
+        protected override string TargetObject
+        {
+            get { return String.Format("{0}\n{1}", NameModel.FullTitle, NameModel.FullTitle); }
         }
 
         protected override void Initialize()
@@ -44,7 +49,5 @@ namespace MMK.Notify.Observer.Tasking.Common.Base
             {
             }
         }
-
-        public TrackNameModel NameModel { get; private set; }
     }
 }
