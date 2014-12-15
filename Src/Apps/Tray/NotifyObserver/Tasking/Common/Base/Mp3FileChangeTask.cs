@@ -20,7 +20,7 @@ namespace MMK.Notify.Observer.Tasking.Common.Base
 
         protected override string TargetObject
         {
-            get { return String.Format("{0}\n{1}", NameModel.FullTitle, NameModel.FullTitle); }
+            get { return String.Format("{0}\n{1}", NameModel.FullTitle, NameModel.ArtistsString); }
         }
 
         protected override void Initialize()
