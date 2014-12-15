@@ -1,5 +1,9 @@
-﻿using System.Windows;
+﻿using System;
+using System.ComponentModel;
+using System.Reflection;
+using System.Windows;
 using System.Windows.Input;
+using MMK.Notify.Model.Settings;
 using MMK.Notify.Properties;
 using MMK.Notify.View;
 using MMK.Wpf;
@@ -26,23 +30,8 @@ namespace MMK.Notify.ViewModel.TrayMenu
 
             ExitCommand = new Command(ExitCommandAction);
             HideCommand = new Command(HideCommandAction);
-        }
 
-        protected override void OnLoadData()
-        {
-            LoadSettings();
-        }
-
-        private void LoadSettings()
-        {
-            IsEnableHotKeys = Settings.Default.IsEnableHotKeys;
-            IsEnableDownloadsWatch = Settings.Default.IsEnableDownloadsWatch;
-
-            if(isEnableHotKeys)
-                StartListenShortcutsCommand.Execute(null);
-
-            if(IsEnableDownloadsWatch)
-                StartDownloadsWatchingCommand.Execute(null);
+            PropertyChanged += OnPropertyChanged;
         }
 
         public bool IsVisible
@@ -57,28 +46,69 @@ namespace MMK.Notify.ViewModel.TrayMenu
             }
         }
 
+        [SettingsProperty]
         public bool IsEnableHotKeys
         {
             get { return isEnableHotKeys; }
             set
             {
-                if(value == isEnableHotKeys)
+                if (value == isEnableHotKeys)
                     return;
                 isEnableHotKeys = value;
                 NotifyPropertyChanged();
             }
         }
 
+        [SettingsProperty]
         public bool IsEnableDownloadsWatch
         {
             get { return isEnableDownloadsWatch; }
             set
             {
-                if(value == isEnableDownloadsWatch)
+                if (value == isEnableDownloadsWatch)
                     return;
                 isEnableDownloadsWatch = value;
                 NotifyPropertyChanged();
             }
+        }
+
+
+        protected override void OnLoadData()
+        {
+            LoadSettings();
+        }
+
+        private void LoadSettings()
+        {
+            IsEnableHotKeys = Settings.Default.IsEnableHotKeys;
+            IsEnableDownloadsWatch = Settings.Default.IsEnableDownloadsWatch;
+
+            if (isEnableHotKeys)
+                StartListenShortcutsCommand.Execute(null);
+
+            if (IsEnableDownloadsWatch)
+                StartDownloadsWatchingCommand.Execute(null);
+        }
+
+
+        private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            var propertyName = e.PropertyName;
+            
+            if(IsSettingsProperty(propertyName))
+                SaveSettings();
+        }
+
+        private bool IsSettingsProperty(string propertyName)
+        {
+            return Attribute.IsDefined(GetType().GetProperty(propertyName),typeof(SettingsPropertyAttribute));
+        }
+
+        private void SaveSettings()
+        {
+            Settings.Default.IsEnableHotKeys = IsEnableHotKeys;
+            Settings.Default.IsEnableDownloadsWatch = IsEnableDownloadsWatch;
+            Settings.Default.Save();
         }
 
 
@@ -88,9 +118,7 @@ namespace MMK.Notify.ViewModel.TrayMenu
         public ICommand StartDownloadsWatchingCommand { get; private set; }
         public ICommand StopDownloadsWatchingCommand { get; private set; }
 
-
         public ICommand OpenHashTagFoldersWindowCommand { get; private set; }
-
         private void OpenHashTagFoldersWindowCommandAction()
         {
             if (hashTagFoldersWindow == null)
@@ -105,7 +133,6 @@ namespace MMK.Notify.ViewModel.TrayMenu
 
 
         public ICommand ExitCommand { get; private set; }
-
         private void ExitCommandAction()
         {
             IsVisible = false;
@@ -114,7 +141,6 @@ namespace MMK.Notify.ViewModel.TrayMenu
 
 
         public ICommand HideCommand { get; private set; }
-
         private void HideCommandAction()
         {
             IsVisible = false;

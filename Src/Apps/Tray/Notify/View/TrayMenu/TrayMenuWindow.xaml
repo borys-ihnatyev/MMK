@@ -60,7 +60,7 @@
                     />
 
                 <view:ToggleMenuItemControl
-                    IsPressed="{Binding IsEnableHotKeys}"
+                    IsPressed="{Binding IsEnableHotKeys, Mode=TwoWay}"
                     Title="Hotkeys"
                     Image="pack://siteoforigin:,,,/Resources/keyboard-26.png"
                     PressCommand="{Binding StartListenShortcutsCommand}"
@@ -68,7 +68,7 @@
                     />
 
                 <view:ToggleMenuItemControl
-                    IsPressed="{Binding IsEnableDownloadsWatch}"
+                    IsPressed="{Binding IsEnableDownloadsWatch, Mode=TwoWay}"
                     Title="Downloads watching"
                     Image="pack://siteoforigin:,,,/Resources/glasses-26.png"
                     PressCommand="{Binding StartDownloadsWatchingCommand}"

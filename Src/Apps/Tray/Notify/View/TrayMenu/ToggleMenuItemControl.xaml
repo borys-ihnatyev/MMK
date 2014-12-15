@@ -22,7 +22,7 @@
                    Margin="6px" />
 
             <CheckBox Name="StateCheckBox" Grid.Column="1"
-                      IsChecked="{Binding IsPressed, RelativeSource={RelativeSource AncestorType={x:Type view:ToggleMenuItemControl}}, Mode=OneWay}"
+                      IsChecked="{Binding IsPressed, RelativeSource={RelativeSource AncestorType={x:Type view:ToggleMenuItemControl}}, Mode=TwoWay}"
                       VerticalAlignment="Center"
                       HorizontalAlignment="Center" />
 
