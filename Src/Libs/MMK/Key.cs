@@ -123,6 +123,8 @@ namespace MMK
 
         private bool Equals(Key other)
         {
+            if (ReferenceEquals(other,null))
+                return false;
             return Note == other.Note && Tone == other.Tone;
         }
 
@@ -202,7 +204,9 @@ namespace MMK
 
         public static bool operator ==(Key keyLeft, Key keyRight)
         {
-            return !ReferenceEquals(keyLeft, null) ? keyLeft.Equals(keyRight) : ReferenceEquals(keyRight, null);
+            if (!ReferenceEquals(keyLeft, null))
+                return keyLeft.Equals(keyRight);
+            return ReferenceEquals(keyRight, null);
         }
 
         public static bool operator !=(Key keyLeft, Key keyRight)
