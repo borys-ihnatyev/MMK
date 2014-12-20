@@ -10,7 +10,12 @@ namespace MMK
         [Pure]
         public static Note Create(int value)
         {
-            return (Note) (Math.Abs(value)%NotesCount);
+            value = value%NotesCount;
+
+            if (value < 0)
+                value = NotesCount + value;
+
+            return (Note) (value%NotesCount);
         }
     }
 }
