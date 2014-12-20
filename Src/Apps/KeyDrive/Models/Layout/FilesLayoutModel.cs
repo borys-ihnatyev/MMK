@@ -32,14 +32,14 @@ namespace MMK.KeyDrive.Models.Layout
             }
         }
 
-        private DirectoryInfo[] GetOrCreateDirectory(HashTagModel hashTagModel)
+        private DirectoryInfo[] GetOrCreateDirectory(IEnumerable<HashTag> hashTagModel)
         {
             if(hashTagModel == null)
                 throw new ArgumentNullException("hashTagModel");
             Contract.Ensures(Contract.Result<DirectoryInfo[]>().Length != 0);
             Contract.EndContractBlock();
 
-            var keySet = hashTagModel.OfType<KeyHashTag>().Select(h => h.Key).ToList();
+            var keySet = GetHashTagModelKeys(hashTagModel);
 
             if (keySet.Count == 0)
                 return new[] { RootHolder.Info as DirectoryInfo };
@@ -50,11 +50,22 @@ namespace MMK.KeyDrive.Models.Layout
                 .ToArray();
         }
 
+        private static List<Key> GetHashTagModelKeys(IEnumerable<HashTag> hashTagModel)
+        {
+            return hashTagModel
+                .OfType<KeyHashTag>()
+                .Select(h => h.Key)
+                .ToList();
+        }
+
         [Pure]
         private DirectoryInfo CreateKeyDirectory(Key key)
         {
             var path = DirectoryPath(key);
-            return Directory.Exists(path) ? new DirectoryInfo(path) : Directory.CreateDirectory(path);
+            
+            return Directory.Exists(path) 
+                ? new DirectoryInfo(path) 
+                : Directory.CreateDirectory(path);
         }
 
         [Pure]
