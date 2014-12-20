@@ -3,14 +3,21 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
+using MMK.Marking;
+using MMK.Marking.Representation;
 using IOPath = System.IO.Path;
 
 namespace MMK.Processing.AutoFolder
 {
     public class MusicFolder
     {
+        private const string DeprecatedFolderName = "deprecated";
+        public static readonly HashTag DeprecatedHashTag = new HashTag(DeprecatedFolderName);
+
         public readonly TimeSpan InnerFolderCreatePeriod = TimeSpan.FromDays(14);
         private readonly string path;
+
+        private MusicFolder deprecatedFolder;
 
         public MusicFolder(string path, bool createNew = false)
         {
@@ -20,7 +27,6 @@ namespace MMK.Processing.AutoFolder
                     throw new DirectoryNotFoundException();
                 else
                     Directory.CreateDirectory(path);
-
             this.path = path;
         }
 
@@ -29,137 +35,101 @@ namespace MMK.Processing.AutoFolder
             get { return path; }
         }
 
-        public string LastYearPath
+        public MusicFolder DeprecatedFolder
         {
-            get { return IOPath.Combine(path, DateTime.Now.ToString("yyyy")); }
-        }
-
-        public int LastInnerFolderNameNumber { get; private set; }
-
-        public string LastInnerFolderPath { get; private set; }
-
-
-        public ResultInfo MoveFile(string filePath)
-        {
-            Initialize();
-
-            filePath = PathExtension.Normalize(filePath);
-            var fileInfo = new FileInfo(filePath);
-
-            Contract.Assume(fileInfo.Directory != null);
-            Contract.Assume(fileInfo.Directory.Parent != null);
-
-            var newFilePath = IOPath.Combine(LastInnerFolderPath, fileInfo.Name);
-            fileInfo.MoveTo(newFilePath);
-
-            return BuildResultInfo(newFilePath);
-        }
-
-        private void Initialize()
-        {
-            CreateLastYearFolderIfNotExists();
-            CreateLastInnerFolderIfNotExists();
-        }
-
-        private void CreateLastYearFolderIfNotExists()
-        {
-            if (!Directory.Exists(LastYearPath))
-                Directory.CreateDirectory(LastYearPath);
-        }
-
-        private void CreateLastInnerFolderIfNotExists()
-        {
-            LastInnerFolderNameNumber = 0;
-            var lastInnerFolderInfo = new DirectoryInfo(IOPath.Combine(LastYearPath, "00"));
-
-            foreach (
-                var info in
-                    Directory.EnumerateDirectories(LastYearPath).Select(directory => new DirectoryInfo(directory)))
+            get
             {
-                int innerFolderNameNumber;
-                int.TryParse(info.Name, out innerFolderNameNumber);
-
-                if (innerFolderNameNumber <= LastInnerFolderNameNumber) continue;
-
-                LastInnerFolderNameNumber = innerFolderNameNumber;
-                lastInnerFolderInfo = info;
+                if (deprecatedFolder == null)
+                {
+                    var deprecatedFolderPath = CreateObsoleteFolderPath();
+                    deprecatedFolder = new MusicFolder(deprecatedFolderPath, true);
+                }
+                return deprecatedFolder;
             }
-
-            var createOffset = DateTime.Now - lastInnerFolderInfo.CreationTime;
-
-            if (createOffset > InnerFolderCreatePeriod)
-                lastInnerFolderInfo =
-                    new DirectoryInfo(IOPath.Combine(LastYearPath, (++LastInnerFolderNameNumber).ToString("D2")));
-
-            if (!lastInnerFolderInfo.Exists)
-                lastInnerFolderInfo.Create();
-
-            LastInnerFolderPath = lastInnerFolderInfo.FullName;
         }
 
-
-        public bool HasFile(string filePath)
+        private string CreateObsoleteFolderPath()
         {
-            return HasFile(new FileInfo(PathExtension.Normalize(filePath)));
+            var pathInfo = new DirectoryInfo(path);
+            Contract.Assert(pathInfo.Parent != null);
+            return IOPath.Combine(pathInfo.Parent.FullName, DeprecatedFolderName, pathInfo.Name);
         }
 
-        public bool HasFile(FileInfo fileInfo)
+        public ResultInfo MoveFile(string filePath, bool saveStructure = false)
         {
-            fileInfo.Refresh();
-
-            if (!fileInfo.Exists)
-                return false;
-
-            if (fileInfo.Directory == null)
-                return false;
-
-            if (fileInfo.Directory.Parent == null)
-                return false;
-
-            return LastYearPath.Equals(fileInfo.Directory.Parent.FullName, StringComparison.OrdinalIgnoreCase);
-        }
-
-
-        public ResultInfo MoveFile(string filePath, MusicFolder currentFolder)
-        {
-            Contract.Requires(currentFolder != null);
-            Contract.EndContractBlock();
-
-            if (currentFolder == this)
-                return BuildResultInfo(filePath);
-
-            var fileInfo = new FileInfo(filePath);
-            var fileInnerFolderNameNumber = GetFileInnerFolderNameNumber(fileInfo);
-
-            if (fileInnerFolderNameNumber > LastInnerFolderNameNumber)
-                return MoveFile(filePath);
-
-            var newFilePath = IOPath.Combine(Path, fileInnerFolderNameNumber.ToString("D2"), fileInfo.Name);
-            fileInfo.MoveTo(newFilePath);
-
-            return BuildResultInfo(newFilePath); 
-        }
-
-        private int GetFileInnerFolderNameNumber(FileInfo fileInfo)
-        {
-            var lastInnerFolderNameNumber = LastInnerFolderNameNumber;
-
-            if (fileInfo.Directory != null)
-                Int32.TryParse(fileInfo.Directory.Name, out lastInnerFolderNameNumber);
-
-            return lastInnerFolderNameNumber;
-        }
-
-
-        private ResultInfo BuildResultInfo(string newFilePath)
-        {
+            var location = GetNewLocation(filePath, saveStructure);
+            var newFilePath =  location.Move(filePath);
             return new ResultInfo
             {
-                NewFilePath = newFilePath,
-                MusicFolderInnerPath = LastInnerFolderPath,
-                MusicFolderRootPath = Path
+                MusicFolderInnerPath = location.Path,
+                MusicFolderRootPath = Path,
+                NewFilePath = newFilePath
             };
         }
+
+        private MusicFolderLocation GetNewLocation(string filePath, bool saveStructure)
+        {
+            var fileLocation = MusicFolderLocation.TryParse(filePath);
+            if (fileLocation == null)
+                return CalcLastLocation();
+            
+            if (fileLocation.RootPath.Equals(Path, StringComparison.OrdinalIgnoreCase))
+                return fileLocation;
+            
+            return GetSimilarLocation(fileLocation, saveStructure);
+        }
+
+        private MusicFolderLocation CalcLastLocation()
+        {
+            var lastLocation = GetLastLocation(DateTime.Now.Year);
+
+            var lastLocationInfo = new DirectoryInfo(lastLocation.Path);
+            if (lastLocationInfo.CreationTime + InnerFolderCreatePeriod >= DateTime.Now)
+                ++lastLocation;
+
+            return lastLocation;
+        }
+
+        private MusicFolderLocation GetSimilarLocation(MusicFolderLocation fileLocation, bool saveStructure)
+        {
+            var newLocation = GetLastLocation(fileLocation.Year);
+
+            if (saveStructure || newLocation.InnerFolder >= fileLocation.InnerFolder)
+                newLocation.InnerFolder = fileLocation.InnerFolder;
+
+            return newLocation;
+        }
+
+        private MusicFolderLocation GetLastLocation(int year)
+        {
+            var lastLocation = new MusicFolderLocation
+            {
+                RootPath = Path,
+                Year = year
+            };
+
+            lastLocation.InnerFolder = GetLastInnerFolder(lastLocation);
+
+            return lastLocation;
+        }
+
+        private static int GetLastInnerFolder(MusicFolderLocation location)
+        {
+            if (!Directory.Exists(location.YearPath))
+                return 0;
+
+            int lastInnerFolderNumber;
+
+            var folderNumbers = Directory.GetDirectories(location.YearPath)
+                .Select(IOPath.GetFileName)
+                .Where(innerFolder => Int32.TryParse(innerFolder, out lastInnerFolderNumber))
+                .Select(Int32.Parse)
+                .OrderBy(n => n)
+                .ToList();
+
+            return folderNumbers.LastOrDefault();
+        }
+
 
         public class Comparer : IComparer<MusicFolder>
         {

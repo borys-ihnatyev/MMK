@@ -54,13 +54,14 @@ namespace MMK.Processing.AutoFolder
 
         public MusicFolder.ResultInfo MoveFile(string filePath, HashTagModel fileHashTagModel)
         {
-            var currentFileMusicFolder = GetCurrentMusicFolder(filePath);
             var matchPath = GetMatchPath(fileHashTagModel);
             var matchFileMusicFolder = pathMusicFolderDictionary[matchPath];
 
-            return currentFileMusicFolder == null 
-                ? matchFileMusicFolder.MoveFile(filePath) 
-                : matchFileMusicFolder.MoveFile(filePath, currentFileMusicFolder);
+            var isDeprecated = fileHashTagModel.Contains(MusicFolder.DeprecatedHashTag);
+
+            return isDeprecated
+                ? matchFileMusicFolder.DeprecatedFolder.MoveFile(filePath, true) 
+                : matchFileMusicFolder.MoveFile(filePath);
         }
 
         [Pure]
@@ -100,19 +101,6 @@ namespace MMK.Processing.AutoFolder
         public bool Match(HashTagModel model)
         {
             return patternFolderDictionary.Keys.Any(pattern => model.IsSupersetOf(pattern.Model));
-        }
-
-        [Pure]
-        private MusicFolder GetCurrentMusicFolder(string filePath)
-        {
-            var fileInfo = new FileInfo(filePath);
-
-            if (!fileInfo.Exists)
-                return null;
-
-            return pathMusicFolderDictionary
-                    .Select(p => p.Value)
-                    .FirstOrDefault(folder => folder.HasFile(fileInfo));
         }
 
         [Pure]

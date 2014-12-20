@@ -149,6 +149,7 @@
     <Compile Include="Processing\AutoFolder\HashTagFolderCollection.cs" />
     <Compile Include="Processing\AutoFolder\HashTagFolderCollection.ISerialization.cs" />
     <Compile Include="Processing\AutoFolder\MusicFolder.cs" />
+    <Compile Include="Processing\AutoFolder\MusicFolderLocation.cs" />
     <Compile Include="Processing\ID3Tager.cs" />
     <Compile Include="Marking\KeyHashTag.NoteNotFoundException.cs" />
     <Compile Include="Marking\KeyHashTag.ToneNotFoundException.cs" />
@@ -171,6 +172,7 @@
     <Compile Include="Processing\AutoFolder\HashTagFolderCollection.SerializationItem.cs" />
     <Compile Include="Processing\AutoFolder\HashTagFolderCollection.Pattern.cs" />
     <None Include="packages.config" />
+    <Compile Include="Processing\AutoFolder\MusicFolderLocation.Parser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="KeyColors\adur.png">
