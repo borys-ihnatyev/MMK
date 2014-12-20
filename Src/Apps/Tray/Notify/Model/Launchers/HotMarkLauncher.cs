@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using MMK.HotMark;
@@ -21,7 +22,10 @@ namespace MMK.Notify.Model.Launchers
 
         private void OnPressed()
         {
-            var items = Explorer.GetForegroundSelectedItemsPaths().ToList();
+            var items = Explorer.GetForegroundSelectedItemsPaths()
+                .Where(path => File.Exists(path) || Directory.Exists(path))
+                .ToList();
+
             if (items.Any())
                 launcher.Launch(items);
         }
