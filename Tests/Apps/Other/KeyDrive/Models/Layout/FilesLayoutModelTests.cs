@@ -54,26 +54,16 @@ namespace MMK.KeyDrive.Models.Layout
         }
 
         [Test]
-        public void Test_CreateFoldersLayout()
-        {
-            foreach (var hashTagModel in BuildHashTagModelWithParalelKeys())
-            {
-                Assert.AreEqual(1, layoutModel[hashTagModel].Length);
-            }
-        }
-
-        [Test]
         public void Same_KeyFolder_ForParalelKeys()
         {
             foreach (var minorKey in CircleOfFifths.MinorKeys)
             {
                 var majKey = CircleOfFifths.GetParalel(minorKey);
 
-                var minKeyFolder = layoutModel[new HashTagModel() {new KeyHashTag(minorKey)}];
-                var majKeyFolder = layoutModel[new HashTagModel() {new KeyHashTag(majKey)}];
+                var minKeyFolder = layoutModel[new HashTagModel {new KeyHashTag(minorKey)}];
+                var majKeyFolder = layoutModel[new HashTagModel {new KeyHashTag(majKey)}];
 
                 Assert.AreEqual(minKeyFolder,majKeyFolder);
-
             }
         }   
 
