@@ -12,18 +12,9 @@ namespace MMK
         /// <returns></returns>
         public static Key GetParalel(Key key)
         {
-            var noteOffset = 3;
-            var tone = Tone.Dur;
-            if (key.IsDur())
-            {
-                noteOffset = -3;
-                tone = Tone.Moll;
-            }
-            var noteVal = (int) key.Note;
-            noteVal += noteOffset;
-            var note = NoteFactory.Create(noteVal);
-
-            return new Key(note, tone);
+            var note = key.IsMoll() ? (int)key.SubDominant : (int)key.Note - 3;
+            var paralelTone = key.IsMoll() ? Tone.Dur : Tone.Moll;
+            return new Key(NoteFactory.Create(note), paralelTone);
         }
 
         public static Key GetNext(Key key)
