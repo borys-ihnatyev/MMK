@@ -15,7 +15,7 @@ namespace MMK.Marking.Representation
             : base(collection, new HashTag.Comparer())
         { }
 
-        protected HashTagModel(SerializationInfo info, StreamingContext context) 
+        protected HashTagModel(SerializationInfo info, StreamingContext context)
             : base(info, context)
         { }
 
