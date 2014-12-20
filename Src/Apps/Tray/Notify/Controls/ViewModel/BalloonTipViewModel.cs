@@ -3,51 +3,57 @@ using MMK.Wpf.ViewModel;
 
 namespace MMK.Notify.Controls.ViewModel
 {
-    public class BalloonTipViewModel : ObservableObject
+    public class BalloonTipViewModel : ObservableObject, INotifyable
     {
         public BalloonTipViewModel()
         {
-            NotifyType = NotifyType.Success;
+            Type = NotifyType.Success;
         }
 
-        private NotifyType notifyType;
-        private string title;
-        private string details;
+        public BalloonTipViewModel(INotifyable notifyable)
+        {
+            Type = notifyable.Type;
+            CommonDescription = notifyable.CommonDescription;
+            DetailedDescription = notifyable.DetailedDescription;
+            TargetObject = notifyable.TargetObject;
+        }
+
+        private NotifyType type;
+        private string commonDescription;
+        private string detailedDescription;
         private string targetObject;
 
-        public NotifyType NotifyType
+        public NotifyType Type
         {
-            get { return notifyType; }
+            get { return type; }
             set
             {
-                if (value != notifyType)
-                {
-                    notifyType = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
-        public string Title
-        {
-            get { return title; }
-            set
-            {
-                if (value == title) return;
-                
-                title = value;
+                if (value == type) return;
+                type = value;
                 NotifyPropertyChanged();
             }
         }
 
-        public string Details
+        public string CommonDescription
         {
-            get { return details; }
+            get { return commonDescription; }
             set
             {
-                if (value == details) return;
+                if (value == commonDescription) return;
                 
-                details = value;
+                commonDescription = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public string DetailedDescription
+        {
+            get { return detailedDescription; }
+            set
+            {
+                if (value == detailedDescription) return;
+                
+                detailedDescription = value;
                 NotifyPropertyChanged();
             }
         }
@@ -63,6 +69,5 @@ namespace MMK.Notify.Controls.ViewModel
                 NotifyPropertyChanged();
             }
         }
-        
     }
 }
