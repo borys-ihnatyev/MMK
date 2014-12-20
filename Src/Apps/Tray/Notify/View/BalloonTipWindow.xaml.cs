@@ -1,10 +1,13 @@
-﻿using MMK.Notify.Controls.ViewModel;
-using System;
+﻿using System;
 using System.Timers;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Media.Animation;
+using MMK.Notify.ViewModel;
+using MMK.Wpf.Windows;
+using Timer = System.Timers.Timer;
 
-namespace MMK.Notify.Controls.View
+namespace MMK.Notify.View
 {
     public partial class BalloonTipWindow
     {
@@ -13,6 +16,8 @@ namespace MMK.Notify.Controls.View
         private readonly Timer hideTimer;
 
         public const int DefaultHeight = 120;
+
+        private readonly Taskbar taskbar;
 
         public BalloonTipWindow()
             : this(new BalloonTipViewModel())
@@ -24,6 +29,8 @@ namespace MMK.Notify.Controls.View
             InitializeComponent();
 
             Hide();
+
+            taskbar = new Taskbar();
 
             hideTimer = new Timer(2000) {AutoReset = true};
             hideTimer.Elapsed += ShowTimeElapsed;
@@ -42,14 +49,24 @@ namespace MMK.Notify.Controls.View
 
         private void BalloonTipWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            Left = SystemParameters.WorkArea.Right - e.NewSize.Width - 5;
+            switch (taskbar.Position)
+            {
+                case Taskbar.TaskbarPosition.Bottom:
+                case Taskbar.TaskbarPosition.Right:
+                case Taskbar.TaskbarPosition.Top:
+                    Left = Screen.PrimaryScreen.WorkingArea.Right - e.NewSize.Width - 5;
+                    break;
+                case Taskbar.TaskbarPosition.Left:
+                    Left = Screen.PrimaryScreen.WorkingArea.Left + 5;
+                    break;
+            }
         }
 
         private void ShowTimeElapsed(object sender, ElapsedEventArgs e)
         {
             App.Current.Dispatcher.Invoke(
                 () => RaiseEvent(new RoutedEventArgs(HideBeginEvent))
-                );
+            );
         }
 
         private void HideCompleted(object sender, EventArgs e)
@@ -59,17 +76,33 @@ namespace MMK.Notify.Controls.View
 
         public new void Show()
         {
-            Top = SystemParameters.WorkArea.Bottom - Height;
+            SetStartupPosition();
             base.Show();
             hideTimer.Start();
         }
 
-        private void AddMoveUp()
+        private void SetStartupPosition()
         {
+            switch (taskbar.Position)
+            {
+                case Taskbar.TaskbarPosition.Left:
+                case Taskbar.TaskbarPosition.Bottom:
+                case Taskbar.TaskbarPosition.Right:
+                    Top = Screen.PrimaryScreen.WorkingArea.Bottom - Height - 7;
+                    break;
+                case Taskbar.TaskbarPosition.Top:
+                    Top = Screen.PrimaryScreen.WorkingArea.Top + 7;
+                    break;
+            }
+        }
+
+        private void AddMove()
+        {
+
             var animation = new DoubleAnimation(
-                Top - (Height + 5),
-                new Duration(new TimeSpan(0, 0, 0, 0, 500))
-                );
+                CalcMoveNewTop(),
+                new Duration(TimeSpan.FromMilliseconds(500))
+            );
 
             Storyboard.SetTarget(animation, this);
             Storyboard.SetTargetProperty(animation, new PropertyPath(TopProperty));
@@ -83,12 +116,19 @@ namespace MMK.Notify.Controls.View
             moveUpStoryBoard.Begin();
         }
 
-        public void MoveUp()
+        private double CalcMoveNewTop()
+        {
+            if(taskbar.Position == Taskbar.TaskbarPosition.Top)
+                return Top + (Height + 5);
+            return Top - (Height + 5);
+        }
+
+        public void Move()
         {
             if (moveUpStoryBoard == null)
-                AddMoveUp();
+                AddMove();
             else
-                moveUpStoryBoard.Completed += (s, e) => AddMoveUp();
+                moveUpStoryBoard.Completed += (s, e) => AddMove();
         }
 
         public static RoutedEvent HideBeginEvent = EventManager.RegisterRoutedEvent(

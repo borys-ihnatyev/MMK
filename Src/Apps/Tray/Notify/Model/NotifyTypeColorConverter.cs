@@ -3,7 +3,7 @@ using System.Windows.Data;
 using System.Windows.Media;
 using MMK.Notify.Observer;
 
-namespace MMK.Notify.Controls.Model
+namespace MMK.Notify.Model
 {
     public class NotifyTypeColorConverter : IValueConverter
     {

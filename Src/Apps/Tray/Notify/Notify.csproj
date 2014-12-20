@@ -136,10 +136,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controls\BalloonTip.cs" />
-    <Compile Include="Controls\Model\NotifyTypeColorConverter.cs" />
-    <Compile Include="Controls\ViewModel\BalloonTipViewModel.cs" />
-    <Compile Include="Controls\View\BalloonTipWindow.xaml.cs">
+    <Compile Include="Model\NotificationController.cs" />
+    <Compile Include="Model\NotifyTypeColorConverter.cs" />
+    <Compile Include="ViewModel\BalloonTipViewModel.cs" />
+    <Compile Include="View\BalloonTipWindow.xaml.cs">
       <DependentUpon>BalloonTipWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\BooleanToColorErrorConverter.cs" />
@@ -159,7 +159,11 @@
     <Compile Include="ViewModel\HashTagFolders\FolderViewModel.cs" />
     <Compile Include="ViewModel\HashTagFolders\HashTagFoldersViewModel.cs" />
     <Compile Include="ViewModel\TrayMenu\TrayMenuViewModel.cs" />
-    <Page Include="Controls\View\BalloonTipWindow.xaml">
+    <Page Include="DesignData\BalloonTipViewModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\BalloonTipWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -342,6 +346,7 @@
       <Name>NotifyObserver</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
-using MMK.Notify.Controls;
 using MMK.Notify.Model;
 using MMK.Notify.Model.Launchers;
 using MMK.Notify.Observer;
@@ -28,7 +27,7 @@ namespace MMK.Notify
 
         private readonly GroupTaskObserver taskObserver;
         private readonly NotifyObserver notifyObserver;
-        private readonly BalloonTip notification;
+        private readonly NotificationController notification;
 
         private readonly GlobalShortcutProviderCollection shortcutProviders;
 
@@ -70,7 +69,7 @@ namespace MMK.Notify
             taskObserver = new GroupTaskObserver();
             notifyObserver = new NotifyObserver(taskObserver);
 
-            notification = new BalloonTip();
+            notification = new NotificationController();
 
             MusicDownloadsWatcher = new MusicDownloadsWatcher();
             notifyIcon = new NotifyIcon
@@ -97,7 +96,7 @@ namespace MMK.Notify
             get { return notifyObserver; }
         }
 
-        public BalloonTip Notification
+        public NotificationController Notification
         {
             get { return notification; }
         }

@@ -1,20 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Timers;
-using MMK.Notify.Controls.Model;
-using MMK.Notify.Controls.View;
-using MMK.Notify.Controls.ViewModel;
 using MMK.Notify.Observer;
-using Timer = System.Timers.Timer;
+using MMK.Notify.View;
+using MMK.Notify.ViewModel;
 
-namespace MMK.Notify.Controls
+namespace MMK.Notify.Model
 {
-    public class BalloonTip
+    public class NotificationController
     {
         private readonly Timer messageQueueTimer;
         private readonly Queue<BalloonTipViewModel> messageQueue;
         private readonly LinkedList<BalloonTipWindow> activeBallonTipWindows;
 
-        public BalloonTip()
+        public NotificationController()
         {
             messageQueueTimer = new Timer(700);
             messageQueueTimer.Elapsed += OnTimerTryPush;
@@ -49,7 +47,7 @@ namespace MMK.Notify.Controls
         {
             var balloonTipWindow = new BalloonTipWindow(message);
             foreach (var window in activeBallonTipWindows)
-                window.MoveUp();
+                window.Move();
             AddBallonTipWindow(balloonTipWindow);
         }
 
@@ -60,30 +58,14 @@ namespace MMK.Notify.Controls
             balloonTipWindow.Show();
         }
 
-        public void Push(NotifyType type, string title, string details = "", string targetObject = "")
+        public void Push(INotifyable notifyable)
         {
             lock (messageQueue)
             {
-                var message = new BalloonTipViewModel
-                {
-                    NotifyType = type,
-                    Title = title,
-                    Details = details,
-                    TargetObject = targetObject
-                };
+                var message = new BalloonTipViewModel(notifyable);
                 messageQueue.Enqueue(message);
                 messageQueueTimer.Start();
             }
-        }
-
-        public void Push(INotifyable notifyable)
-        {
-            Push(
-                notifyable.Type,
-                notifyable.CommonDescription,
-                notifyable.DetailedDescription,
-                notifyable.TargetObject
-            );
         }
     }
 }
