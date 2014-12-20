@@ -4,7 +4,7 @@ using MMK.Marking.Representation;
 using MMK.Processing.AutoFolder;
 using NUnit.Framework;
 
-namespace MMK.Tests.AutoFolders
+namespace MMK.Tests.Processing.AutoFolder
 {
     [TestFixture]
     public class HashTagFolderCollectionTest
@@ -48,7 +48,6 @@ namespace MMK.Tests.AutoFolders
         }
 
         // ReSharper restore ObjectCreationAsStatement
-
 
         [Test]
         public void NotThrowsException_OnAddFolderWithSinglePatternThatHasSameHashTag()

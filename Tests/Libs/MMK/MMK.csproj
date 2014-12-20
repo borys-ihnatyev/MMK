@@ -66,11 +66,13 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="AutoFolders\HashTagFolderCollectionTest.cs" />
+    <Compile Include="Base\FileUsageTestFixture.cs" />
+    <Compile Include="Processing\AutoFolder\HashTagFolderCollectionTest.cs" />
     <Compile Include="KeyTests.cs" />
     <Compile Include="Marking\HashTagModelTest.cs" />
     <Compile Include="Marking\HashTagTest.cs" />
     <Compile Include="Marking\Parsing\HashTagModelParserTest.cs" />
+    <Compile Include="Processing\AutoFolder\MusicFolderLocationParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuintCircleTests.cs" />
   </ItemGroup>

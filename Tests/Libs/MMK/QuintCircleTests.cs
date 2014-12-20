@@ -26,13 +26,28 @@ namespace MMK.Tests
         [TestCase(Tone.Dur)]
         public void Line(Tone tone)
         {
-
             var key = new Key(Note.F, tone);
-            for (int i = 0; i < notesInQuintOrder.Length; i++)
-            { 
-                Assert.AreEqual(notesInQuintOrder[i] + tone.ToString().ToLower(), key.ToString());
+            foreach (var t in notesInQuintOrder)
+            {
+                Assert.AreEqual(t + tone.ToString().ToLower(), key.ToString());
                 key = CircleOfFifths.GetNext(key);
             }
+        }
+
+        [Test]
+        public void Relative_KeyTestMoll()
+        {
+            var key = new Key(Note.A, Tone.Moll);
+            var expectedRelative = new Key(Note.C, Tone.Dur);
+            Assert.AreEqual(expectedRelative, CircleOfFifths.GetParalel(key));
+        }
+
+        [Test]
+        public void Relative_KeyTestDur()
+        {
+            var key = new Key(Note.C, Tone.Dur);
+            var expectedRelative = new Key(Note.A, Tone.Moll);
+            Assert.AreEqual(expectedRelative, CircleOfFifths.GetParalel(key));
         }
     }
 }
