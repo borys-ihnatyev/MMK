@@ -116,20 +116,22 @@ namespace MMK
 
         public override bool Equals(object obj)
         {
-            if (obj == null)
-                return false;
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return obj is Key && Equals((Key) obj);
+        }
 
-            var rKey = obj as Key;
-
-            if (rKey == null)
-                return false;
-
-            return (Note == rKey.Note) && (Tone == rKey.Tone);
+        private bool Equals(Key other)
+        {
+            return Note == other.Note && Tone == other.Tone;
         }
 
         public override int GetHashCode()
         {
-            return Note.GetHashCode() ^ Tone.GetHashCode();
+            unchecked
+            {
+                return ((int) Note*397) ^ (int) Tone;
+            }
         }
 
 
