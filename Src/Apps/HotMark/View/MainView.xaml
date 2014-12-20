@@ -104,8 +104,7 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
-    <Grid IsHitTestVisible="True"
-          Margin="5">
+    <Grid IsHitTestVisible="True" Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="26" />
