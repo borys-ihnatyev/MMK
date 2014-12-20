@@ -1,0 +1,8 @@
+﻿<MainViewModel xmlns="clr-namespace:MMK.MagicPlaylist.ViewModels"
+               xmlns:system="clr-namespace:System;assembly=mscorlib">
+    <MainViewModel.SourceDirs>
+        <system:String>
+            D:\documents\university\Final Work
+        </system:String>
+    </MainViewModel.SourceDirs>
+</MainViewModel>
