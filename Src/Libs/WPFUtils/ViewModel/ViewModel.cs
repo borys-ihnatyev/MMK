@@ -69,10 +69,11 @@ namespace MMK.Wpf.ViewModel
         {
             var errors = new Collection<ValidationResult>();
             
-            if(Validator.TryValidateProperty(columnName, new ValidationContext(this), errors))
-                return null;
-
-            return errors[0].ErrorMessage;
+            var validationContext = new ValidationContext(this);
+            
+            return Validator.TryValidateProperty(columnName, validationContext, errors) 
+                ? null 
+                : errors[0].ErrorMessage;
         }
 
         public string Error
