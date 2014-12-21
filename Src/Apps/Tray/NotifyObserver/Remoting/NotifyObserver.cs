@@ -38,7 +38,8 @@ namespace MMK.Notify.Observer.Remoting
 
         public void Start()
         {
-            if (IsStarted) return;
+            if (IsStarted) 
+                return;
 
             var channel = new IpcChannel(NotifyObserverRemotingInfo.IpcChannelPortName);
             ChannelServices.RegisterChannel(channel, false);
@@ -74,6 +75,16 @@ namespace MMK.Notify.Observer.Remoting
             observer.Add(tasks);
         }
 
+        public void Stop()
+        {
+            if(!IsStarted) 
+                return;
+
+            var channel = new IpcChannel(NotifyObserverRemotingInfo.IpcChannelPortName);
+            ChannelServices.UnregisterChannel(channel);
+
+            IsStarted = false;
+        }
 
         public void ChangeHashTagModel(string path, HashTagModel add, HashTagModel remove)
         {
