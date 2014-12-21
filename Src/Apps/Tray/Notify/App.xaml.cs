@@ -11,7 +11,6 @@ using MMK.Notify.Observer.Remoting;
 using MMK.Notify.Observer.Tasking.Observing;
 using MMK.Notify.Properties;
 using MMK.Notify.Services;
-using MMK.Notify.Views.TrayMenu;
 using MMK.Processing.AutoFolder;
 using MMK.Wpf.Providers;
 using Application = System.Windows.Application;

@@ -179,10 +179,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controllers\NotificationController.cs" />
-    <Compile Include="Controllers\TrayMenuController.cs" />
+    <Compile Include="Services\NotificationService.cs" />
+    <Compile Include="Services\TrayMenuService.cs" />
     <Compile Include="Model\NotifyTypeColorConverter.cs" />
-    <Compile Include="Controllers\TaskProgressController.cs" />
     <Compile Include="ViewModels\BalloonTipViewModel.cs" />
     <Compile Include="ViewModels\TaskProgressViewModel.cs" />
     <Compile Include="Views\BalloonTipWindow.xaml.cs">
