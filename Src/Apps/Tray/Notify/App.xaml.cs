@@ -25,7 +25,7 @@ namespace MMK.Notify
 
         private readonly NotifyIcon notifyIcon;
 
-        private readonly GroupTaskObserver taskObserver;
+        private readonly TaskObserver taskObserver;
         private readonly NotifyObserver notifyObserver;
         private readonly NotificationController notification;
 
@@ -66,7 +66,7 @@ namespace MMK.Notify
             if (!AppGuard.IsSingleInstance())
                 Shutdown();
 
-            taskObserver = new GroupTaskObserver();
+            taskObserver = new TaskObserver();
             notifyObserver = new NotifyObserver(taskObserver);
 
             notification = new NotificationController();
@@ -86,7 +86,7 @@ namespace MMK.Notify
 
         public MusicDownloadsWatcher MusicDownloadsWatcher { get; private set; }
 
-        public GroupTaskObserver TaskObserver
+        public TaskObserver TaskObserver
         {
             get { return taskObserver; }
         }
@@ -198,9 +198,9 @@ namespace MMK.Notify
 
         #region Task Observing Notify
 
-        private void TaskObserved(INotifyable info)
+        private void TaskObserved(object sender, TaskObserver.NotifyEventArgs e)
         {
-            notification.Push(info);
+            notification.Push(e.Message);
         }
 
         #endregion
