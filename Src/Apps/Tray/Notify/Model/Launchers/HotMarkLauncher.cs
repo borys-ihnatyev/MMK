@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using MMK.HotMark;
 using MMK.HotMark.View;
 using MMK.Wpf;
 using MMK.Wpf.Providers;
 
 namespace MMK.Notify.Model.Launchers
 {
-    sealed public class HotMarkLauncher : GlobalShortcutProvider
+    public sealed class HotMarkLauncher : GlobalShortcutProvider
     {
-        private readonly HotMarkWindowLauncher launcher; 
+        private readonly HotMarkWindowLauncher launcher;
 
         public HotMarkLauncher(KeyModifyers modifyer, int keyCode) : base(modifyer, keyCode)
         {
@@ -32,20 +30,16 @@ namespace MMK.Notify.Model.Launchers
 
         private class HotMarkWindowLauncher : WindowLauncher<MainView>
         {
-            private IEnumerable<string> paths = new string[0];  
+            private IEnumerable<string> paths = new string[0];
 
-            public HotMarkWindowLauncher()
+            public void Launch(IEnumerable<string> filePaths)
             {
-            }
-
-            public void Launch(IEnumerable<string> paths)
-            {
-                this.paths = paths;
+                paths = filePaths;
 
                 Launch();
             }
 
-            protected override MainView OnCreateWindow()
+            protected override MainView WindowFactory()
             {
                 return new MainView(paths);
             }
@@ -55,10 +49,10 @@ namespace MMK.Notify.Model.Launchers
                 App.Current.StopListenShortcuts();
             }
 
-            protected override void OnBindWindowEvents()
+            protected override void BindWindowEvents()
             {
+                base.BindWindowEvents();
                 Window.Closed += (sender, args) => App.Current.StartListenShortcuts();
-
             }
         }
     }

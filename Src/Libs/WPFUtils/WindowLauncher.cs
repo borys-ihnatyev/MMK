@@ -26,24 +26,20 @@ namespace MMK.Wpf
 
         private void CreateWindow()
         {
-            Window = OnCreateWindow();
+            Window = WindowFactory();
 
             BindWindowEvents();
         }
 
-        protected virtual TWindow OnCreateWindow()
+        protected virtual TWindow WindowFactory()
         {
             return new TWindow();
         }
 
-        private void BindWindowEvents()
+        protected virtual void BindWindowEvents()
         {
             Window.Closed += (sender, args) => Window = null;
-
-            OnBindWindowEvents();
         }
-
-        protected virtual void OnBindWindowEvents() { }
 
         protected virtual void BeforeLaunch() { }
     }
