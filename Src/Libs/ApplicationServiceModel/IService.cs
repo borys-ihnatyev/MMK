@@ -4,6 +4,8 @@
     {
         bool IsInitialized { get; }
 
+        void Initialize();
+
         void Start();
         void Stop();
     }
