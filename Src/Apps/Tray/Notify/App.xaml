@@ -4,7 +4,6 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="DesignData/ViewModels.xaml"/>
                 <ResourceDictionary Source="Style/Styles.xaml"/>
                 <ResourceDictionary Source="Style/CustomizedWindow/VS2012WindowStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
