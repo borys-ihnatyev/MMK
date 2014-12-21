@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using SHDocVw;
@@ -11,7 +12,7 @@ namespace System.Windows
         public static IEnumerable<string> GetForegroundSelectedItemsPaths()
         {
             var foregroundWindowHwnd = GetForegroundWindow();
-            return GetSelectedItemsPaths(foregroundWindowHwnd);
+            return GetSelectedItemsPaths(foregroundWindowHwnd).Where(p => File.Exists(p) || Directory.Exists(p));
         }
 
         private static IEnumerable<string> GetSelectedItemsPaths(int hwnd)
