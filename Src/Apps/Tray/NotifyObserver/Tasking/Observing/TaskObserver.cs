@@ -8,18 +8,22 @@ using Timer = System.Timers.Timer;
 
 namespace MMK.Notify.Observer.Tasking.Observing
 {
-    public class TaskObserver : IDisposable
+    public partial class TaskObserver : IDisposable
     {
         public const int FailedTaskRerunPauseSeconds = 5;
 
         private readonly ManualResetEvent taskRunEvent;
         private readonly AutoResetEvent taskCancelEvent;
 
-        public event Action<INotifyable> TaskDone;
-        public event Action<INotifyable> TaskObserved;
-        public event Action<INotifyable> TaskFailed;
+        public event EventHandler<TaskQueuedEventArgs> TaskQueued;
+        public event EventHandler<EventArgs> QueueEmpty;
 
-        public event Action<INotifyable> Notify;
+
+        public event EventHandler<NotifyEventArgs> TaskDone;
+
+        public event EventHandler<NotifyEventArgs> TaskObserved;
+
+        public event EventHandler<NotifyEventArgs> TaskFailed;
 
         private Thread thread;
 
@@ -35,46 +39,34 @@ namespace MMK.Notify.Observer.Tasking.Observing
             thread = new Thread(TaskObserverProc);
         }
 
-        public int ReceivedTasksCount
+        protected virtual void OnQueueEmpty()
         {
-            get { return tasks.Count; }
+            var handler = QueueEmpty;
+            if (handler != null) 
+                handler(this, new EventArgs(this));
         }
 
+        protected virtual void OnTaskQueued(int taskCount)
+        {
+            var handler = TaskQueued;
+            if(handler!= null)
+                handler(this, new TaskQueuedEventArgs(this, taskCount));
+        }
 
         protected virtual void OnTaskObserved(Task.ObservedInfo info)
         {
             Contract.Requires(info != null);
 
-            if (TaskObserved != null)
-                TaskObserved(info);
-
-            if (info.IsOk)
-                OnTaskDone(info);
-            else
-                OnTaskFailed(info);
+            OnNotifyEvent(TaskObserved, info);
+            OnNotifyEvent(info.IsOk ? TaskDone : TaskFailed, info);
         }
 
-        protected virtual void OnTaskDone(Task.ObservedInfo taskObservedInfo)
+        private void OnNotifyEvent(EventHandler<NotifyEventArgs> handler, INotifyable message)
         {
-            if (TaskDone != null)
-                TaskDone(taskObservedInfo);
+            if (handler != null)
+                handler(this, new NotifyEventArgs(this, message));
         }
 
-        protected virtual void OnTaskFailed(Task.ObservedInfo taskObservedInfo)
-        {
-            if (TaskFailed != null)
-                TaskFailed(taskObservedInfo);
-        }
-
-
-        protected virtual void OnNotify(INotifyable notifyable)
-        {
-            var handler = Notify;
-            if (handler != null) 
-                handler(notifyable);
-        }
-
-        
         #region Flow
 
         private void TaskObserverProc()
@@ -96,7 +88,8 @@ namespace MMK.Notify.Observer.Tasking.Observing
                 ObserveTask(task);
             }
             catch (Task.Cancel)
-            { }
+            {
+            }
         }
 
         private void ObserveTask(Task task)
@@ -111,7 +104,8 @@ namespace MMK.Notify.Observer.Tasking.Observing
                 if (task.RunCount < 1)
                     return;
             }
-            else {
+            else
+            {
                 if (observedInfo.IsRerunFailed)
                     observedInfo.UnmarkRerun();
             }
@@ -122,7 +116,7 @@ namespace MMK.Notify.Observer.Tasking.Observing
         private void AddTaskWithDeelay(Task task)
         {
             var deelayTimer = CreateDeelayTimer();
-            deelayTimer.Elapsed += delegate{ Add(task); };
+            deelayTimer.Elapsed += delegate { Add(task); };
             deelayTimer.Start();
         }
 
@@ -141,7 +135,10 @@ namespace MMK.Notify.Observer.Tasking.Observing
             lock (tasks)
             {
                 if (tasks.Count == 0)
+                {
                     taskRunEvent.Reset();
+                    OnQueueEmpty();
+                }
             }
         }
 
@@ -230,6 +227,7 @@ namespace MMK.Notify.Observer.Tasking.Observing
 
         protected virtual void AfterQueue(IEnumerable<Task> newTasks)
         {
+            OnTaskQueued(newTasks.Count());
         }
 
         #endregion

@@ -132,6 +132,9 @@
     <Compile Include="NotifyType.cs" />
     <Compile Include="Tasking\GroupedTask.cs" />
     <Compile Include="Tasking\Common\Base\Mp3FileChangeTask.cs" />
+    <Compile Include="Tasking\Observing\GroupTaskObserver.cs" />
+    <Compile Include="Tasking\Observing\TaskObserver.EventArgs.cs" />
+    <Compile Include="Tasking\Observing\TaskObserver.TaskQueuedEventArgs.cs" />
     <Compile Include="Tasking\Task.Cancel.cs" />
     <Compile Include="Tasking\TaskGroup.cs" />
     <Compile Include="Tasking\Common\AddHashTagModelTask.cs" />
@@ -145,7 +148,6 @@
     <Compile Include="INotifyObserverOwner.cs" />
     <Compile Include="NotifyMessage.cs" />
     <Compile Include="NotifyableException.cs" />
-    <Compile Include="Tasking\Observing\GroupTaskObserver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="INotifyObserver.cs" />
     <Compile Include="Remoting\NotifyObserver.cs" />
@@ -155,7 +157,9 @@
     <Compile Include="Tasking\Task.ObservedInfo.cs" />
     <Compile Include="Tasking\Observing\TaskObserver.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="Tasking\Observing\TaskObserver.NotifyEventArgs.cs" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Libs\MMK\MMK.csproj">
       <Project>{a9193781-f0f5-406c-bc5f-312ae4f516f3}</Project>
