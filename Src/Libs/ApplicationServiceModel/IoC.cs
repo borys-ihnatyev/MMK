@@ -1,15 +1,24 @@
 ﻿using System.Reflection;
-using MMK.ApplicationServiceModel.ServiceLocator.Resolving;
+using MMK.ApplicationServiceModel.Locator.Resolving;
 
 namespace MMK.ApplicationServiceModel
 {
     public class IoC
     {
-        private static object current;
+        private static IServiceLocator assemblyServiceLocator;
 
-        public static T Get<T>()
+        public static IServiceLocator ServiceLocator
         {
-            return (T)(current ?? (current = new ServiceLocatorResolver(Assembly.GetEntryAssembly()).GetServiceLocator()));
+            get
+            {
+                if (assemblyServiceLocator == null)
+                {
+                    var serviceLocatorResolver = new ServiceLocatorResolver(Assembly.GetEntryAssembly());
+                    assemblyServiceLocator = serviceLocatorResolver.ResolveLocator();
+                }
+
+                return assemblyServiceLocator;
+            }
         }
     }
 }
