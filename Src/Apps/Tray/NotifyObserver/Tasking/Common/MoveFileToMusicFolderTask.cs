@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using MMK.Notify.Observer.Tasking.Common.Base;
 using MMK.Processing.AutoFolder;
@@ -85,5 +87,10 @@ namespace MMK.Notify.Observer.Tasking.Common
         }
 
         #endregion
+
+        public static IEnumerable<Task> Many(IEnumerable<string> paths, HashTagFolderCollection folderCollection)
+        {
+            return paths.Select(p => new MoveFileToMusicFolderTask(p, folderCollection));
+        }  
     }
 }

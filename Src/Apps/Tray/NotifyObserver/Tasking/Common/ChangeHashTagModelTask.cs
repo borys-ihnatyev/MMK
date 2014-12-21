@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using MMK.Marking.Representation;
 using MMK.Notify.Observer.Tasking.Common.Base;
@@ -12,6 +14,11 @@ namespace MMK.Notify.Observer.Tasking.Common
     {
         protected readonly HashTagModel AddHashTagModel;
         protected readonly HashTagModel RemoveHashTagModel;
+
+        public static IEnumerable<Task> Many(IEnumerable<string> paths, HashTagModel add, HashTagModel remove)
+        {
+            return paths.Select(p => new ChangeHashTagModelTask(p, add, remove));
+        }  
 
         public ChangeHashTagModelTask(string oldPath, HashTagModel add, HashTagModel remove)
             : base(oldPath)

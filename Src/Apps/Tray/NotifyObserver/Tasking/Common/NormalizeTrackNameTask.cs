@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.IO;
+using System.Linq;
 using MMK.Notify.Observer.Tasking.Common.Base;
 
 namespace MMK.Notify.Observer.Tasking.Common
@@ -8,6 +10,11 @@ namespace MMK.Notify.Observer.Tasking.Common
     [Serializable]
     public class NormalizeTrackNameTask : Mp3FileChangeTask
     {
+        public static IEnumerable<Task> Many(IEnumerable<string> paths)
+        {
+            return paths.Select(p => new NormalizeTrackNameTask(p));
+        }  
+
         public NormalizeTrackNameTask(string oldPath)
             : base(oldPath)
         {
