@@ -1,0 +1,23 @@
+﻿<trayMenu:MenuItemControlBase x:Class="MMK.Notify.Views.TrayMenu.MenuItemControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:trayMenu="clr-namespace:MMK.Notify.Views.TrayMenu"
+             mc:Ignorable="d">
+    <Button Margin="-7px,0,-7px,0"
+            HorizontalContentAlignment="Left"
+            Command="{Binding Command, RelativeSource={RelativeSource AncestorType={x:Type trayMenu:MenuItemControl}}}"
+            Style="{StaticResource ClearButtonStyle}">
+        <Grid Height="32px">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="32px"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Image Source="{Binding Image, RelativeSource={RelativeSource AncestorType={x:Type trayMenu:MenuItemControl}}}" 
+                   Margin="6px"/>
+            <TextBlock Grid.Column="1" VerticalAlignment="Center" 
+                       Text="{Binding Title, RelativeSource={RelativeSource AncestorType={x:Type trayMenu:MenuItemControl}}}"/>
+        </Grid>
+    </Button>
+</trayMenu:MenuItemControlBase>

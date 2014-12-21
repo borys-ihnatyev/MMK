@@ -1,18 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Timers;
 using MMK.Notify.Observer;
-using MMK.Notify.View;
-using MMK.Notify.ViewModel;
+using MMK.Notify.ViewModels;
+using MMK.Notify.Views;
 
-namespace MMK.Notify.Model
+namespace MMK.Notify.Services
 {
-    public class NotificationController
+    public class NotificationService
     {
         private readonly Timer messageQueueTimer;
         private readonly Queue<BalloonTipViewModel> messageQueue;
         private readonly LinkedList<BalloonTipWindow> activeBallonTipWindows;
 
-        public NotificationController()
+        public NotificationService()
         {
             messageQueueTimer = new Timer(700);
             messageQueueTimer.Elapsed += OnTimerTryPush;

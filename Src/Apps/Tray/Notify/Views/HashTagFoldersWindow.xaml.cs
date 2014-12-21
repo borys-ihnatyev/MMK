@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using MMK.Notify.ViewModel.HashTagFolders;
+using MMK.Notify.ViewModels.HashTagFolders;
 
-namespace MMK.Notify.View
+namespace MMK.Notify.Views
 {
     /// <summary>
     /// Interaction logic for HashTagFoldersWindow.xaml

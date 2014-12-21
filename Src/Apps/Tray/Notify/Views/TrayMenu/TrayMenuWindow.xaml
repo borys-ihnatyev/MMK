@@ -1,0 +1,132 @@
+﻿<wpf:TrayWindow x:Class="MMK.Notify.Views.TrayMenu.TrayMenuWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:wpf="clr-namespace:MMK.Wpf;assembly=MMK.Wpf"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:trayMenu="clr-namespace:MMK.Notify.Views.TrayMenu"
+        xmlns:trayMenu1="clr-namespace:MMK.Notify.ViewModels.TrayMenu"
+        mc:Ignorable="d"
+        Height="193.537" 
+        Width="286" 
+        d:DataContext="{d:DesignInstance trayMenu1:TrayMenuViewModel}">
+    
+    <Grid Margin="5px">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="34px"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="32px"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="32px"/>
+                <RowDefinition Height="2px"/>
+            </Grid.RowDefinitions>
+
+
+            <!--Hide Button-->
+            <Button 
+                Command="{Binding HideCommand}"
+                Style="{StaticResource ClearButtonStyle}">
+                <Image 
+                    Margin="2px"
+                    Source="pack://siteoforigin:,,,/Resources/Layouts-32.png"/>
+            </Button>
+
+            <TextBlock Grid.Row="0" Grid.Column="1"
+                       VerticalAlignment="Center"
+                       FontWeight="Bold"
+                       Padding="4px">
+                MMK Notify
+            </TextBlock>
+            <Separator Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0"></Separator>
+        </Grid>
+
+
+        <!--Menu Items-->
+        <ListBox Grid.Row="1"
+                 Style="{StaticResource ClearListBoxStyle}"
+                 VerticalAlignment="Top">
+            <ListBox.Items>
+                <trayMenu:MenuItemControl
+                    Title="Music collection manager"
+                    Image="pack://siteoforigin:,,,/Resources/musiccollectionmanagerlogo.ico"
+                    />
+
+                <trayMenu:ToggleMenuItemControl
+                    IsPressed="{Binding IsEnableHotKeys, Mode=TwoWay}"
+                    Title="Hotkeys"
+                    Image="pack://siteoforigin:,,,/Resources/keyboard-26.png"
+                    PressCommand="{Binding StartListenShortcutsCommand}"
+                    ReleaseCommand="{Binding StopListenShortcutsCommand}"
+                    />
+
+                <trayMenu:ToggleMenuItemControl
+                    IsPressed="{Binding IsEnableDownloadsWatch, Mode=TwoWay}"
+                    Title="Downloads watching"
+                    Image="pack://siteoforigin:,,,/Resources/glasses-26.png"
+                    PressCommand="{Binding StartDownloadsWatchingCommand}"
+                    ReleaseCommand="{Binding StopDownloadsWatchingCommand}"
+                    />
+                
+                <trayMenu:MenuItemControl
+                    Title="Exit"
+                    Image="pack://siteoforigin:,,,/Resources/exit-26.png"
+                    Command="{Binding ExitCommand}"
+                    />
+            </ListBox.Items>
+        </ListBox>
+    </Grid>
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Deactivated">
+            <i:InvokeCommandAction Command="{Binding HideCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <Window.Style>
+        <Style TargetType="{x:Type Window}">
+            <Style.Setters>
+                <Setter Property="WindowStyle" Value="None"/>
+                <Setter Property="AllowsTransparency" Value="True"/>
+                <Setter Property="ShowInTaskbar" Value="False"/>
+                <Setter Property="Topmost" Value="True"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"/>
+            </Style.Setters>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsVisible}" Value="false">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+                                    Storyboard.TargetProperty="Opacity"
+                                    To="0"
+                                    Duration="0:0:0.21"
+                                    />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+
+                    <DataTrigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+                                    Storyboard.TargetProperty="Opacity"
+                                    To="1"
+                                    Duration="0:0:0.21"
+                                    />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Style>
+</wpf:TrayWindow>

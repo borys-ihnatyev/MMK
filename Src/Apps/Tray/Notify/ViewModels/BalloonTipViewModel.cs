@@ -1,7 +1,7 @@
 ﻿using MMK.Notify.Observer;
 using MMK.Wpf.ViewModel;
 
-namespace MMK.Notify.ViewModel
+namespace MMK.Notify.ViewModels
 {
     public class BalloonTipViewModel : ObservableObject, INotifyable
     {

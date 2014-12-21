@@ -7,9 +7,9 @@ using MMK.Notify.ViewModels.TrayMenu;
 using MMK.Notify.Views.TrayMenu;
 using Application = System.Windows.Application;
 
-namespace MMK.Notify.Controllers
+namespace MMK.Notify.Services
 {
-    public class TrayMenuController
+    public class TrayMenuService
     {
         private bool initialized;
         private TrayMenuWindow trayMenuWindow;
@@ -18,7 +18,7 @@ namespace MMK.Notify.Controllers
 
         public event EventHandler<EventArgs<Window>> WindowInitialize;
 
-        public TrayMenuController()
+        public TrayMenuService()
         {
             trayIcon = new NotifyIcon
             {

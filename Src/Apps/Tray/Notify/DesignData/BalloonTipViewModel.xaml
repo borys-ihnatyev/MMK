@@ -1,5 +1,5 @@
-﻿<BalloonTipViewModel xmlns="clr-namespace:MMK.Notify.ViewModel"
-                     CommonDescription="Change hash tag model"
+﻿<BalloonTipViewModel xmlns="clr-namespace:MMK.Notify.ViewModels"
+                                            CommonDescription="Change hash tag model"
                      DetailedDescription="File a changed to b"
                      TargetObject="Shakira - Loca"
                      Type="Success"/>

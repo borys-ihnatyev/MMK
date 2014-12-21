@@ -41,6 +41,49 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>true</Prefer32Bit>
+    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>False</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
+    <CodeContractsRunCodeAnalysis>True</CodeContractsRunCodeAnalysis>
+    <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
+    <CodeContractsBoundsObligations>True</CodeContractsBoundsObligations>
+    <CodeContractsArithmeticObligations>True</CodeContractsArithmeticObligations>
+    <CodeContractsEnumObligations>True</CodeContractsEnumObligations>
+    <CodeContractsRedundantAssumptions>True</CodeContractsRedundantAssumptions>
+    <CodeContractsAssertsToContractsCheckBox>True</CodeContractsAssertsToContractsCheckBox>
+    <CodeContractsRedundantTests>True</CodeContractsRedundantTests>
+    <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
+    <CodeContractsMissingPublicEnsuresAsWarnings>True</CodeContractsMissingPublicEnsuresAsWarnings>
+    <CodeContractsInferRequires>True</CodeContractsInferRequires>
+    <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
+    <CodeContractsInferEnsuresAutoProperties>True</CodeContractsInferEnsuresAutoProperties>
+    <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
+    <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
+    <CodeContractsSuggestAssumptionsForCallees>False</CodeContractsSuggestAssumptionsForCallees>
+    <CodeContractsSuggestRequires>False</CodeContractsSuggestRequires>
+    <CodeContractsNecessaryEnsures>True</CodeContractsNecessaryEnsures>
+    <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
+    <CodeContractsSuggestReadonly>True</CodeContractsSuggestReadonly>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
+    <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>False</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsExtraRewriteOptions />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsSQLServerOption />
+    <CodeContractsBaseLineFile>..\..\baseline.xml</CodeContractsBaseLineFile>
+    <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
+    <CodeContractsSkipAnalysisIfCannotConnectToCache>False</CodeContractsSkipAnalysisIfCannotConnectToCache>
+    <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
+    <CodeContractsBeingOptimisticOnExternal>True</CodeContractsBeingOptimisticOnExternal>
+    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>DoNotBuild</CodeContractsReferenceAssembly>
+    <CodeContractsAnalysisWarningLevel>3</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -136,10 +179,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Model\NotificationController.cs" />
+    <Compile Include="Controllers\NotificationController.cs" />
+    <Compile Include="Controllers\TrayMenuController.cs" />
     <Compile Include="Model\NotifyTypeColorConverter.cs" />
-    <Compile Include="ViewModel\BalloonTipViewModel.cs" />
-    <Compile Include="View\BalloonTipWindow.xaml.cs">
+    <Compile Include="Controllers\TaskProgressController.cs" />
+    <Compile Include="ViewModels\BalloonTipViewModel.cs" />
+    <Compile Include="ViewModels\TaskProgressViewModel.cs" />
+    <Compile Include="Views\BalloonTipWindow.xaml.cs">
       <DependentUpon>BalloonTipWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\BooleanToColorErrorConverter.cs" />
@@ -155,19 +201,23 @@
     </Compile>
     <Compile Include="Properties\Settings.cs" />
     <Compile Include="Style\CustomizedWindow\VS2012WindowStyle.cs" />
-    <Compile Include="ViewModel\HashTagFolders\FolderPatternViewModel.cs" />
-    <Compile Include="ViewModel\HashTagFolders\FolderViewModel.cs" />
-    <Compile Include="ViewModel\HashTagFolders\HashTagFoldersViewModel.cs" />
-    <Compile Include="ViewModel\TrayMenu\TrayMenuViewModel.cs" />
+    <Compile Include="ViewModels\HashTagFolders\FolderPatternViewModel.cs" />
+    <Compile Include="ViewModels\HashTagFolders\FolderViewModel.cs" />
+    <Compile Include="ViewModels\HashTagFolders\HashTagFoldersViewModel.cs" />
+    <Compile Include="ViewModels\TrayMenu\TrayMenuViewModel.cs" />
     <Page Include="DesignData\BalloonTipViewModel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\BalloonTipWindow.xaml">
+    <Page Include="DesignData\TaskProgressViewModel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DesignData\ViewModels.xaml">
+    <Page Include="Views\BalloonTipWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DesignData\HashTagFoldersViewModel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -175,19 +225,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\HashTagFoldersWindow.xaml">
+    <Page Include="Views\HashTagFoldersWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\TrayMenu\MenuItemControl.xaml">
+    <Page Include="Views\TaskProgressView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\TrayMenu\ToggleMenuItemControl.xaml">
+    <Page Include="Views\TrayMenu\MenuItemControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\TrayMenu\TrayMenuWindow.xaml">
+    <Page Include="Views\TrayMenu\ToggleMenuItemControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TrayMenu\TrayMenuWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -195,17 +249,20 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="View\HashTagFoldersWindow.xaml.cs">
+    <Compile Include="Views\HashTagFoldersWindow.xaml.cs">
       <DependentUpon>HashTagFoldersWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\TrayMenu\MenuItemControl.xaml.cs">
+    <Compile Include="Views\TaskProgressView.xaml.cs">
+      <DependentUpon>TaskProgressView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TrayMenu\MenuItemControl.xaml.cs">
       <DependentUpon>MenuItemControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\TrayMenu\MenuItemControlBase.cs" />
-    <Compile Include="View\TrayMenu\ToggleMenuItemControl.xaml.cs">
+    <Compile Include="Views\TrayMenu\MenuItemControlBase.cs" />
+    <Compile Include="Views\TrayMenu\ToggleMenuItemControl.xaml.cs">
       <DependentUpon>ToggleMenuItemControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\TrayMenu\TrayMenuWindow.xaml.cs">
+    <Compile Include="Views\TrayMenu\TrayMenuWindow.xaml.cs">
       <DependentUpon>TrayMenuWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>

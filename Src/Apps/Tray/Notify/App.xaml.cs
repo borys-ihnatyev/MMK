@@ -4,13 +4,13 @@ using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
-using MMK.Notify.Controllers;
 using MMK.Notify.Model;
 using MMK.Notify.Model.Launchers;
 using MMK.Notify.Observer;
 using MMK.Notify.Observer.Remoting;
 using MMK.Notify.Observer.Tasking.Observing;
 using MMK.Notify.Properties;
+using MMK.Notify.Services;
 using MMK.Notify.Views.TrayMenu;
 using MMK.Processing.AutoFolder;
 using MMK.Wpf.Providers;
@@ -22,8 +22,8 @@ namespace MMK.Notify
     {
         private readonly TaskObserver taskObserver;
         private readonly NotifyObserver notifyObserver;
-        private readonly NotificationController notification;
-        private readonly TrayMenuController trayMenuController;
+        private readonly NotificationService notification;
+        private readonly TrayMenuService trayMenuService;
 
         private readonly GlobalShortcutProviderCollection shortcutProviders;
 
@@ -67,15 +67,15 @@ namespace MMK.Notify
 
             notifyObserver = new NotifyObserver(taskObserver);
 
-            notification = new NotificationController();
+            notification = new NotificationService();
 
             MusicDownloadsWatcher = new MusicDownloadsWatcher();
             MusicDownloadsWatcher.FileDownloaded += notifyObserver.NormalizeTrackName;
 
             shortcutProviders = new GlobalShortcutProviderCollection();
 
-            trayMenuController = new TrayMenuController();
-            trayMenuController.WindowInitialize += OnWindowInitialize;
+            trayMenuService = new TrayMenuService();
+            trayMenuService.WindowInitialize += OnWindowInitialize;
         }
 
         public HashTagFolderCollection FolderCollection { get; set; }
@@ -92,7 +92,7 @@ namespace MMK.Notify
             get { return notifyObserver; }
         }
 
-        public NotificationController Notification
+        public NotificationService Notification
         {
             get { return notification; }
         }
@@ -105,7 +105,7 @@ namespace MMK.Notify
 
         private void Initialize()
         {
-            trayMenuController.Initialize();
+            trayMenuService.Initialize();
             InitializeFolderCollection();
         }
 
@@ -125,8 +125,8 @@ namespace MMK.Notify
             taskObserver.Start();
             StartNotifyObserver();
 
-            MainWindow = trayMenuController.TrayMenuWindow;
-            trayMenuController.Start();
+            MainWindow = trayMenuService.TrayMenuWindow;
+            trayMenuService.Start();
         }
 
         private void StartNotifyObserver()

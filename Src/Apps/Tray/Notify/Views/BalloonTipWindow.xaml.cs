@@ -3,11 +3,11 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media.Animation;
-using MMK.Notify.ViewModel;
+using MMK.Notify.ViewModels;
 using MMK.Wpf.Windows;
 using Timer = System.Timers.Timer;
 
-namespace MMK.Notify.View
+namespace MMK.Notify.Views
 {
     public partial class BalloonTipWindow
     {
