@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
+using MMK.ApplicationServiceModel;
+using MMK.ApplicationServiceModel.Locator;
 using MMK.Notify.Model;
 using MMK.Notify.Model.Launchers;
 using MMK.Notify.Observer;
@@ -13,18 +15,23 @@ using MMK.Notify.Properties;
 using MMK.Notify.Services;
 using MMK.Processing.AutoFolder;
 using MMK.Wpf.Providers;
+using Ninject;
+using Ninject.Activation;
+using Ninject.Modules;
 using Application = System.Windows.Application;
 
 namespace MMK.Notify
 {
-    public partial class App : INotifyObserverOwner
+    [ServiceLocatorOwner]
+    public partial class App
     {
-        private readonly TaskObserver taskObserver;
-        private readonly NotifyObserver notifyObserver;
-        private readonly NotificationService notification;
-        private readonly TrayMenuService trayMenuService;
+        private static ServiceLocator serviceLocator;
 
-        private readonly GlobalShortcutProviderCollection shortcutProviders;
+        [ServiceLocator]
+        public static ServiceLocator ServiceLocator
+        {
+            get { return (serviceLocator ?? (serviceLocator = new ServiceLocator())); }
+        }
 
 #if !DEBUG
 
@@ -56,155 +63,49 @@ namespace MMK.Notify
         }
 #endif
 
-        public App()
-        {
-            if (!AppGuard.IsSingleInstance())
-                Shutdown();
-
-            taskObserver = new TaskObserver();
-            taskObserver.TaskObserved += TaskObserved;
-
-            notifyObserver = new NotifyObserver(taskObserver);
-
-            notification = new NotificationService();
-
-            MusicDownloadsWatcher = new MusicDownloadsWatcher();
-            MusicDownloadsWatcher.FileDownloaded += notifyObserver.NormalizeTrackName;
-
-            shortcutProviders = new GlobalShortcutProviderCollection();
-
-            trayMenuService = new TrayMenuService();
-            trayMenuService.WindowInitialize += OnWindowInitialize;
-        }
-
-        public HashTagFolderCollection FolderCollection { get; set; }
-
-        public MusicDownloadsWatcher MusicDownloadsWatcher { get; private set; }
-
-        public TaskObserver TaskObserver
-        {
-            get { return taskObserver; }
-        }
-
-        public INotifyObserver NotifyObserver
-        {
-            get { return notifyObserver; }
-        }
-
-        public NotificationService Notification
-        {
-            get { return notification; }
-        }
-
         protected override void OnStartup(StartupEventArgs e)
         {
+            if (!AppGuard.IsSingleInstance())
+            {
+                Shutdown();
+                return;
+            }
+
             Initialize();
             StartServices();
         }
 
         private void Initialize()
         {
-            trayMenuService.Initialize();
-            InitializeFolderCollection();
+            InitializeServices();
         }
 
-        private void OnWindowInitialize(object sender, EventArgs<Window> e)
+        private static void InitializeServices()
         {
-            MainWindow = e.Arg;
-            MainWindow.Loaded += (s, a) => LoadShortcuts();
+            ServiceLocator.Bind<TaskObserver>().ToSelf().InSingletonScope();
+            ServiceLocator.Bind<INotifyObserver>().To<NotifyObserver>().InSingletonScope();
+            
+            ServiceLocator.Bind<HashTagFolderCollection>().ToMethod(c => Settings.Default.FolderCollection).InSingletonScope();
+
+            ServiceLocator.Bind<NotificationService>().ToSelf().InSingletonScope();
+            ServiceLocator.Bind<TaskObserverService>().ToSelf().InSingletonScope();
+            ServiceLocator.Bind<GlobalShortcutService>().ToSelf().InSingletonScope();
+            ServiceLocator.Bind<TrayMenuService>().ToSelf().InSingletonScope();
+
+            ServiceLocator.Get<TrayMenuService>().Initialize();
         }
 
-        private void InitializeFolderCollection()
+        private static void StartServices()
         {
-            FolderCollection = Settings.Default.FolderCollection;
+            ServiceLocator.Get<TaskObserverService>().Start();
+            ServiceLocator.Get<TrayMenuService>().Start();
         }
-
-        private void StartServices()
-        {
-            taskObserver.Start();
-            StartNotifyObserver();
-
-            MainWindow = trayMenuService.TrayMenuWindow;
-            trayMenuService.Start();
-        }
-
-        private void StartNotifyObserver()
-        {
-#if DEBUG
-            notifyObserver.Start();
-#else
-            if (!notifyObserver.TryStart())
-                Shutdown();
-#endif
-        }
-
-        public new static App Current
-        {
-            get { return (App) Application.Current; }
-        }
-
-        #region Behaviors
 
         protected override void OnExit(ExitEventArgs e)
         {
-            taskObserver.Dispose();
+            ServiceLocator.Get<TrayMenuService>().Stop();
+            ServiceLocator.Get<TaskObserverService>().Stop();
             base.OnExit(e);
-        }
-
-        #endregion
-
-        #region Task Observing Notify
-
-        private void TaskObserved(object sender, TaskObserver.NotifyEventArgs e)
-        {
-            notification.Push(e.Message);
-        }
-
-        #endregion
-
-        #region Shortcuts
-
-        private void LoadShortcuts()
-        {
-            (shortcutProviders as IGlobalShortcutProvider).SetWindow(MainWindow);
-
-            shortcutProviders.Add(new HotMarkLauncher(KeyModifyers.Ctrl, (int) Keys.T));
-            shortcutProviders.Add(KeyModifyers.Ctrl | KeyModifyers.Shift, (int) Keys.T, NormalizeHotKey_Pressed);
-            shortcutProviders.Add(KeyModifyers.Ctrl | KeyModifyers.Shift, (int) Keys.M, MoveFileToCollection_Pressed);
-
-            var swiftSearchLauncher = new SwiftSearchLauncher(MainWindow);
-
-            swiftSearchLauncher.SetStartShortcut(KeyModifyers.Ctrl, Keys.Space);
-            swiftSearchLauncher.SetStartFromClipboardShortcut(KeyModifyers.Ctrl | KeyModifyers.Shift, Keys.V);
-
-            shortcutProviders.Add(swiftSearchLauncher);
-        }
-
-        private void NormalizeHotKey_Pressed()
-        {
-            notifyObserver.NormalizeTrackName(
-                Explorer.GetForegroundSelectedItemsPaths().Where(File.Exists)
-                );
-        }
-
-        private void MoveFileToCollection_Pressed()
-        {
-            notifyObserver.MoveToCollectionFolder(
-                Explorer.GetForegroundSelectedItemsPaths().Where(File.Exists),
-                FolderCollection
-                );
-        }
-
-        #endregion
-
-        public void StartListenShortcuts()
-        {
-            shortcutProviders.StartListen();
-        }
-
-        public void StopListenShortcuts()
-        {
-            shortcutProviders.StopListen();
         }
     }
 }
