@@ -205,6 +205,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Libs\ApplicationServiceModel\ApplicationServiceModel.csproj">
+      <Project>{b7d69bf7-b8f9-46ff-963c-93ed9c8d5f47}</Project>
+      <Name>ApplicationServiceModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Libs\MMK\MMK.csproj">
       <Project>{a9193781-f0f5-406c-bc5f-312ae4f516f3}</Project>
       <Name>MMK</Name>

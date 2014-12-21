@@ -1,8 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Windows;
+using MMK.ApplicationServiceModel;
 using MMK.Marking;
 using MMK.Marking.Representation;
 using MMK.Notify.Observer;
+using MMK.Notify.Observer.Tasking;
+using MMK.Notify.Observer.Tasking.Common;
 
 namespace MMK.HotMark.Model
 {
@@ -27,13 +31,16 @@ namespace MMK.HotMark.Model
             if(addHashTagModel.Count == 0 && removeHashTagModel.Count == 0)
                 return;
 
-            var notifyObserverOwner = Application.Current as INotifyObserverOwner;
-            if (notifyObserverOwner == null) return;
+            var notifyObserver = IoC.ServiceLocator.Get<INotifyObserver>();
 
+            IEnumerable<Task> tasks;
+            
             if (removeHashTagModel.Count == 0 && addHashTagModel.Count > 0)
-                notifyObserverOwner.NotifyObserver.AddHashTagModel(Paths, addHashTagModel);
+                tasks = AddHashTagModelTask.Many(Paths, addHashTagModel);
             else
-                notifyObserverOwner.NotifyObserver.ChangeHashTagModel(Paths, addHashTagModel, removeHashTagModel);
+                tasks = ChangeHashTagModelTask.Many(Paths, addHashTagModel, removeHashTagModel);
+
+            notifyObserver.Observe(tasks);
         }
     }
 }

@@ -1,22 +1,21 @@
 ﻿using System.Collections.Generic;
-using System.Windows;
+using MMK.ApplicationServiceModel;
 using MMK.Marking;
 using MMK.Notify.Observer;
+using MMK.Notify.Observer.Tasking.Common;
 
 namespace MMK.HotMark.Model
 {
     public sealed class RewriteHashTagModel : HashTagModelChangeNotify
     {
-        public RewriteHashTagModel(IEnumerable<string> paths, IEnumerable<HashTag> initialConjointHashTagModel) : base(paths, initialConjointHashTagModel)
-        {
-
-        }
+        public RewriteHashTagModel(IEnumerable<string> paths, IEnumerable<HashTag> initialConjointHashTagModel)
+            : base(paths, initialConjointHashTagModel)
+        { }
 
         protected override void OnNotifyChange()
         {
-            var notifyObserverOwner = Application.Current as INotifyObserverOwner;
-            if (notifyObserverOwner != null)
-                notifyObserverOwner.NotifyObserver.RewriteHashTagModel(Paths, FinalHashTagModel);
+            var notifyObserver = IoC.ServiceLocator.Get<INotifyObserver>();
+            notifyObserver.Observe(RewriteHashTagModelTask.Many(Paths, FinalHashTagModel));
         }
     }
 }

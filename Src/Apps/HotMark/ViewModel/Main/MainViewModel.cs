@@ -318,7 +318,6 @@ namespace MMK.HotMark.ViewModel.Main
             window.Close();
         }
 
-
         private IEnumerable<HashTag> GetNotEmptyHashTags()
         {
             return HashTags
