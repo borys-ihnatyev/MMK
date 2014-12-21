@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
 using MMK.Notify.Observer;
@@ -7,12 +8,12 @@ namespace MMK.Notify.Model
 {
     public class NotifyTypeColorConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (!(value is NotifyType))
                 return null;
 
-            return Convert((NotifyType)value);
+            return Convert((NotifyType) value);
         }
 
         public static SolidColorBrush Convert(NotifyType notifyType)
@@ -36,7 +37,7 @@ namespace MMK.Notify.Model
             }
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return null;
         }

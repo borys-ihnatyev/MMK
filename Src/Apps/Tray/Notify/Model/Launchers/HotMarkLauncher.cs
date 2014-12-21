@@ -2,7 +2,9 @@
 using System.IO;
 using System.Linq;
 using System.Windows;
+using MMK.ApplicationServiceModel;
 using MMK.HotMark.View;
+using MMK.Notify.Services;
 using MMK.Wpf;
 using MMK.Wpf.Providers;
 
@@ -46,13 +48,13 @@ namespace MMK.Notify.Model.Launchers
 
             protected override void BeforeLaunch()
             {
-                App.Current.StopListenShortcuts();
+                IoC.ServiceLocator.Get<GlobalShortcutService>().Stop();
             }
 
             protected override void BindWindowEvents()
             {
                 base.BindWindowEvents();
-                Window.Closed += (sender, args) => App.Current.StartListenShortcuts();
+                Window.Closed += (sender, args) => IoC.ServiceLocator.Get<GlobalShortcutService>().Start();
             }
         }
     }

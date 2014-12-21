@@ -1,8 +1,9 @@
 ﻿using MMK.Marking.Representation;
+using MMK.Wpf.ViewModel;
 
 namespace MMK.Notify.ViewModels.HashTagFolders
 {
-    public class FolderPatternViewModel : Wpf.ViewModel.ViewModel
+    public class FolderPatternViewModel : ViewModel
     {
         private string patternString;
         private int priority;
@@ -20,8 +21,8 @@ namespace MMK.Notify.ViewModels.HashTagFolders
             get { return isValidPattern; }
             set
             {
-                if(value == isValidPattern) return;
-                
+                if (value == isValidPattern) return;
+
                 isValidPattern = value;
                 NotifyPropertyChanged();
             }
@@ -32,7 +33,7 @@ namespace MMK.Notify.ViewModels.HashTagFolders
             get { return patternString; }
             set
             {
-                if(value == patternString) return;
+                if (value == patternString) return;
 
                 patternString = value;
                 NotifyPropertyChanged();
@@ -42,17 +43,14 @@ namespace MMK.Notify.ViewModels.HashTagFolders
             }
         }
 
-        public HashTagModel Pattern
-        {
-            get; private set;
-        }
+        public HashTagModel Pattern { get; private set; }
 
         public int Priority
         {
             get { return priority; }
             set
             {
-                if(value == priority) 
+                if (value == priority)
                     return;
                 priority = value;
                 NotifyPropertyChanged();

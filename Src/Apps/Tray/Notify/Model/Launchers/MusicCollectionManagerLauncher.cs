@@ -2,7 +2,7 @@
 
 namespace MMK.Notify.Model.Launchers
 {
-    sealed public class MusicCollectionManagerLauncher : SingleAppLauncher
+    public sealed class MusicCollectionManagerLauncher : SingleAppLauncher
     {
         private static MusicCollectionManagerLauncher instance;
 

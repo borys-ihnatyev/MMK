@@ -40,7 +40,7 @@ namespace MMK.Notify.ViewModels
             set
             {
                 if (value == commonDescription) return;
-                
+
                 commonDescription = value;
                 NotifyPropertyChanged();
             }
@@ -52,7 +52,7 @@ namespace MMK.Notify.ViewModels
             set
             {
                 if (value == detailedDescription) return;
-                
+
                 detailedDescription = value;
                 NotifyPropertyChanged();
             }
@@ -64,7 +64,7 @@ namespace MMK.Notify.ViewModels
             set
             {
                 if (value == targetObject) return;
-                
+
                 targetObject = value;
                 NotifyPropertyChanged();
             }

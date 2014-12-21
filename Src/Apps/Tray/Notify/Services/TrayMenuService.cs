@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Threading;
+using MMK.ApplicationServiceModel;
 using MMK.Notify.Properties;
 using MMK.Notify.ViewModels.TrayMenu;
 using MMK.Notify.Views.TrayMenu;
@@ -9,16 +10,14 @@ using Application = System.Windows.Application;
 
 namespace MMK.Notify.Services
 {
-    public class TrayMenuService
+    public class TrayMenuService : Service, IDisposable
     {
-        private bool initialized;
         private TrayMenuWindow trayMenuWindow;
         private readonly TrayMenuViewModel trayMenuViewModel;
         private readonly NotifyIcon trayIcon;
+        private readonly GlobalShortcutService shortcutService;
 
-        public event EventHandler<EventArgs<Window>> WindowInitialize;
-
-        public TrayMenuService()
+        public TrayMenuService(GlobalShortcutService shortcutService)
         {
             trayIcon = new NotifyIcon
             {
@@ -27,6 +26,8 @@ namespace MMK.Notify.Services
             };
 
             trayMenuViewModel = new TrayMenuViewModel();
+
+            this.shortcutService = shortcutService;
         }
 
         public Window TrayMenuWindow
@@ -34,31 +35,24 @@ namespace MMK.Notify.Services
             get { return trayMenuWindow; }
         }
 
-        public void Initialize()
+
+        protected override void OnInitialize()
         {
-            if (initialized)
-                return;
             InitializeTrayIcon();
             InitializeTrayWindow();
-            initialized = true;
         }
 
         private void InitializeTrayWindow()
         {
             trayMenuWindow = new TrayMenuWindow();
             trayMenuWindow.BeginInit();
-            
-            OnWindowInitialize();
 
             trayMenuWindow.DataContext = trayMenuViewModel;
-            trayMenuWindow.Loaded += (sender, args) => trayMenuViewModel.LoadData();
-        }
 
-        protected virtual void OnWindowInitialize()
-        {
-            var handler = WindowInitialize;
-            if (handler != null) 
-                handler(this, new EventArgs<Window>(trayMenuWindow));
+            trayMenuWindow.Loaded += (sender, args) => shortcutService.Initialize();
+            trayMenuWindow.Loaded += (sender, args) => trayMenuViewModel.LoadData();
+
+            trayMenuWindow.EndInit();
         }
 
         private void InitializeTrayIcon()
@@ -67,6 +61,7 @@ namespace MMK.Notify.Services
             trayIcon.Visible = true;
             Application.Current.Deactivated += OnAppDeactivated;
         }
+
 
         private void OnTrayIconClick(object sender, EventArgs eventArgs)
         {
@@ -94,14 +89,26 @@ namespace MMK.Notify.Services
             timer.Start();
         }
 
-        public void Start()
-        {
-            if (!initialized)
-                throw new Exception("instanse was not Initialized");
 
-            trayMenuWindow.EndInit();
+        public override void Start()
+        {
+            if (!IsInitialized)
+                throw new Exception("Service was not Initialized");
+
             trayIcon.Visible = true;
             trayMenuWindow.Show();
+        }
+
+        public override void Stop()
+        {
+            trayMenuWindow.Hide();
+            trayIcon.Visible = false;
+        }
+
+        public void Dispose()
+        {
+            trayMenuWindow.Close();
+            trayIcon.Dispose();
         }
     }
 }

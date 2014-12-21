@@ -2,14 +2,17 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
+using MMK.ApplicationServiceModel;
 using MMK.Notify.Model.Settings;
 using MMK.Notify.Properties;
+using MMK.Notify.Services;
 using MMK.Notify.Views;
 using MMK.Wpf;
+using MMK.Wpf.ViewModel;
 
 namespace MMK.Notify.ViewModels.TrayMenu
 {
-    public class TrayMenuViewModel : Wpf.ViewModel.ViewModel
+    public class TrayMenuViewModel : ViewModel
     {
         private bool isVisible = true;
         private Window hashTagFoldersWindow;
@@ -20,12 +23,12 @@ namespace MMK.Notify.ViewModels.TrayMenu
         public TrayMenuViewModel()
         {
             OpenHashTagFoldersWindowCommand = new Command(OpenHashTagFoldersWindowCommandAction);
-            
-            StartListenShortcutsCommand = new Command(App.Current.StartListenShortcuts);
-            StopListenShortcutsCommand = new Command(App.Current.StopListenShortcuts);
-            
-            StartDownloadsWatchingCommand = new Command(App.Current.MusicDownloadsWatcher.Start);
-            StopDownloadsWatchingCommand = new Command(App.Current.MusicDownloadsWatcher.Stop);
+
+            StartListenShortcutsCommand = new Command(IoC.ServiceLocator.Get<GlobalShortcutService>().Start);
+            StopListenShortcutsCommand = new Command(IoC.ServiceLocator.Get<GlobalShortcutService>().Stop);
+
+            /*StartDownloadsWatchingCommand = new Command(App.Current.MusicDownloadsWatcher.Start);
+            StopDownloadsWatchingCommand = new Command(App.Current.MusicDownloadsWatcher.Stop);*/
 
             ExitCommand = new Command(ExitCommandAction);
             HideCommand = new Command(HideCommandAction);
@@ -93,14 +96,14 @@ namespace MMK.Notify.ViewModels.TrayMenu
         private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             var propertyName = e.PropertyName;
-            
-            if(IsSettingsProperty(propertyName))
+
+            if (IsSettingsProperty(propertyName))
                 SaveSettings();
         }
 
         private bool IsSettingsProperty(string propertyName)
         {
-            return Attribute.IsDefined(GetType().GetProperty(propertyName),typeof(SettingsPropertyAttribute));
+            return Attribute.IsDefined(GetType().GetProperty(propertyName), typeof (SettingsPropertyAttribute));
         }
 
         private void SaveSettings()
@@ -118,6 +121,7 @@ namespace MMK.Notify.ViewModels.TrayMenu
         public ICommand StopDownloadsWatchingCommand { get; private set; }
 
         public ICommand OpenHashTagFoldersWindowCommand { get; private set; }
+
         private void OpenHashTagFoldersWindowCommandAction()
         {
             if (hashTagFoldersWindow == null)
@@ -132,6 +136,7 @@ namespace MMK.Notify.ViewModels.TrayMenu
 
 
         public ICommand ExitCommand { get; private set; }
+
         private void ExitCommandAction()
         {
             IsVisible = false;
@@ -140,6 +145,7 @@ namespace MMK.Notify.ViewModels.TrayMenu
 
 
         public ICommand HideCommand { get; private set; }
+
         private void HideCommandAction()
         {
             IsVisible = false;

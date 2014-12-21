@@ -21,7 +21,7 @@
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        
+
         <Grid>
             <ListView
                 Style="{StaticResource ClearListBoxStyle}"
@@ -95,14 +95,14 @@
                                                         <ColumnDefinition Width="20px" />
                                                     </Grid.ColumnDefinitions>
 
-                                                    <TextBox 
+                                                    <TextBox
                                                         TextAlignment="Right"
-                                                        Text="{Binding Priority}"/>
-                                                    
+                                                        Text="{Binding Priority}" />
+
                                                     <TextBox Grid.Column="1"
                                                              Margin="-1,0,0,0"
-                                                        Foreground="{Binding IsValidPattern, Converter={StaticResource ErrorColorConverter}}"
-                                                        Text="{Binding PatternString}" />
+                                                             Foreground="{Binding IsValidPattern, Converter={StaticResource ErrorColorConverter}}"
+                                                             Text="{Binding PatternString}" />
 
                                                     <Button Grid.Column="2"
                                                             Command="{Binding DataContext.RemovePatternCommand,RelativeSource={RelativeSource AncestorType=ListBox}}"
@@ -120,10 +120,10 @@
                                     <Label Grid.Row="1"
                                            Margin="0,-4,0,-2"
                                            HorizontalAlignment="Right"
-                                       Foreground="#777" Width="54">
+                                           Foreground="#777" Width="54">
                                         Add:
                                     </Label>
-             
+
                                     <Button Grid.Row="1"
                                             HorizontalAlignment="Right"
                                             Width="21"
@@ -132,9 +132,9 @@
                                             VerticalContentAlignment="Center"
                                             Style="{StaticResource ClearButtonStyle}"
                                             Command="{Binding AddPatternCommand}" Margin="0,0,2,0">
-                                         +
+                                        +
                                     </Button>
-                                        
+
                                 </Grid>
                             </Grid>
                         </Border>

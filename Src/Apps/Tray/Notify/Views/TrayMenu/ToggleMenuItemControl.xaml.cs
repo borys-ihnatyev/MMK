@@ -37,7 +37,6 @@ namespace MMK.Notify.Views.TrayMenu
             {
                 if (ReleaseCommand != null)
                     ReleaseCommand.Execute(null);
-                
             }
             else
             {
@@ -49,7 +48,7 @@ namespace MMK.Notify.Views.TrayMenu
         }
 
         public static readonly DependencyProperty IsPressedCommandProperty =
-            DependencyProperty.Register("IsPressed", typeof(Boolean), typeof(ToggleMenuItemControl),
+            DependencyProperty.Register("IsPressed", typeof (Boolean), typeof (ToggleMenuItemControl),
                 new PropertyMetadata(default(Boolean)));
 
         public static readonly DependencyProperty PressCommandProperty =

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Forms;
-using MMK.Notify.ViewModels.TrayMenu;
 using MMK.Wpf.Windows;
 
 namespace MMK.Notify.Views.TrayMenu

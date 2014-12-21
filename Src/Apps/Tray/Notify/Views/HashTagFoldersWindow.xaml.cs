@@ -3,9 +3,6 @@ using MMK.Notify.ViewModels.HashTagFolders;
 
 namespace MMK.Notify.Views
 {
-    /// <summary>
-    /// Interaction logic for HashTagFoldersWindow.xaml
-    /// </summary>
     public partial class HashTagFoldersWindow
     {
         private readonly HashTagFoldersViewModel viewModel;
@@ -22,7 +19,5 @@ namespace MMK.Notify.Views
         {
             viewModel.LoadData();
         }
-
-
     }
 }

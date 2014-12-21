@@ -1,24 +1,14 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Windows;
-using System.Windows.Forms;
-using MMK.ApplicationServiceModel;
 using MMK.ApplicationServiceModel.Locator;
 using MMK.Notify.Model;
-using MMK.Notify.Model.Launchers;
 using MMK.Notify.Observer;
 using MMK.Notify.Observer.Remoting;
 using MMK.Notify.Observer.Tasking.Observing;
 using MMK.Notify.Properties;
 using MMK.Notify.Services;
 using MMK.Processing.AutoFolder;
-using MMK.Wpf.Providers;
 using Ninject;
-using Ninject.Activation;
-using Ninject.Modules;
-using Application = System.Windows.Application;
 
 namespace MMK.Notify
 {
@@ -84,8 +74,10 @@ namespace MMK.Notify
         {
             ServiceLocator.Bind<TaskObserver>().ToSelf().InSingletonScope();
             ServiceLocator.Bind<INotifyObserver>().To<NotifyObserver>().InSingletonScope();
-            
-            ServiceLocator.Bind<HashTagFolderCollection>().ToMethod(c => Settings.Default.FolderCollection).InSingletonScope();
+
+            ServiceLocator.Bind<HashTagFolderCollection>()
+                .ToMethod(c => Settings.Default.FolderCollection)
+                .InSingletonScope();
 
             ServiceLocator.Bind<NotificationService>().ToSelf().InSingletonScope();
             ServiceLocator.Bind<TaskObserverService>().ToSelf().InSingletonScope();

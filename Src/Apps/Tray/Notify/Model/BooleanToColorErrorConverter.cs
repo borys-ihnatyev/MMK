@@ -5,7 +5,7 @@ using System.Windows.Media;
 
 namespace MMK.Notify.Model
 {
-    class BooleanToColorErrorConverter : IValueConverter
+    internal class BooleanToColorErrorConverter : IValueConverter
     {
         public BooleanToColorErrorConverter()
         {

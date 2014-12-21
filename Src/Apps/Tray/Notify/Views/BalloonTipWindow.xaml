@@ -23,7 +23,7 @@
     <Window.Resources>
         <model:NotifyTypeColorConverter x:Key="NotifyTypeColorConverter" />
     </Window.Resources>
-    
+
     <Border BorderThickness="1px" BorderBrush="#777">
         <Grid Height="auto">
             <Grid.ColumnDefinitions>

@@ -182,7 +182,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\ServiceLocator.cs" />
+    <Compile Include="Services\GlobalShortcutService.cs" />
     <Compile Include="Services\NotificationService.cs" />
+    <Compile Include="Services\TaskObserverService.cs" />
     <Compile Include="Services\TrayMenuService.cs" />
     <Compile Include="Model\NotifyTypeColorConverter.cs" />
     <Compile Include="ViewModels\BalloonTipViewModel.cs" />

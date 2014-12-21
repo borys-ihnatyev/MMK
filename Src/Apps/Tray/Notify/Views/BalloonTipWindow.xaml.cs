@@ -1,10 +1,12 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Timers;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media.Animation;
 using MMK.Notify.ViewModels;
 using MMK.Wpf.Windows;
+using Application = System.Windows.Application;
 using Timer = System.Timers.Timer;
 
 namespace MMK.Notify.Views
@@ -41,7 +43,7 @@ namespace MMK.Notify.Views
             MouseDown += (s, e) => Close();
         }
 
-        private void BalloonTipWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void BalloonTipWindow_Closing(object sender, CancelEventArgs e)
         {
             hideTimer.Stop();
             hideTimer.Dispose();
@@ -64,9 +66,9 @@ namespace MMK.Notify.Views
 
         private void ShowTimeElapsed(object sender, ElapsedEventArgs e)
         {
-            App.Current.Dispatcher.Invoke(
+            Application.Current.Dispatcher.Invoke(
                 () => RaiseEvent(new RoutedEventArgs(HideBeginEvent))
-            );
+                );
         }
 
         private void HideCompleted(object sender, EventArgs e)
@@ -98,11 +100,10 @@ namespace MMK.Notify.Views
 
         private void AddMove()
         {
-
             var animation = new DoubleAnimation(
                 CalcMoveNewTop(),
                 new Duration(TimeSpan.FromMilliseconds(500))
-            );
+                );
 
             Storyboard.SetTarget(animation, this);
             Storyboard.SetTargetProperty(animation, new PropertyPath(TopProperty));
@@ -118,7 +119,7 @@ namespace MMK.Notify.Views
 
         private double CalcMoveNewTop()
         {
-            if(taskbar.Position == Taskbar.TaskbarPosition.Top)
+            if (taskbar.Position == Taskbar.TaskbarPosition.Top)
                 return Top + (Height + 5);
             return Top - (Height + 5);
         }

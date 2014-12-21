@@ -1,11 +1,13 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
+using MMK.ApplicationServiceModel;
 using MMK.Processing.AutoFolder;
 using MMK.Wpf;
+using MMK.Wpf.ViewModel;
 
 namespace MMK.Notify.ViewModels.HashTagFolders
 {
-    public class HashTagFoldersViewModel : Wpf.ViewModel.ViewModel
+    public class HashTagFoldersViewModel : ViewModel
     {
         private bool isApplyFailed;
 
@@ -25,7 +27,7 @@ namespace MMK.Notify.ViewModels.HashTagFolders
             get { return isApplyFailed; }
             private set
             {
-                if(value == isApplyFailed) return;
+                if (value == isApplyFailed) return;
                 isApplyFailed = value;
                 NotifyPropertyChanged();
             }
@@ -39,10 +41,10 @@ namespace MMK.Notify.ViewModels.HashTagFolders
         private void LoadFolderCollection()
         {
             //add folders
-            foreach (var path in App.Current.FolderCollection.Folders)
+            foreach (var path in IoC.ServiceLocator.Get<HashTagFolderCollection>().Folders)
             {
                 var folderViewModel = new FolderViewModel(path);
-                foreach (var pattern in App.Current.FolderCollection.GetPatternsForFolder(path))
+                foreach (var pattern in IoC.ServiceLocator.Get<HashTagFolderCollection>().GetPatternsForFolder(path))
                 {
                     var folderPatternViewModel = new FolderPatternViewModel
                     {
@@ -55,7 +57,7 @@ namespace MMK.Notify.ViewModels.HashTagFolders
             }
         }
 
-        public ICommand AddFolderCommand{ get; private set;}
+        public ICommand AddFolderCommand { get; private set; }
 
         private void AddFolderCommandAction()
         {
@@ -104,7 +106,7 @@ namespace MMK.Notify.ViewModels.HashTagFolders
             }
 
             IsApplyFailed = false;
-            App.Current.FolderCollection = hashTagFolders;
+            //App.Current.FolderCollection = hashTagFolders;
         }
     }
 }

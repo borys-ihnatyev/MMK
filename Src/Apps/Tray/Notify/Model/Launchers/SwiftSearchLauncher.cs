@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Forms;
+using MMK.ApplicationServiceModel;
+using MMK.Notify.Services;
 using MMK.SwiftSearch;
 using MMK.Wpf;
 using MMK.Wpf.Providers;
@@ -7,7 +9,7 @@ using Clipboard = System.Windows.Clipboard;
 
 namespace MMK.Notify.Model.Launchers
 {
-    sealed public class SwiftSearchLauncher : GlobalShortcutProviderCollection
+    public sealed class SwiftSearchLauncher : GlobalShortcutProviderCollection
     {
         private readonly WindowLauncher<SearchWindow> launcher = new WindowLauncher<SearchWindow>();
 
@@ -17,32 +19,32 @@ namespace MMK.Notify.Model.Launchers
 
         public SwiftSearchLauncher()
         {
-
         }
 
-        public SwiftSearchLauncher(Window window):base(window)
+        public SwiftSearchLauncher(Window window) : base(window)
         {
         }
 
         public void SetStartShortcut(KeyModifyers modifyers, Keys key)
         {
-            if(isSetStartShortcut) return;
+            if (isSetStartShortcut) return;
 
-            isSetStartShortcut = Add(modifyers, (int)key, Start);
+            isSetStartShortcut = Add(modifyers, (int) key, Start);
         }
 
         private void Start()
         {
-            App.Current.StopListenShortcuts();
+            IoC.ServiceLocator.Get<GlobalShortcutService>().Stop();
             launcher.Launch();
-            launcher.Window.Closed += (s, e) => App.Current.StartListenShortcuts();
+            launcher.Window.Closed += (s, e) => IoC.ServiceLocator.Get<GlobalShortcutService>().Start();
+            ;
         }
 
         public void SetStartFromClipboardShortcut(KeyModifyers modifyers, Keys key)
         {
-            if(isSetStartFromClipboardShortcut)return;
+            if (isSetStartFromClipboardShortcut) return;
 
-            isSetStartFromClipboardShortcut = Add(modifyers, (int)key, StartFromClipboard);
+            isSetStartFromClipboardShortcut = Add(modifyers, (int) key, StartFromClipboard);
         }
 
         private void StartFromClipboard()

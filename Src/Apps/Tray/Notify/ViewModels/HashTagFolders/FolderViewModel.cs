@@ -3,10 +3,11 @@ using System.IO;
 using System.Windows.Forms;
 using System.Windows.Input;
 using MMK.Wpf;
+using MMK.Wpf.ViewModel;
 
 namespace MMK.Notify.ViewModels.HashTagFolders
 {
-    public class FolderViewModel : Wpf.ViewModel.ViewModel
+    public class FolderViewModel : ViewModel
     {
         private string path;
         private bool isValidPath;
@@ -45,8 +46,8 @@ namespace MMK.Notify.ViewModels.HashTagFolders
             get { return isValidPath; }
             private set
             {
-                if(value == isValidPath) return;
-                
+                if (value == isValidPath) return;
+
                 isValidPath = value;
                 NotifyPropertyChanged();
             }

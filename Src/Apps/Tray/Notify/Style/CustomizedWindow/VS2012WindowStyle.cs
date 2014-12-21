@@ -1,8 +1,8 @@
 using System;
-using System.Windows.Input;
-using System.Windows;
-using System.Windows.Interop;
 using System.Runtime.InteropServices;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 
 namespace Whush.Demo.Styles.CustomizedWindow
@@ -15,13 +15,17 @@ namespace Whush.Demo.Styles.CustomizedWindow
             while (element != null)
             {
                 element = VisualTreeHelper.GetParent(element);
-                if (element is Window) { action(element as Window); break; }
+                if (element is Window)
+                {
+                    action(element as Window);
+                    break;
+                }
             }
         }
 
         public static void ForWindowFromTemplate(this object templateFrameworkElement, Action<Window> action)
         {
-            var window = ((FrameworkElement)templateFrameworkElement).TemplatedParent as Window;
+            var window = ((FrameworkElement) templateFrameworkElement).TemplatedParent as Window;
             if (window != null) action(window);
         }
 
@@ -36,28 +40,59 @@ namespace Whush.Demo.Styles.CustomizedWindow
     {
         #region sizing event handlers
 
-        void OnSizeSouth(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.South); }
-        void OnSizeNorth(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.North); }
-        void OnSizeEast(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.East); }
-        void OnSizeWest(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.West); }
-        void OnSizeNorthWest(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.NorthWest); }
-        void OnSizeNorthEast(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.NorthEast); }
-        void OnSizeSouthEast(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.SouthEast); }
-        void OnSizeSouthWest(object sender, MouseButtonEventArgs e) { OnSize(sender, SizingAction.SouthWest); }
+        private void OnSizeSouth(object sender, MouseButtonEventArgs e)
+        {
+            OnSize(sender, SizingAction.South);
+        }
 
-        void OnSize(object sender, SizingAction action)
+        private void OnSizeNorth(object sender, MouseButtonEventArgs e)
+        {
+            OnSize(sender, SizingAction.North);
+        }
+
+        private void OnSizeEast(object sender, MouseButtonEventArgs e)
+        {
+            OnSize(sender, SizingAction.East);
+        }
+
+        private void OnSizeWest(object sender, MouseButtonEventArgs e)
+        {
+            OnSize(sender, SizingAction.West);
+        }
+
+        private void OnSizeNorthWest(object sender, MouseButtonEventArgs e)
+        {
+            OnSize(sender, SizingAction.NorthWest);
+        }
+
+        private void OnSizeNorthEast(object sender, MouseButtonEventArgs e)
+        {
+            OnSize(sender, SizingAction.NorthEast);
+        }
+
+        private void OnSizeSouthEast(object sender, MouseButtonEventArgs e)
+        {
+            OnSize(sender, SizingAction.SouthEast);
+        }
+
+        private void OnSizeSouthWest(object sender, MouseButtonEventArgs e)
+        {
+            OnSize(sender, SizingAction.SouthWest);
+        }
+
+        private void OnSize(object sender, SizingAction action)
         {
             if (Mouse.LeftButton == MouseButtonState.Pressed)
             {
                 sender.ForWindowFromTemplate(w =>
-                    {
-                        if (w.WindowState == WindowState.Normal)
-                            DragSize(w.GetWindowHandle(), action);
-                    });
+                {
+                    if (w.WindowState == WindowState.Normal)
+                        DragSize(w.GetWindowHandle(), action);
+                });
             }
         }
 
-        void IconMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void IconMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ClickCount > 1)
             {
@@ -66,26 +101,29 @@ namespace Whush.Demo.Styles.CustomizedWindow
             else
             {
                 sender.ForWindowFromTemplate(w =>
-                    SendMessage(w.GetWindowHandle(), WmSyscommand, (IntPtr)ScKeymenu, (IntPtr)' '));
+                    SendMessage(w.GetWindowHandle(), WmSyscommand, (IntPtr) ScKeymenu, (IntPtr) ' '));
             }
         }
 
-        void CloseButtonClick(object sender, RoutedEventArgs e)
+        private void CloseButtonClick(object sender, RoutedEventArgs e)
         {
             sender.ForWindowFromTemplate(w => w.Close());
         }
 
-        void MinButtonClick(object sender, RoutedEventArgs e)
+        private void MinButtonClick(object sender, RoutedEventArgs e)
         {
             sender.ForWindowFromTemplate(w => w.WindowState = WindowState.Minimized);
         }
 
-        void MaxButtonClick(object sender, RoutedEventArgs e)
+        private void MaxButtonClick(object sender, RoutedEventArgs e)
         {
-            sender.ForWindowFromTemplate(w => w.WindowState = (w.WindowState == WindowState.Maximized) ? WindowState.Normal : WindowState.Maximized);
+            sender.ForWindowFromTemplate(
+                w =>
+                    w.WindowState =
+                        (w.WindowState == WindowState.Maximized) ? WindowState.Normal : WindowState.Maximized);
         }
 
-        void TitleBarMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void TitleBarMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ClickCount > 1)
             {
@@ -97,26 +135,26 @@ namespace Whush.Demo.Styles.CustomizedWindow
             }
         }
 
-        void TitleBarMouseMove(object sender, MouseEventArgs e)
+        private void TitleBarMouseMove(object sender, MouseEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 sender.ForWindowFromTemplate(w =>
+                {
+                    if (w.WindowState == WindowState.Maximized)
                     {
-                        if (w.WindowState == WindowState.Maximized)
-                        {
-                            w.BeginInit();
-                            const double adjustment = 40.0;
-                            var mouse1 = e.MouseDevice.GetPosition(w);
-                            var width1 = Math.Max(w.ActualWidth - 2 * adjustment, adjustment);
-                            w.WindowState = WindowState.Normal;
-                            var width2 = Math.Max(w.ActualWidth - 2 * adjustment, adjustment);
-                            w.Left = (mouse1.X - adjustment) * (1 - width2 / width1);
-                            w.Top = -7;
-                            w.EndInit();
-                            w.DragMove();
-                        }
-                    });
+                        w.BeginInit();
+                        const double adjustment = 40.0;
+                        var mouse1 = e.MouseDevice.GetPosition(w);
+                        var width1 = Math.Max(w.ActualWidth - 2*adjustment, adjustment);
+                        w.WindowState = WindowState.Normal;
+                        var width2 = Math.Max(w.ActualWidth - 2*adjustment, adjustment);
+                        w.Left = (mouse1.X - adjustment)*(1 - width2/width1);
+                        w.Top = -7;
+                        w.EndInit();
+                        w.DragMove();
+                    }
+                });
             }
         }
 
@@ -124,16 +162,16 @@ namespace Whush.Demo.Styles.CustomizedWindow
 
         #region P/Invoke
 
-        const int WmSyscommand = 0x112;
-        const int ScSize = 0xF000;
-        const int ScKeymenu = 0xF100;
+        private const int WmSyscommand = 0x112;
+        private const int ScSize = 0xF000;
+        private const int ScKeymenu = 0xF100;
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        static extern IntPtr SendMessage(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
+        private static extern IntPtr SendMessage(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
 
-        static void DragSize(IntPtr handle, SizingAction sizingAction)
+        private static void DragSize(IntPtr handle, SizingAction sizingAction)
         {
-            SendMessage(handle, WmSyscommand, (IntPtr)(ScSize + sizingAction), IntPtr.Zero);
+            SendMessage(handle, WmSyscommand, (IntPtr) (ScSize + sizingAction), IntPtr.Zero);
             SendMessage(handle, 514, IntPtr.Zero, IntPtr.Zero);
         }
 

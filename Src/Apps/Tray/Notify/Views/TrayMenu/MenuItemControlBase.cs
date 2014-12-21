@@ -9,29 +9,32 @@ namespace MMK.Notify.Views.TrayMenu
     {
         public string Title
         {
-            get { return (string)GetValue(TitleProperty); }
+            get { return (string) GetValue(TitleProperty); }
             set { SetValue(TitleProperty, value); }
         }
 
         public ImageSource Image
         {
-            get { return (ImageSource)GetValue(ImageProperty); }
+            get { return (ImageSource) GetValue(ImageProperty); }
             set { SetValue(ImageProperty, value); }
         }
 
         public ICommand Command
         {
-            get { return (ICommand)GetValue(CommandProperty); }
+            get { return (ICommand) GetValue(CommandProperty); }
             set { SetValue(CommandProperty, value); }
         }
 
         public static readonly DependencyProperty TitleProperty =
-            DependencyProperty.Register("Title", typeof(string), typeof(MenuItemControlBase), new PropertyMetadata(default(string)));
+            DependencyProperty.Register("Title", typeof (string), typeof (MenuItemControlBase),
+                new PropertyMetadata(default(string)));
 
         public static readonly DependencyProperty ImageProperty =
-            DependencyProperty.Register("Image", typeof(ImageSource), typeof(MenuItemControlBase), new PropertyMetadata(default(ImageSource)));
+            DependencyProperty.Register("Image", typeof (ImageSource), typeof (MenuItemControlBase),
+                new PropertyMetadata(default(ImageSource)));
 
         public static readonly DependencyProperty CommandProperty =
-            DependencyProperty.Register("Command", typeof(ICommand), typeof(MenuItemControlBase), new PropertyMetadata(default(ICommand)));
+            DependencyProperty.Register("Command", typeof (ICommand), typeof (MenuItemControlBase),
+                new PropertyMetadata(default(ICommand)));
     }
 }

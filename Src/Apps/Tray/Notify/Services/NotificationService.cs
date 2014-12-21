@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Timers;
+using System.Windows;
 using MMK.Notify.Observer;
 using MMK.Notify.ViewModels;
 using MMK.Notify.Views;
@@ -25,11 +26,11 @@ namespace MMK.Notify.Services
         {
             lock (messageQueue)
             {
-                if(TryStopTimerOnEmptyQueue())
+                if (TryStopTimerOnEmptyQueue())
                     return;
-     
+
                 var message = messageQueue.Dequeue();
-                App.Current.Dispatcher.Invoke(() => Push(message));
+                Application.Current.Dispatcher.Invoke(() => Push(message));
 
                 TryStopTimerOnEmptyQueue();
             }
@@ -38,7 +39,7 @@ namespace MMK.Notify.Services
         private bool TryStopTimerOnEmptyQueue()
         {
             if (messageQueue.Count != 0) return false;
-            
+
             messageQueueTimer.Stop();
             return true;
         }

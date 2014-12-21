@@ -5,11 +5,12 @@ using MMK.Utils;
 namespace MMK.Notify.Model
 {
     /// <summary>
-    /// TODO : provide for each browser specific (now is only for CHROME)
+    ///     TODO : provide for each browser specific (now is only for CHROME)
     /// </summary>
-    sealed public class MusicDownloadsWatcher
+    public sealed class MusicDownloadsWatcher
     {
-        private static readonly string DefaultDownloadsPath = Environment.ExpandEnvironmentVariables("%USERPROFILE%") + @"\Downloads\";
+        private static readonly string DefaultDownloadsPath = Environment.ExpandEnvironmentVariables("%USERPROFILE%") +
+                                                              @"\Downloads\";
 
         public MusicDownloadsWatcher()
         {
