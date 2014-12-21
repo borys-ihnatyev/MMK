@@ -2,6 +2,6 @@
 {
     public interface IServiceContainer
     {
-        TService GetService<TService>();
+        TService GetService<TService>() where TService : IService;
     }
 }
