@@ -6,7 +6,7 @@
 
         public void Initialize()
         {
-            if(IsInitialized)
+            if (IsInitialized)
                 return;
 
             OnInitialize();
@@ -16,7 +16,7 @@
 
         protected virtual void OnInitialize()
         {
-            
+
         }
 
         public abstract void Start();
