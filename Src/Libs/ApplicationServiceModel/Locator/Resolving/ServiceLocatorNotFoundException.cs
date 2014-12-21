@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MMK.Application.ServiceLocator.Resolving
+namespace MMK.ApplicationServiceModel.Locator.Resolving
 {
     [Serializable]
     public class ServiceLocatorNotFoundException : Exception

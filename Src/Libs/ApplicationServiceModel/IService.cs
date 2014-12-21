@@ -1,4 +1,4 @@
-﻿namespace MMK.Application
+﻿namespace MMK.ApplicationServiceModel
 {
     public interface IService
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MMK.Application.ServiceLocator
+namespace MMK.ApplicationServiceModel.Locator
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class ServiceLocatorOwnerAttribute : Attribute

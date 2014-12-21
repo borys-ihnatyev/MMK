@@ -7,7 +7,7 @@
     <ProjectGuid>{B7D69BF7-B8F9-46FF-963C-93ED9C8D5F47}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MMK.Application</RootNamespace>
+    <RootNamespace>MMK.ApplicationServiceModel</RootNamespace>
     <AssemblyName>MMK.ApplicationServiceModel</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

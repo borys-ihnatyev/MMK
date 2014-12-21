@@ -1,6 +1,6 @@
 ﻿using MMK.Application;
-using MMK.Application.ServiceLocator;
-using MMK.Application.ServiceLocator.Resolving;
+using MMK.ApplicationServiceModel.Locator;
+using MMK.ApplicationServiceModel.Locator.Resolving;
 using NUnit.Framework;
 
 namespace MMK.ApplicationServiceModel

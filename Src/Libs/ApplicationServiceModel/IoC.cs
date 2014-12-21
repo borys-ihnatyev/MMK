@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
-using MMK.Application.ServiceLocator.Resolving;
+using MMK.ApplicationServiceModel.ServiceLocator.Resolving;
 
-namespace MMK.Application
+namespace MMK.ApplicationServiceModel
 {
     public class IoC
     {

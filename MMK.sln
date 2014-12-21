@@ -43,6 +43,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Usages", "Usages", "{D5C975
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotMarkPianoKeyboardUsage", "Usages\HotMarkPianoKeyboardUsage\HotMarkPianoKeyboardUsage.csproj", "{3E2AED46-A3F7-4512-8024-004005E7A3B4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationServiceModel", "Src\Libs\ApplicationServiceModel\ApplicationServiceModel.csproj", "{B7D69BF7-B8F9-46FF-963C-93ED9C8D5F47}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationServiceModel", "Tests\Libs\ApplicationServiceModel\ApplicationServiceModel.csproj", "{C890172E-B6B5-428C-88EB-BF0D6833F20F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -271,6 +275,38 @@ Global
 		{3E2AED46-A3F7-4512-8024-004005E7A3B4}.Release|Win32.ActiveCfg = Release|Any CPU
 		{3E2AED46-A3F7-4512-8024-004005E7A3B4}.Release|x64.ActiveCfg = Release|Any CPU
 		{3E2AED46-A3F7-4512-8024-004005E7A3B4}.Release|x86.ActiveCfg = Release|Any CPU
+		{B7D69BF7-B8F9-46FF-963C-93ED9C8D5F47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7D69BF7-B8F9-46FF-963C-93ED9C8D5F47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7D69BF7-B8F9-46FF-963C-93ED9C8D5F47}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{B7D69BF7-B8F9-46FF-963C-93ED9C8D5F47}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B7D69BF7-B8F9-46FF-963C-93ED9C8D5F47}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B7D69BF7-B8F9-46FF-963C-93ED9C8D5F47}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{B7D69BF7-B8F9-46FF-963C-93ED9C8D5F47}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B7D69BF7-B8F9-46FF-963C-93ED9C8D5F47}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B7D69BF7-B8F9-46FF-963C-93ED9C8D5F47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7D69BF7-B8F9-46FF-963C-93ED9C8D5F47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7D69BF7-B8F9-46FF-963C-93ED9C8D5F47}.Release|ARM.ActiveCfg = Release|Any CPU
+		{B7D69BF7-B8F9-46FF-963C-93ED9C8D5F47}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B7D69BF7-B8F9-46FF-963C-93ED9C8D5F47}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B7D69BF7-B8F9-46FF-963C-93ED9C8D5F47}.Release|Win32.ActiveCfg = Release|Any CPU
+		{B7D69BF7-B8F9-46FF-963C-93ED9C8D5F47}.Release|x64.ActiveCfg = Release|Any CPU
+		{B7D69BF7-B8F9-46FF-963C-93ED9C8D5F47}.Release|x86.ActiveCfg = Release|Any CPU
+		{C890172E-B6B5-428C-88EB-BF0D6833F20F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C890172E-B6B5-428C-88EB-BF0D6833F20F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C890172E-B6B5-428C-88EB-BF0D6833F20F}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{C890172E-B6B5-428C-88EB-BF0D6833F20F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C890172E-B6B5-428C-88EB-BF0D6833F20F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C890172E-B6B5-428C-88EB-BF0D6833F20F}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{C890172E-B6B5-428C-88EB-BF0D6833F20F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C890172E-B6B5-428C-88EB-BF0D6833F20F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C890172E-B6B5-428C-88EB-BF0D6833F20F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C890172E-B6B5-428C-88EB-BF0D6833F20F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C890172E-B6B5-428C-88EB-BF0D6833F20F}.Release|ARM.ActiveCfg = Release|Any CPU
+		{C890172E-B6B5-428C-88EB-BF0D6833F20F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C890172E-B6B5-428C-88EB-BF0D6833F20F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C890172E-B6B5-428C-88EB-BF0D6833F20F}.Release|Win32.ActiveCfg = Release|Any CPU
+		{C890172E-B6B5-428C-88EB-BF0D6833F20F}.Release|x64.ActiveCfg = Release|Any CPU
+		{C890172E-B6B5-428C-88EB-BF0D6833F20F}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -292,5 +328,7 @@ Global
 		{8AFE6C18-58AC-4CC9-AD97-C3BA844ECF76} = {A9589D96-630C-4949-8B8B-72F225B34349}
 		{E26ADF4C-68ED-4962-9EA5-42A6EBC7A0B1} = {C8215B92-2AFE-4041-BC6B-8E3F8834F648}
 		{3E2AED46-A3F7-4512-8024-004005E7A3B4} = {D5C97564-53FB-4613-8FA2-A1821DB39051}
+		{B7D69BF7-B8F9-46FF-963C-93ED9C8D5F47} = {9C8786EC-47FE-4D04-9798-FBAA9A59D395}
+		{C890172E-B6B5-428C-88EB-BF0D6833F20F} = {C8215B92-2AFE-4041-BC6B-8E3F8834F648}
 	EndGlobalSection
 EndGlobal

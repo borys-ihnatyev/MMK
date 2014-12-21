@@ -3,7 +3,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 
-namespace MMK.Application.ServiceLocator.Resolving
+namespace MMK.ApplicationServiceModel.Locator.Resolving
 {
 
     internal class ServiceLocatorResolver
