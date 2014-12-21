@@ -365,6 +365,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Libs\ApplicationServiceModel\ApplicationServiceModel.csproj">
+      <Project>{b7d69bf7-b8f9-46ff-963c-93ed9c8d5f47}</Project>
+      <Name>ApplicationServiceModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Libs\MMK\MMK.csproj">
       <Project>{A9193781-F0F5-406C-BC5F-312AE4F516F3}</Project>
       <Name>MMK</Name>
