@@ -1,0 +1,11 @@
+﻿<TaskProgressViewModel xmlns="clr-namespace:MMK.Notify.ViewModels"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:observer="clr-namespace:MMK.Notify.Observer;assembly=MMK.Notify.Observer"
+                       ObservedCount="7"
+                       QueuedCount="12">
+    <TaskProgressViewModel.CurrentInfo>
+        <observer:NotifyMessage CommonDescription="Add hash tag model" 
+                                TargetObject="Shakira - Loca (Super extended mega mix)" 
+                                Type="Success"/>
+    </TaskProgressViewModel.CurrentInfo>
+</TaskProgressViewModel>
