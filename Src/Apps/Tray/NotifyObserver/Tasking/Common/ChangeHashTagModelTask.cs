@@ -8,7 +8,7 @@ using MMK.Notify.Observer.Tasking.Common.Base;
 namespace MMK.Notify.Observer.Tasking.Common
 {
     [Serializable]
-    internal class ChangeHashTagModelTask : Mp3FileChangeTask
+    public class ChangeHashTagModelTask : Mp3FileChangeTask
     {
         protected readonly HashTagModel AddHashTagModel;
         protected readonly HashTagModel RemoveHashTagModel;

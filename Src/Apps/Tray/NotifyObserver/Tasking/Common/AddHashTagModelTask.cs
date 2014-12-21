@@ -4,7 +4,7 @@ using MMK.Marking.Representation;
 namespace MMK.Notify.Observer.Tasking.Common
 {
     [Serializable]
-    internal sealed class AddHashTagModelTask : ChangeHashTagModelTask
+    public sealed class AddHashTagModelTask : ChangeHashTagModelTask
     {
         public AddHashTagModelTask(string oldPath, HashTagModel hashTags) 
             : base(oldPath, hashTags, null)

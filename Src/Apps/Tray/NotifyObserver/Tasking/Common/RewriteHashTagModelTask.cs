@@ -2,7 +2,7 @@
 
 namespace MMK.Notify.Observer.Tasking.Common
 {
-    internal sealed class RewriteHashTagModelTask : ChangeHashTagModelTask
+    public sealed class RewriteHashTagModelTask : ChangeHashTagModelTask
     {
         public RewriteHashTagModelTask(string oldPath, HashTagModel hashTags) : base(oldPath, hashTags, null)
         {

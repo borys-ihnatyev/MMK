@@ -6,7 +6,7 @@ using MMK.Notify.Observer.Tasking.Common.Base;
 namespace MMK.Notify.Observer.Tasking.Common
 {
     [Serializable]
-    internal class NormalizeTrackNameTask : Mp3FileChangeTask
+    public class NormalizeTrackNameTask : Mp3FileChangeTask
     {
         public NormalizeTrackNameTask(string oldPath)
             : base(oldPath)

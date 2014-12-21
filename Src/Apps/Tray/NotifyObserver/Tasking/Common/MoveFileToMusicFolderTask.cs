@@ -7,7 +7,7 @@ using MMK.Processing.AutoFolder;
 namespace MMK.Notify.Observer.Tasking.Common
 {
     [Serializable]
-    internal sealed class MoveFileToMusicFolderTask : Mp3FileChangeTask
+    public sealed class MoveFileToMusicFolderTask : Mp3FileChangeTask
     {
         private readonly HashTagFolderCollection folderCollection;
 

@@ -7,7 +7,7 @@ using MMK.Utils;
 namespace MMK.Notify.Observer.Tasking.Common.Base
 {
     [Serializable]
-    internal abstract class Mp3FileChangeTask : FileChangeTask
+    public abstract class Mp3FileChangeTask : FileChangeTask
     {
         protected Mp3FileChangeTask(string oldPath) : base(oldPath)
         { }
