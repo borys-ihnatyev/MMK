@@ -24,7 +24,6 @@ namespace MMK.Wpf
             SetWindowLong(wndHelper.Handle, (int)GetWindowLongFields.GWL_EXSTYLE, (IntPtr)exStyle);
         }
 
-
         #region Window styles
 
         // ReSharper disable InconsistentNaming
