@@ -183,7 +183,6 @@
     <Compile Include="Services\TrayMenuService.cs" />
     <Compile Include="Model\NotifyTypeColorConverter.cs" />
     <Compile Include="ViewModels\BalloonTipViewModel.cs" />
-    <Compile Include="ViewModels\TaskProgressViewModel.cs" />
     <Compile Include="Views\BalloonTipWindow.xaml.cs">
       <DependentUpon>BalloonTipWindow.xaml</DependentUpon>
     </Compile>
@@ -208,10 +207,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DesignData\TaskProgressViewModel.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\BalloonTipWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -225,10 +220,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\HashTagFoldersWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\TaskProgressView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -250,9 +241,6 @@
     </Compile>
     <Compile Include="Views\HashTagFoldersWindow.xaml.cs">
       <DependentUpon>HashTagFoldersWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\TaskProgressView.xaml.cs">
-      <DependentUpon>TaskProgressView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TrayMenu\MenuItemControl.xaml.cs">
       <DependentUpon>MenuItemControl.xaml</DependentUpon>
