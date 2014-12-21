@@ -79,7 +79,7 @@ namespace MMK.ApplicationServiceModel.Locator.Resolving
             if (serviceLocatorProperties.Count > 1)
                 throw new ServiceLocatorConflictException("Only one property can be marked with ServiceLocatorAttribute");
 
-            if (!serviceLocatorProperties[0].PropertyType.IsAssignableFrom(typeof (IServiceLocator)))
+            if (!typeof (IServiceLocator).IsAssignableFrom(serviceLocatorProperties[0].PropertyType))
                 throw new ServiceLocatorNotFoundException("Property marked with ServiceLocatorAttribute must be subclass of IServiceLocator");
         }
     }
