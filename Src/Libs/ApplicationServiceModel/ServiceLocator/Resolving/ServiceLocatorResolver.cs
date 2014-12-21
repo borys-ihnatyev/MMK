@@ -5,6 +5,7 @@ using System.Reflection;
 
 namespace MMK.Application.ServiceLocator.Resolving
 {
+
     internal class ServiceLocatorResolver
     {
         private readonly Assembly assembly;
