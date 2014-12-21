@@ -11,20 +11,5 @@ namespace MMK.Notify.Observer
 
         void Observe(Task task);
         void Observe(IEnumerable<Task> task);
-
-        void ChangeHashTagModel(string path, HashTagModel add, HashTagModel remove);
-        void ChangeHashTagModel(IEnumerable<string> path, HashTagModel add, HashTagModel remove);
-
-        void RewriteHashTagModel(string path, HashTagModel hashTagModel);
-        void RewriteHashTagModel(IEnumerable<string> paths, HashTagModel hashTagModel);
-        
-        void AddHashTagModel(string path, HashTagModel hashTagModel);
-        void AddHashTagModel(IEnumerable<string> paths, HashTagModel hashTagModel);
-
-        void NormalizeTrackName(string path);
-        void NormalizeTrackName(IEnumerable<string> paths);
-
-        void MoveToCollectionFolder(string path, HashTagFolderCollection collection);
-        void MoveToCollectionFolder(IEnumerable<string> paths, HashTagFolderCollection collection);
     }
 }
