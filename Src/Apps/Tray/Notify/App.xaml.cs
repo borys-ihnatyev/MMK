@@ -102,7 +102,6 @@ namespace MMK.Notify
         {
             ServiceLocator.Get<TaskObserverService>().Start();
             ServiceLocator.Get<TrayMenuService>().Start();
-            ServiceLocator.Get<TaskProgressService>().Start();
         }
 
         protected override void OnExit(ExitEventArgs e)
