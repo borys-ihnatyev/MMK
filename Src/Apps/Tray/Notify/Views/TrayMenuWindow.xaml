@@ -28,11 +28,7 @@
                 <Setter Property="AllowsTransparency" Value="True" />
                 <Setter Property="Topmost" Value="True" />
                 <Setter Property="Foreground" Value="White"></Setter>
-                <Setter Property="Background">
-                    <Setter.Value>
-                        <SolidColorBrush Opacity="0.9" Color="#111" />
-                    </Setter.Value>
-                </Setter>
+                <Setter Property="Background" Value="{StaticResource WindowBlackGlance}"/>
             </Style.Setters>
             <Style.Triggers>
                 <DataTrigger Binding="{Binding IsVisible}" Value="false">
