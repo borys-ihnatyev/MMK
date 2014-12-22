@@ -15,6 +15,7 @@ namespace MMK.Notify.Views
             taskbar = new Taskbar();
             InitializeComponent();
             MouseDown += OnMouseDown;
+            Loaded += (s, e) => base.Show();
         }
 
         private void OnMouseDown(object sender, MouseButtonEventArgs e)
@@ -27,13 +28,11 @@ namespace MMK.Notify.Views
         {
             SetStartupPosition();
             Opacity = 1;
-            base.Show();
             Activate();
         }
 
         public new void Hide()
         {
-            base.Hide();
             Opacity = 0;
         }
 
