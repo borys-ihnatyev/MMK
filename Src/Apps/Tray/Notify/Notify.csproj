@@ -184,6 +184,11 @@
     </ApplicationDefinition>
     <Compile Include="Model\ServiceLocator.cs" />
     <Compile Include="Model\Service\IDownloadsWatcher.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\GlobalShortcutService.cs" />
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\TaskObserverService.cs" />
@@ -201,11 +206,6 @@
     <Compile Include="Services\ChromeDownloadsWatcherService.cs" />
     <Compile Include="Model\Launchers\SwiftSearchLauncher.cs" />
     <Compile Include="Model\Settings\SettingsPropertyAttribute.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Settings.cs" />
     <Compile Include="Style\CustomizedWindow\VS2012WindowStyle.cs" />
     <Compile Include="ViewModels\HashTagFolders\FolderPatternViewModel.cs" />
@@ -323,9 +323,6 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="OtherResources\NotifyLogo.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\NotifyLogo.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -336,27 +333,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\exit-32.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\glasses-32.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\keyboard-32.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\save-32.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\settings-32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -415,7 +392,11 @@
       <Name>NotifyObserver</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\process-26.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

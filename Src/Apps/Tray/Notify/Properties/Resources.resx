@@ -121,20 +121,11 @@
   <data name="exit_26" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\exit-26.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="exit_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\exit-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="glasses_26" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\glasses-26.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="glasses_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\glasses-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="keyboard_26" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\keyboard-26.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="keyboard_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\keyboard-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Layouts_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Layouts-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -148,10 +139,7 @@
   <data name="settings_26" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\settings-26.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="settings_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\settings-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TrayIcon_MMK_Notify" xml:space="preserve">
-    <value>MMK Notify</value>
+  <data name="process_26" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\process-26.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
