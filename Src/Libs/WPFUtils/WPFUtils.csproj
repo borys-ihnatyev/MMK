@@ -99,6 +99,7 @@
     <Compile Include="Providers\Key\GlobalKeyShortcut.cs" />
     <Compile Include="Providers\Key\GlobalKeyShortcutProvider.cs" />
     <Compile Include="Providers\Key\GlobalKeyShortcutRegister.cs" />
+    <Compile Include="System\Windows\FrameworkElementExtension.cs" />
     <Compile Include="Windows\TaskBar.Native.cs" />
     <Compile Include="Windows\TaskBar.Abe.cs" />
     <Compile Include="Windows\TaskBar.Abm.cs" />
