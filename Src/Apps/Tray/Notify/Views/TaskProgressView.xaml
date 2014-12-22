@@ -13,30 +13,36 @@
                 FontWeight="Regular"
                 Visibility="Visible"
                 Width="350" Height="120" d:DataContext="{d:DesignData Source=../DesignData/TaskProgressViewModel.xaml}">
-    <Window.Style>
-        <Style TargetType="Window">
+    <wpf:TrayWindow.Style>
+        <Style TargetType="{x:Type Window}">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding IsActive}" Value="False">
-                    <DataTrigger.EnterActions>
-                        <BeginStoryboard>
-                            <Storyboard TargetProperty="Opacity">
-                                <DoubleAnimation To="0" Duration="0:0:0.7"/>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </DataTrigger.EnterActions>
-                </DataTrigger>
+                
                 <DataTrigger Binding="{Binding IsActive}" Value="True">
                     <DataTrigger.EnterActions>
                         <BeginStoryboard>
-                            <Storyboard TargetProperty="Opacity">
-                                <DoubleAnimation To="1" Duration="0:0:0.7"/>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" 
+                                                 To="0" 
+                                                 Duration="0:0:0.7"/>
                             </Storyboard>
                         </BeginStoryboard>
                     </DataTrigger.EnterActions>
+                    
+                    <DataTrigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation 
+                                    Storyboard.TargetProperty="Opacity"
+                                    To="1" 
+                                    Duration="0:0:0.7"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.ExitActions>
                 </DataTrigger>
+                
             </Style.Triggers>
         </Style>
-    </Window.Style>
+    </wpf:TrayWindow.Style>
     
     <Window.Resources>
         <model:NotifyTypeColorConverter x:Key="NotifyTypeColorConverter"/>

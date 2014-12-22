@@ -7,6 +7,8 @@
                               mc:Ignorable="d">
     <Button Margin="-7px,0,-7px,0"
             HorizontalContentAlignment="Left"
+            Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"
+            Background="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"
             Command="{Binding Command, RelativeSource={RelativeSource AncestorType={x:Type trayMenu:MenuItemControl}}}"
             Style="{StaticResource ClearButtonStyle}">
         <Grid Height="32px">

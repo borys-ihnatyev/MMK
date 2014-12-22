@@ -5,30 +5,39 @@
                               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                               xmlns:trayMenu="clr-namespace:MMK.Notify.Views.TrayMenu"
                               mc:Ignorable="d">
-    <Button Margin="-7px,0,-7px,0"
-            HorizontalContentAlignment="Left"
-            Command="{Binding Command, RelativeSource={RelativeSource AncestorType={x:Type trayMenu:ToggleMenuItemControl}}}"
-            Style="{StaticResource ClearButtonStyle}">
-        <Grid Height="32px">
+    <CheckBox Name="StateCheckBox"
+              Margin="-7px,0,-7px,0"
+              Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"
+              Background="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"
+              IsChecked="{Binding IsPressed, RelativeSource={RelativeSource AncestorType={x:Type trayMenu:ToggleMenuItemControl}}, Mode=TwoWay}"
+              Command="{Binding Command, RelativeSource={RelativeSource AncestorType={x:Type trayMenu:ToggleMenuItemControl}}}"
+              Content="{Binding Title, RelativeSource={RelativeSource AncestorType={x:Type trayMenu:ToggleMenuItemControl}}}"
+              HorizontalContentAlignment="Left">
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="32px" />
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+        <CheckBox.Template>
+            <ControlTemplate TargetType="{x:Type CheckBox}">
+                <DockPanel Height="32">
+                    
+                    <Image DockPanel.Dock="Left"
+                           Source="{Binding Image, RelativeSource={RelativeSource AncestorType={x:Type trayMenu:ToggleMenuItemControl}}}"
+                           Margin="6" />
 
-            <Image Grid.Column="0"
-                   Source="{Binding Image, RelativeSource={RelativeSource AncestorType={x:Type trayMenu:ToggleMenuItemControl}}}"
-                   Margin="6px" />
+                    <Ellipse x:Name="_StateEllipseControl"
+                             DockPanel.Dock="Left"
+                             Width="10"
+                             Height="10"
+                             Fill="Tomato" />
 
-            <CheckBox Name="StateCheckBox" Grid.Column="1"
-                      IsChecked="{Binding IsPressed, RelativeSource={RelativeSource AncestorType={x:Type trayMenu:ToggleMenuItemControl}}, Mode=TwoWay}"
-                      VerticalAlignment="Center"
-                      HorizontalAlignment="Center" />
-
-            <TextBlock Grid.Column="2" FontSize="14px"
-                       VerticalAlignment="Center"
-                       Text="{Binding Title, RelativeSource={RelativeSource AncestorType={x:Type trayMenu:ToggleMenuItemControl}}}" />
-        </Grid>
-    </Button>
+                    <ContentPresenter x:Name="content" DockPanel.Dock="Left"
+                                      Margin="6,0,0,0"
+                                      VerticalAlignment="Center" />
+                </DockPanel>
+                <ControlTemplate.Triggers>
+                    <Trigger Property="IsChecked" Value="True">
+                        <Setter TargetName="_StateEllipseControl" Property="Fill" Value="#27FF27" />
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+        </CheckBox.Template>
+    </CheckBox>
 </trayMenu:MenuItemControlBase>
