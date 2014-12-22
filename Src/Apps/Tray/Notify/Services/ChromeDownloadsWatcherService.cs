@@ -1,11 +1,12 @@
 ﻿using System;
 using System.IO;
 using MMK.ApplicationServiceModel;
+using MMK.Notify.Model.Service;
 using MMK.Utils;
 
 namespace MMK.Notify.Services
 {
-    public sealed class ChromeDownloadsWatcherService : Service
+    public sealed class ChromeDownloadsWatcherService : Service, IDownloadsWatcher
     {
         private static readonly string DefaultDownloadsPath;
 
