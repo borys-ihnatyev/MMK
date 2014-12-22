@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Forms;
 using MMK.Wpf.Windows;
 
-namespace MMK.Notify.Views.TrayMenu
+namespace MMK.Notify.Views
 {
     public partial class TrayMenuWindow
     {

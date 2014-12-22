@@ -247,7 +247,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\TrayMenu\TrayMenuWindow.xaml">
+    <Page Include="Views\TrayMenuWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -268,7 +268,7 @@
     <Compile Include="Views\TrayMenu\ToggleMenuItemControl.xaml.cs">
       <DependentUpon>ToggleMenuItemControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\TrayMenu\TrayMenuWindow.xaml.cs">
+    <Compile Include="Views\TrayMenuWindow.xaml.cs">
       <DependentUpon>TrayMenuWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>

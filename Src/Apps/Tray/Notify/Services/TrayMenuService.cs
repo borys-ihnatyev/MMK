@@ -5,6 +5,7 @@ using System.Windows.Threading;
 using MMK.ApplicationServiceModel;
 using MMK.Notify.Properties;
 using MMK.Notify.ViewModels;
+using MMK.Notify.Views;
 using MMK.Notify.Views.TrayMenu;
 using Application = System.Windows.Application;
 
@@ -36,10 +37,12 @@ namespace MMK.Notify.Services
             get { return trayMenuWindow; }
         }
 
+        #region Init
+
         protected override void OnInitialize()
         {
-            InitializeTrayIcon();
             InitializeTrayWindow();
+            InitializeTrayIcon();
             taskProgressService.IsActiveChanged += TaskProgressStateChanged;
         }
 
@@ -64,16 +67,7 @@ namespace MMK.Notify.Services
 
         private void OnTrayIconMouseClick(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
-                taskProgressService.Start();
-            else
-                ShowTrayMenu();
-        }
-
-        private void ShowTrayMenu()
-        {
-            trayMenuViewModel.IsVisible = true;
-            trayMenuWindow.Activate();
+            ShowTrayMenu();
         }
 
         private void OnAppDeactivated(object sender, EventArgs eventArgs)
@@ -98,6 +92,26 @@ namespace MMK.Notify.Services
             timer.Start();
         }
 
+        private void TaskProgressStateChanged(object sender, ChangedEventArgs<bool> e)
+        {
+            trayIcon.Icon = e.NewValue ? Resources.logo_processing : Resources.logo_normal;
+            if (e.NewValue)
+            {
+                trayIcon.MouseMove += TrayIconOnMouseMove;
+            }
+            else
+            {
+                trayIcon.MouseMove -= TrayIconOnMouseMove;
+                taskProgressService.Stop();
+            }
+        }
+
+        private void TrayIconOnMouseMove(object sender, MouseEventArgs e)
+        {
+            taskProgressService.Start();
+        }
+
+        #endregion
 
         public override void Start()
         {
@@ -105,12 +119,19 @@ namespace MMK.Notify.Services
                 throw new Exception("Service was not Initialized");
 
             trayIcon.Visible = true;
+            ShowTrayMenu();
+        }
+
+        private void ShowTrayMenu()
+        {
+            trayMenuViewModel.IsVisible = true;
             trayMenuWindow.Show();
+            trayMenuWindow.Activate();
         }
 
         public override void Stop()
         {
-            trayMenuWindow.Hide();
+            trayMenuViewModel.IsVisible = false;
             trayIcon.Visible = false;
         }
 
@@ -120,11 +141,6 @@ namespace MMK.Notify.Services
 
             trayMenuWindow.Close();
             trayIcon.Dispose();
-        }
-
-        private void TaskProgressStateChanged(object sender, ChangedEventArgs<bool> e)
-        {
-            trayIcon.Icon = e.NewValue ? Resources.logo_processing : Resources.logo_normal;
         }
     }
 }
