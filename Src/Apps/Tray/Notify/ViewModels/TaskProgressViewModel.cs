@@ -37,6 +37,8 @@ namespace MMK.Notify.ViewModels
             get { return isActive; }
             private set
             {
+                if(value == isActive)
+                    return;
                 isActive = value;
                 NotifyPropertyChanged();
             }
@@ -110,6 +112,10 @@ namespace MMK.Notify.ViewModels
         private void OnTaskFailed(object sender, TaskObserver.NotifyEventArgs e)
         {
             ++failedCount;
+            
+            if(failedCount == QueuedCount)
+                return;
+            
             Notification.Push(e.Message);
         }
 
