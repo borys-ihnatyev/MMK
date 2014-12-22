@@ -3,7 +3,9 @@
                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                 xmlns:wpf="clr-namespace:MMK.Wpf;assembly=MMK.Wpf"
                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
+                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                xmlns:model="clr-namespace:MMK.Notify.Model"
+                mc:Ignorable="d"
                 WindowStyle="None"
                 AllowsTransparency="True"
                 SnapsToDevicePixels="True"
@@ -35,6 +37,10 @@
             </Style.Triggers>
         </Style>
     </Window.Style>
+    
+    <Window.Resources>
+        <model:NotifyTypeColorConverter x:Key="NotifyTypeColorConverter"/>
+    </Window.Resources>
     
     <Border BorderThickness="1" BorderBrush="#777">
         <Grid>
@@ -69,12 +75,13 @@
                        FontWeight="DemiBold"
                        Text="{Binding QueuedCount}"/>
            
-
             <ProgressBar Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3"
                          Value="{Binding ObservedCount}"
                          Minimum="0"
+                         BorderThickness="0"
+                         Foreground="{Binding CurrentInfo.Type, Converter={StaticResource NotifyTypeColorConverter}}"
                          Maximum="{Binding QueuedCount}"
-                         Height="4" />
+                         Height="5" />
 
             <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3"
                        VerticalAlignment="Center"
