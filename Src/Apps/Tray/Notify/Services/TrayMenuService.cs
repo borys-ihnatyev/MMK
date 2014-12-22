@@ -16,8 +16,9 @@ namespace MMK.Notify.Services
         private readonly TrayMenuViewModel trayMenuViewModel;
         private readonly NotifyIcon trayIcon;
         private readonly GlobalShortcutService shortcutService;
+        private readonly TaskProgressService taskProgressService;
 
-        public TrayMenuService(GlobalShortcutService shortcutService)
+        public TrayMenuService(GlobalShortcutService shortcutService, TaskProgressService taskProgressService)
         {
             trayIcon = new NotifyIcon
             {
@@ -27,6 +28,7 @@ namespace MMK.Notify.Services
 
             trayMenuViewModel = new TrayMenuViewModel();
             this.shortcutService = shortcutService;
+            this.taskProgressService = taskProgressService;
         }
 
         public Window TrayMenuWindow
@@ -56,13 +58,19 @@ namespace MMK.Notify.Services
 
         private void InitializeTrayIcon()
         {
-            trayIcon.Click += OnTrayIconClick;
-            trayIcon.Visible = true;
+            trayIcon.MouseClick += OnTrayIconMouseClick;
             Application.Current.Deactivated += OnAppDeactivated;
         }
 
+        private void OnTrayIconMouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right && taskProgressService.IsActive)
+                taskProgressService.Start();
+            else
+                ShowTrayMenu();
+        }
 
-        private void OnTrayIconClick(object sender, EventArgs eventArgs)
+        private void ShowTrayMenu()
         {
             trayMenuViewModel.IsVisible = true;
             trayMenuWindow.Activate();
@@ -71,7 +79,9 @@ namespace MMK.Notify.Services
         private void OnAppDeactivated(object sender, EventArgs eventArgs)
         {
             trayMenuViewModel.IsVisible = false;
-            trayIcon.Click -= OnTrayIconClick;
+            trayIcon.MouseClick -= OnTrayIconMouseClick;
+            
+            taskProgressService.Stop();
 
             var timer = new DispatcherTimer
             {
@@ -81,7 +91,7 @@ namespace MMK.Notify.Services
 
             timer.Tick += (s, a) =>
             {
-                trayIcon.Click += OnTrayIconClick;
+                trayIcon.MouseClick += OnTrayIconMouseClick;
                 timer.Stop();
             };
 
