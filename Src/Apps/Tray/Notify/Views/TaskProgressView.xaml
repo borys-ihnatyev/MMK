@@ -7,17 +7,9 @@
                 xmlns:model="clr-namespace:MMK.Notify.Model"
                 mc:Ignorable="d"
                 Width="350" Height="120" d:DataContext="{d:DesignData Source=../DesignData/TaskProgressViewModel.xaml}">
+    
     <wpf:TrayWindow.Style>
-        <Style TargetType="{x:Type Window}">
-            <Style.Setters>
-                <Setter Property="WindowStyle" Value="None" />
-                <Setter Property="AllowsTransparency" Value="True" />
-                <Setter Property="FontSize" Value="10pt" />
-                <Setter Property="FontWeight" Value="Regular" />
-                <Setter Property="Foreground" Value="White" />
-                <Setter Property="Background" Value="{StaticResource WindowBlackGlance}" />
-
-            </Style.Setters>
+        <Style TargetType="{x:Type Window}" BasedOn="{StaticResource WindowBlackGlanceStyle}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding IsProgress}" Value="True">
                     <DataTrigger.EnterActions>

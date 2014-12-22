@@ -24,7 +24,7 @@ namespace MMK.Notify.Services
 
         protected override void OnInitialize()
         {
-            var trayWindow = IoC.ServiceLocator.Get<TrayMenuService>().TrayMenuWindow;
+            var trayWindow = IoC.ServiceLocator.Get<TrayMenuService>().TrayMenuView;
 
             (shortcutProviders as IGlobalShortcutProvider).SetWindow(trayWindow);
 

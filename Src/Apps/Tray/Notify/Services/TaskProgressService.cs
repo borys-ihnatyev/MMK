@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Windows;
 using MMK.ApplicationServiceModel;
 using MMK.Notify.ViewModels;
 using MMK.Notify.Views;
@@ -8,27 +9,26 @@ namespace MMK.Notify.Services
 {
     public class TaskProgressService : Service
     {
-        private TaskProgressView view;
-        private readonly TaskProgressViewModel viewModel;
+        private TaskProgressView taskProgressView;
+        private readonly TaskProgressViewModel taskProgressViewModel;
 
         public event EventHandler<ChangedEventArgs<bool>> StateChanged;
 
         public TaskProgressService()
         {
-            viewModel = new TaskProgressViewModel();
+            taskProgressViewModel = new TaskProgressViewModel();
         }
 
         protected override void OnInitialize()
         {
-            viewModel.PropertyChanged += OnViewModelPropertyChanged;
-            view = new TaskProgressView {DataContext = viewModel, Opacity = 0};
-            view.BeginInit();
-            view.Loaded += (s, e) => viewModel.LoadData();
-            view.Closed += (s, e) => viewModel.UnloadData();
-            view.EndInit();
+            taskProgressViewModel.PropertyChanged += OnTaskProgressViewModelPropertyChanged;
+
+            taskProgressView = new TaskProgressView {DataContext = taskProgressViewModel};
+            taskProgressView.AfterLoad(taskProgressViewModel.LoadData);
+            taskProgressView.Closed += (s, e) => taskProgressViewModel.UnloadData();
         }
 
-        private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OnTaskProgressViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "IsProgress")
                 OnStateChanged();
@@ -36,21 +36,21 @@ namespace MMK.Notify.Services
 
         public override void Start()
         {
-            if(!viewModel.IsProgress)
+            if(!taskProgressViewModel.IsProgress)
                 return;
 
-            view.Show();
+            taskProgressView.Show();
         }
 
         public override void Stop()
         {
-            view.Hide();
+            taskProgressView.Hide();
         }
 
         protected virtual void OnStateChanged()
         {
             var handler = StateChanged;
-            var state = viewModel.IsProgress;
+            var state = taskProgressViewModel.IsProgress;
             if (handler != null)
                 handler(this, new ChangedEventArgs<bool>(!state, state));
         }

@@ -5,10 +5,11 @@ using MMK.Wpf.Windows;
 
 namespace MMK.Notify.Views
 {
-    public partial class TrayMenuWindow
+    public partial class TrayMenuView
     {
-        public TrayMenuWindow()
+        public TrayMenuView()
         {
+            Opacity = 0;
             Loaded += OnLoaded;
             InitializeComponent();
         }
@@ -16,6 +17,7 @@ namespace MMK.Notify.Views
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             SetStartupPosition();
+            Show();
         }
 
         private void SetStartupPosition()

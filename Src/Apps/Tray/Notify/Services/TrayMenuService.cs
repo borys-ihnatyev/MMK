@@ -12,7 +12,7 @@ namespace MMK.Notify.Services
 {
     public class TrayMenuService : Service, IDisposable
     {
-        private TrayMenuWindow trayMenuWindow;
+        private TrayMenuView trayMenuView;
         private readonly TrayMenuViewModel trayMenuViewModel;
         private readonly NotifyIcon trayIcon;
         private readonly GlobalShortcutService shortcutService;
@@ -31,9 +31,9 @@ namespace MMK.Notify.Services
             this.taskProgressService = taskProgressService;
         }
 
-        public Window TrayMenuWindow
+        public Window TrayMenuView
         {
-            get { return trayMenuWindow; }
+            get { return trayMenuView; }
         }
 
         #region Init
@@ -47,16 +47,9 @@ namespace MMK.Notify.Services
 
         private void InitializeTrayWindow()
         {
-            trayMenuWindow = new TrayMenuWindow {DataContext = trayMenuViewModel, Opacity = 0};
-            trayMenuWindow.BeginInit();
-
-            trayMenuWindow.DataContext = trayMenuViewModel;
-
-            trayMenuWindow.Loaded += (sender, args) => shortcutService.Initialize();
-            trayMenuWindow.Loaded += (sender, args) => trayMenuViewModel.LoadData();
-
-            trayMenuWindow.EndInit();
-            trayMenuWindow.Show();
+            trayMenuView = new TrayMenuView {DataContext = trayMenuViewModel};
+            trayMenuView.AfterLoad(shortcutService.Initialize, trayMenuViewModel.LoadData);
+            trayMenuView.Show();
         }
 
         private void InitializeTrayIcon()
@@ -68,7 +61,7 @@ namespace MMK.Notify.Services
         private void OnTrayIconMouseClick(object sender, MouseEventArgs e)
         {
             trayMenuViewModel.IsVisible = true;
-            trayMenuWindow.Activate();
+            trayMenuView.Activate();
         }
 
         private void OnAppDeactivated(object sender, EventArgs eventArgs)
@@ -121,7 +114,7 @@ namespace MMK.Notify.Services
 
             trayIcon.Visible = true;
             trayMenuViewModel.IsVisible = true;
-            trayMenuWindow.Activate();
+            trayMenuView.Activate();
         }
 
         public override void Stop()
@@ -134,7 +127,7 @@ namespace MMK.Notify.Services
         {
             taskProgressService.StateChanged -= TaskProgressStateChanged;
 
-            trayMenuWindow.Close();
+            trayMenuView.Close();
             trayIcon.Dispose();
         }
     }
