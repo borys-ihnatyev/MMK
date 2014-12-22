@@ -116,7 +116,10 @@ namespace MMK.Notify.Observer.Tasking.Observing
         private void AddTaskWithDeelay(Task task)
         {
             var deelayTimer = CreateDeelayTimer();
-            deelayTimer.Elapsed += delegate { Add(task); };
+            deelayTimer.Elapsed += delegate
+            {
+                Add(task); deelayTimer.Stop(); deelayTimer.Dispose();
+            };
             deelayTimer.Start();
         }
 
@@ -125,7 +128,6 @@ namespace MMK.Notify.Observer.Tasking.Observing
             return new Timer
             {
                 Interval = TimeSpan.FromSeconds(FailedTaskRerunPauseSeconds).TotalMilliseconds,
-                AutoReset = true,
                 Enabled = false
             };
         }
