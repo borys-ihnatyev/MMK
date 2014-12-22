@@ -17,6 +17,7 @@ namespace MMK.Notify.ViewModels
 
         private INotifyable currentInfo;
 
+        private bool isVisible;
         private bool isProgress;
         private int observedCount;
         private int queuedCount;
@@ -32,6 +33,19 @@ namespace MMK.Notify.ViewModels
             }
         }
 
+        public bool IsVisible
+        {
+            get { return isVisible; }
+            set
+            {
+                if(value == isVisible)
+                    return;
+                isVisible = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+
         public bool IsProgress
         {
             get { return isProgress; }
@@ -39,7 +53,11 @@ namespace MMK.Notify.ViewModels
             {
                 if(value == isProgress)
                     return;
+                
                 isProgress = value;
+
+                IsVisible = IsProgress;
+
                 NotifyPropertyChanged();
             }
         }
@@ -125,14 +143,6 @@ namespace MMK.Notify.ViewModels
             Reset();
         }
 
-        private void Reset()
-        {
-            ObservedCount = 0;
-            QueuedCount = 0;
-            failedCount = 0;
-            currentInfo = null;
-        }
-
         private void Notify()
         {
             if (QueuedCount == 0)
@@ -141,6 +151,15 @@ namespace MMK.Notify.ViewModels
             var message = BuildNotifyMessage();
 
             Notification.Push(message);
+        }
+
+        private void Reset()
+        {
+            ObservedCount = 0;
+            QueuedCount = 0;
+            failedCount = 0;
+            IsVisible = false;
+            currentInfo = null;
         }
 
         private INotifyable BuildNotifyMessage()
