@@ -9,7 +9,7 @@
                 SnapsToDevicePixels="True"
                 FontSize="10pt"
                 FontWeight="Regular"
-                Width="300" Height="120" d:DataContext="{d:DesignData Source=../DesignData/TaskProgressViewModel.xaml}">
+                Width="350" Height="120" d:DataContext="{d:DesignData Source=../DesignData/TaskProgressViewModel.xaml}">
     <Border BorderThickness="1" BorderBrush="#777">
         <Grid>
             <Grid.RowDefinitions>
