@@ -22,7 +22,7 @@ namespace MMK.Notify.Services
         {
             trayIcon = new NotifyIcon
             {
-                Icon = Resources.NotifyLogo,
+                Icon = Resources.logo_normal,
                 Text = @"MMK Notify"
             };
 
@@ -36,11 +36,11 @@ namespace MMK.Notify.Services
             get { return trayMenuWindow; }
         }
 
-
         protected override void OnInitialize()
         {
             InitializeTrayIcon();
             InitializeTrayWindow();
+            taskProgressService.IsActiveChanged += TaskProgressStateChanged;
         }
 
         private void InitializeTrayWindow()
@@ -64,7 +64,7 @@ namespace MMK.Notify.Services
 
         private void OnTrayIconMouseClick(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right && taskProgressService.IsActive)
+            if (e.Button == MouseButtons.Right)
                 taskProgressService.Start();
             else
                 ShowTrayMenu();
@@ -116,8 +116,15 @@ namespace MMK.Notify.Services
 
         public void Dispose()
         {
+            taskProgressService.IsActiveChanged -= TaskProgressStateChanged;
+
             trayMenuWindow.Close();
             trayIcon.Dispose();
+        }
+
+        private void TaskProgressStateChanged(object sender, ChangedEventArgs<bool> e)
+        {
+            trayIcon.Icon = e.NewValue ? Resources.logo_processing : Resources.logo_normal;
         }
     }
 }

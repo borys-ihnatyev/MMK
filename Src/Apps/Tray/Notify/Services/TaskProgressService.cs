@@ -47,13 +47,13 @@ namespace MMK.Notify.Services
             view.Hide();
         }
 
-        public event EventHandler<EventArgs<bool>> IsActiveChanged;
+        public event EventHandler<ChangedEventArgs<bool>> IsActiveChanged;
 
         protected virtual void OnIsActiveChanged()
         {
             var handler = IsActiveChanged;
             if (handler != null) 
-                handler(this, new EventArgs<bool>(IsActive));
+                handler(this, new ChangedEventArgs<bool>(!IsActive, IsActive));
         }
     }
 }
