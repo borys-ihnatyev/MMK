@@ -73,36 +73,35 @@ namespace MMK.Notify.ViewModels
 
         protected override void OnLoadData()
         {
-            var taskObserver = IoC.ServiceLocator.Get<TaskObserver>();
-            taskObserver.TaskQueued += TaskObserverOnTaskQueued;
-            taskObserver.QueueEmpty += OnQueueEmpty;
-            taskObserver.TaskObserved += OnTaskObserved;
+            var observer = IoC.ServiceLocator.Get<TaskObserver>();
+            observer.TaskQueued += OnTaskQueued;
+            observer.QueueEmpty += OnQueueEmpty;
+            observer.TaskObserved += OnTaskObserved;
         }
 
         protected override void OnUnloadData()
         {
-            var taskObserver = IoC.ServiceLocator.Get<TaskObserver>();
-
-            taskObserver.TaskQueued -= TaskObserverOnTaskQueued;
-            taskObserver.QueueEmpty -= OnQueueEmpty;
-            taskObserver.TaskObserved -= OnTaskObserved;
+            var observer = IoC.ServiceLocator.Get<TaskObserver>();
+            observer.TaskQueued -= OnTaskQueued;
+            observer.QueueEmpty -= OnQueueEmpty;
+            observer.TaskObserved -= OnTaskObserved;
         }
 
-        private void TaskObserverOnTaskQueued(object sender, TaskObserver.TaskQueuedEventArgs e)
+        public void OnTaskQueued(object sender, TaskObserver.TaskQueuedEventArgs e)
         {
             QueuedCount += e.TaskCount;
         }
 
-        private void OnTaskObserved(object sender, TaskObserver.NotifyEventArgs e)
+        public void OnTaskObserved(object sender, TaskObserver.NotifyEventArgs e)
         {
             ++ObservedCount;
             CurrentInfo = e.Message;
         }
 
-        private void OnQueueEmpty(object sender, EventArgs e)
+        public void OnQueueEmpty(object sender, EventArgs e)
         {
-            QueuedCount = 0;
             ObservedCount = 0;
+            QueuedCount = 0;
             currentInfo = null;
         }
     }

@@ -4,12 +4,10 @@
                 xmlns:wpf="clr-namespace:MMK.Wpf;assembly=MMK.Wpf"
                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
-                WindowStyle="None"
-                AllowsTransparency="True"
                 SnapsToDevicePixels="True"
                 FontSize="10pt"
                 FontWeight="Regular"
-                Width="300" Height="90" d:DataContext="{d:DesignData Source=../DesignData/TaskProgressViewModel.xaml}">
+                Width="300" Height="120" d:DataContext="{d:DesignData Source=../DesignData/TaskProgressViewModel.xaml}">
     <Border BorderThickness="1" BorderBrush="#777">
         <Grid>
             <Grid.RowDefinitions>
@@ -30,23 +28,19 @@
             <TextBlock Grid.Row="1" Grid.Column="0"
                        VerticalAlignment="Center"
                        Padding="5"
-                       Text="{Binding CurrentInfo.CommonDescription}">
-                Task
-            </TextBlock>
+                       Text="{Binding CurrentInfo.CommonDescription}"/>
 
             <TextBlock Grid.Row="1" Grid.Column="1"
                        VerticalAlignment="Center" TextAlignment="Center"
                        FontWeight="DemiBold"
-                       Text="{Binding ObservedCount}">
-                5
-            </TextBlock>
+                       Text="{Binding ObservedCount}"/>
+            
 
             <TextBlock Grid.Row="1" Grid.Column="2"
                        VerticalAlignment="Center" TextAlignment="Center"
                        FontWeight="DemiBold"
-                       Text="{Binding QueuedCount}">
-                10
-            </TextBlock>
+                       Text="{Binding QueuedCount}"/>
+           
 
             <ProgressBar Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3"
                          Value="{Binding ObservedCount}"
@@ -57,9 +51,7 @@
             <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3"
                        VerticalAlignment="Center"
                        Padding="5"
-                       Text="{Binding CurrentInfo.TargetObject}">
-                Shakira - Loca
-            </TextBlock>
+                       Text="{Binding CurrentInfo.TargetObject}"/>
         </Grid>
     </Border>
 </wpf:TrayWindow>

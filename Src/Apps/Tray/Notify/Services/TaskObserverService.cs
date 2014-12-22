@@ -10,7 +10,9 @@ namespace MMK.Notify.Services
         private readonly TaskObserver observer;
         private readonly NotifyObserver notifyObserver;
 
-        public TaskObserverService(NotificationService notification, TaskObserver observer,
+        public TaskObserverService(
+            NotificationService notification, 
+            TaskObserver observer,
             NotifyObserver notifyObserver)
         {
             this.notification = notification;
@@ -18,23 +20,33 @@ namespace MMK.Notify.Services
             this.notifyObserver = notifyObserver;
         }
 
-        private void ObserverOnTaskObserved(object sender, TaskObserver.NotifyEventArgs e)
-        {
-            notification.Push(e.Message);
-        }
-
         public override void Start()
         {
-            observer.TaskObserved += ObserverOnTaskObserved;
+            BindEvents();
             notifyObserver.Start();
             observer.Start();
         }
 
+        private void BindEvents()
+        {
+            observer.TaskObserved += ObserverOnTaskObserved;
+        }
+
         public override void Stop()
         {
-            observer.TaskObserved -= ObserverOnTaskObserved;
+            UnbindEvents();
             observer.Cancell();
             notifyObserver.Stop();
+        }
+
+        private void UnbindEvents()
+        {
+            observer.TaskObserved -= ObserverOnTaskObserved;
+        }
+
+        private void ObserverOnTaskObserved(object sender, TaskObserver.NotifyEventArgs e)
+        {
+            notification.Push(e.Message);
         }
     }
 }

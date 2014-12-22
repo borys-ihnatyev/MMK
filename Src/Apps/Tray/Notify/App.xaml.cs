@@ -81,22 +81,27 @@ namespace MMK.Notify
 
             ServiceLocator.Bind<NotificationService>().ToSelf().InSingletonScope();
             ServiceLocator.Bind<TaskObserverService>().ToSelf().InSingletonScope();
+            ServiceLocator.Bind<TaskProgressService>().ToSelf().InSingletonScope();
+
             ServiceLocator.Bind<GlobalShortcutService>().ToSelf().InSingletonScope();
             ServiceLocator.Bind<TrayMenuService>().ToSelf().InSingletonScope();
 
             ServiceLocator.Get<TrayMenuService>().Initialize();
+            ServiceLocator.Get<TaskProgressService>().Initialize();
         }
 
         private static void StartServices()
         {
             ServiceLocator.Get<TaskObserverService>().Start();
             ServiceLocator.Get<TrayMenuService>().Start();
+            ServiceLocator.Get<TaskProgressService>().Start();
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
             ServiceLocator.Get<TrayMenuService>().Stop();
             ServiceLocator.Get<TaskObserverService>().Stop();
+            ServiceLocator.Get<TaskProgressService>().Stop();
             base.OnExit(e);
         }
     }
