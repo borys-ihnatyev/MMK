@@ -22,10 +22,10 @@ namespace MMK.Notify.Services
         protected override void OnInitialize()
         {
             taskProgressViewModel.PropertyChanged += OnTaskProgressViewModelPropertyChanged;
-
+            taskProgressViewModel.LoadData();
             taskProgressView = new TaskProgressView {DataContext = taskProgressViewModel};
-            taskProgressView.AfterLoad(taskProgressViewModel.LoadData);
             taskProgressView.Closed += (s, e) => taskProgressViewModel.UnloadData();
+            taskProgressView.Show();
         }
 
         private void OnTaskProgressViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -39,12 +39,13 @@ namespace MMK.Notify.Services
             if(!taskProgressViewModel.IsProgress)
                 return;
 
-            taskProgressView.Show();
+            taskProgressViewModel.IsVisible = true;
+            taskProgressView.Activate();
         }
 
         public override void Stop()
         {
-            taskProgressView.Hide();
+            taskProgressViewModel.IsVisible = false;
         }
 
         protected virtual void OnStateChanged()
