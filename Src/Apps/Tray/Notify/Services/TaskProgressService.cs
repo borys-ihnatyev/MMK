@@ -47,7 +47,6 @@ namespace MMK.Notify.Services
             view.Hide();
         }
 
-
         public event EventHandler<EventArgs<bool>> IsActiveChanged;
 
         protected virtual void OnIsActiveChanged()
