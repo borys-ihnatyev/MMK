@@ -1,4 +1,6 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
+using System.Windows.Input;
 using MMK.Wpf.Windows;
 
 namespace MMK.Notify.Views
@@ -9,9 +11,16 @@ namespace MMK.Notify.Views
 
         public TaskProgressView()
         {
-            InitializeComponent();
             Opacity = 0;
             taskbar = new Taskbar();
+            InitializeComponent();
+            MouseDown += OnMouseDown;
+        }
+
+        private void OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                DragMove();
         }
 
         public new void Show()
@@ -19,6 +28,7 @@ namespace MMK.Notify.Views
             SetStartupPosition();
             Opacity = 1;
             base.Show();
+            Activate();
         }
 
         public new void Hide()
