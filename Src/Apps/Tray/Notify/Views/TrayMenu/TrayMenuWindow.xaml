@@ -8,9 +8,59 @@
                 xmlns:trayMenu="clr-namespace:MMK.Notify.Views.TrayMenu"
                 xmlns:viewModels="clr-namespace:MMK.Notify.ViewModels"
                 mc:Ignorable="d"
-                Height="193.537"
+                Height="185"
                 Width="286"
                 d:DataContext="{d:DesignInstance viewModels:TrayMenuViewModel}">
+
+    <Window.Resources>
+        <Style TargetType="{x:Type trayMenu:MenuItemControl}">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style TargetType="{x:Type trayMenu:ToggleMenuItemControl}">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+    </Window.Resources>
+    
+    <Window.Style>
+        <Style TargetType="{x:Type Window}">
+            <Style.Setters>
+                <Setter Property="WindowStyle" Value="None" />
+                <Setter Property="AllowsTransparency" Value="True" />
+                <Setter Property="Topmost" Value="True" />
+                <Setter Property="Foreground" Value="White"></Setter>
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <SolidColorBrush Opacity="0.9" Color="#111" />
+                    </Setter.Value>
+                </Setter>
+            </Style.Setters>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsVisible}" Value="false">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+                                    Storyboard.TargetProperty="Opacity"
+                                    To="0"
+                                    Duration="0:0:0.21" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+
+                    <DataTrigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+                                    Storyboard.TargetProperty="Opacity"
+                                    To="1"
+                                    Duration="0:0:0.21" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Style>
 
     <Grid Margin="5px">
         <Grid.RowDefinitions>
@@ -36,7 +86,7 @@
                 Style="{StaticResource ClearButtonStyle}">
                 <Image
                     Margin="2px"
-                    Source="pack://siteoforigin:,,,/Resources/Layouts-32.png" />
+                    Source="pack://siteoforigin:,,,/Resources/logo-normal-256.png" />
             </Button>
 
             <TextBlock Grid.Row="0" Grid.Column="1"
@@ -86,41 +136,4 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
-    <Window.Style>
-        <Style TargetType="{x:Type Window}">
-            <Style.Setters>
-                <Setter Property="WindowStyle" Value="None" />
-                <Setter Property="AllowsTransparency" Value="True" />
-                <Setter Property="ShowInTaskbar" Value="False" />
-                <Setter Property="Topmost" Value="True" />
-                <Setter Property="BorderThickness" Value="1" />
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" />
-            </Style.Setters>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsVisible}" Value="false">
-                    <DataTrigger.EnterActions>
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation
-                                    Storyboard.TargetProperty="Opacity"
-                                    To="0"
-                                    Duration="0:0:0.21" />
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </DataTrigger.EnterActions>
-
-                    <DataTrigger.ExitActions>
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation
-                                    Storyboard.TargetProperty="Opacity"
-                                    To="1"
-                                    Duration="0:0:0.21" />
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </DataTrigger.ExitActions>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-    </Window.Style>
 </wpf:TrayWindow>
