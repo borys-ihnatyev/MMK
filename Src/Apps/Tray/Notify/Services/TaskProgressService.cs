@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+using System.ComponentModel;
 using MMK.ApplicationServiceModel;
-using MMK.Notify.Observer.Tasking.Observing;
 using MMK.Notify.ViewModels;
 using MMK.Notify.Views;
 
@@ -13,12 +8,24 @@ namespace MMK.Notify.Services
 {
     public class TaskProgressService : Service
     {
-        private Window view;
+        private TaskProgressView view;
         private readonly TaskProgressViewModel viewModel;
 
         public TaskProgressService()
         {
             viewModel = new TaskProgressViewModel();
+            viewModel.PropertyChanged += OnViewModelPropertyChanged;
+        }
+
+        public bool IsActive
+        {
+            get { return viewModel.IsActive; }
+        }
+
+        private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == "IsActive")
+                OnIsActiveChanged();
         }
 
         protected override void OnInitialize()
@@ -37,8 +44,17 @@ namespace MMK.Notify.Services
 
         public override void Stop()
         {
-
             view.Hide();
+        }
+
+
+        public event EventHandler<EventArgs<bool>> IsActiveChanged;
+
+        protected virtual void OnIsActiveChanged()
+        {
+            var handler = IsActiveChanged;
+            if (handler != null) 
+                handler(this, new EventArgs<bool>(IsActive));
         }
     }
 }
