@@ -2,6 +2,7 @@
 using System.Windows;
 using MMK.ApplicationServiceModel.Locator;
 using MMK.Notify.Model;
+using MMK.Notify.Model.Service;
 using MMK.Notify.Observer;
 using MMK.Notify.Observer.Remoting;
 using MMK.Notify.Observer.Tasking.Observing;
@@ -73,7 +74,14 @@ namespace MMK.Notify
         private static void InitializeServices()
         {
             ServiceLocator.Bind<TaskObserver>().ToSelf().InSingletonScope();
-            ServiceLocator.Bind<INotifyObserver>().To<NotifyObserver>().InSingletonScope();
+
+            ServiceLocator.Bind<INotifyObserver>()
+                .To<NotifyObserver>()
+                .InSingletonScope();
+
+            ServiceLocator.Bind<IDownloadsWatcher>()
+                .To<ChromeDownloadsWatcherService>()
+                .InSingletonScope();
 
             ServiceLocator.Bind<HashTagFolderCollection>()
                 .ToMethod(c => Settings.Default.FolderCollection)

@@ -10,6 +10,8 @@ namespace MMK.Notify.Services
     {
         private static readonly string DefaultDownloadsPath;
 
+        private readonly FileSystemWatcher fileWatcher;
+
         static ChromeDownloadsWatcherService()
         {
             DefaultDownloadsPath = Environment
@@ -21,8 +23,6 @@ namespace MMK.Notify.Services
             fileWatcher = new FileSystemWatcher(DefaultDownloadsPath);
             fileWatcher.Renamed += OnRenamed;
         }
-
-        private readonly FileSystemWatcher fileWatcher;
 
         private void OnRenamed(object sender, RenamedEventArgs e)
         {
