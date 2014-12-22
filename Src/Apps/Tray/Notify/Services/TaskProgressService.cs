@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Windows.Threading;
 using MMK.ApplicationServiceModel;
 using MMK.Notify.ViewModels;
 using MMK.Notify.Views;
@@ -27,34 +26,25 @@ namespace MMK.Notify.Services
             view.Loaded += (s, e) => viewModel.LoadData();
             view.Closed += (s, e) => viewModel.UnloadData();
             view.EndInit();
-            view.Show();
         }
 
         private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "IsActive")
+            if (e.PropertyName == "IsProgress")
                 OnStateChanged();
         }
 
         public override void Start()
         {
-            if (view.IsActive)
+            if(!viewModel.IsProgress)
                 return;
 
-            Dispatcher.CurrentDispatcher.Invoke(delegate
-            {
-                view.Opacity = 1;
-                view.Activate();
-            });
-            
+            view.Show();
         }
 
         public override void Stop()
         {
-            Dispatcher.CurrentDispatcher.Invoke(delegate
-            {
-                view.Opacity = 0;
-            });
+            view.Hide();
         }
 
         protected virtual void OnStateChanged()
