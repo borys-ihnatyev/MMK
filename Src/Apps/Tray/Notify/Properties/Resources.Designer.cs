@@ -91,12 +91,52 @@ namespace MMK.Notify.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon logo_normal {
+            get {
+                object obj = ResourceManager.GetObject("logo_normal", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon logo_normal_256 {
+            get {
+                object obj = ResourceManager.GetObject("logo_normal_256", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Layouts_32 {
+        internal static System.Drawing.Bitmap logo_normal_256_img {
             get {
-                object obj = ResourceManager.GetObject("Layouts_32", resourceCulture);
+                object obj = ResourceManager.GetObject("logo_normal_256_img", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon logo_processing {
+            get {
+                object obj = ResourceManager.GetObject("logo_processing", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon logo_warning {
+            get {
+                object obj = ResourceManager.GetObject("logo_warning", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -106,16 +146,6 @@ namespace MMK.Notify.Properties {
         internal static System.Drawing.Icon MusicCollectionManagerLogo {
             get {
                 object obj = ResourceManager.GetObject("MusicCollectionManagerLogo", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon NotifyLogo {
-            get {
-                object obj = ResourceManager.GetObject("NotifyLogo", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
