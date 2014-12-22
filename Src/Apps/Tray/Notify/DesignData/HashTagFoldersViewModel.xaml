@@ -1,6 +1,7 @@
-﻿<HashTagFoldersViewModel xmlns="clr-namespace:MMK.Notify.ViewModels.HashTagFolders"
-                         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <HashTagFoldersViewModel.Folders>
+﻿<viewModels:HashTagFoldersViewModel xmlns="clr-namespace:MMK.Notify.ViewModels.HashTagFolders"
+                         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                         xmlns:viewModels="clr-namespace:MMK.Notify.ViewModels">
+    <viewModels:HashTagFoldersViewModel.Folders>
         <FolderViewModel Path="D:\music\main">
             <FolderViewModel.Patterns>
                 <FolderPatternViewModel PatternString="#deep" Priority="3" />
@@ -23,5 +24,5 @@
                 <FolderPatternViewModel PatternString="#trap" Priority="4" />
             </FolderViewModel.Patterns>
         </FolderViewModel>
-    </HashTagFoldersViewModel.Folders>
-</HashTagFoldersViewModel>
+    </viewModels:HashTagFoldersViewModel.Folders>
+</viewModels:HashTagFoldersViewModel>

@@ -1,5 +1,4 @@
 ﻿using System.Windows.Forms;
-using System.Windows.Threading;
 using MMK.Wpf.Windows;
 
 namespace MMK.Notify.Views
@@ -20,7 +19,6 @@ namespace MMK.Notify.Views
             SetStartupPosition();
             Opacity = 1;
             base.Show();
-            
         }
 
         public new void Hide()

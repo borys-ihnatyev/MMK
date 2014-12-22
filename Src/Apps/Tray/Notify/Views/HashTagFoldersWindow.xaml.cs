@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using MMK.Notify.ViewModels;
 using MMK.Notify.ViewModels.HashTagFolders;
 
 namespace MMK.Notify.Views

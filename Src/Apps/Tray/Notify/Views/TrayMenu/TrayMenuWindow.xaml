@@ -6,11 +6,11 @@
                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                 xmlns:trayMenu="clr-namespace:MMK.Notify.Views.TrayMenu"
-                xmlns:trayMenu1="clr-namespace:MMK.Notify.ViewModels.TrayMenu"
+                xmlns:viewModels="clr-namespace:MMK.Notify.ViewModels"
                 mc:Ignorable="d"
                 Height="193.537"
                 Width="286"
-                d:DataContext="{d:DesignInstance trayMenu1:TrayMenuViewModel}">
+                d:DataContext="{d:DesignInstance viewModels:TrayMenuViewModel}">
 
     <Grid Margin="5px">
         <Grid.RowDefinitions>

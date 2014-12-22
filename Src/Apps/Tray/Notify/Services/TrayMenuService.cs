@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using System.Windows.Threading;
 using MMK.ApplicationServiceModel;
 using MMK.Notify.Properties;
-using MMK.Notify.ViewModels.TrayMenu;
+using MMK.Notify.ViewModels;
 using MMK.Notify.Views.TrayMenu;
 using Application = System.Windows.Application;
 

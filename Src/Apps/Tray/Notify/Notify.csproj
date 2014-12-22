@@ -183,6 +183,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\ServiceLocator.cs" />
+    <Compile Include="Model\Service\IDownloadsWatcher.cs" />
     <Compile Include="Services\GlobalShortcutService.cs" />
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\TaskObserverService.cs" />
@@ -197,7 +198,7 @@
     <Compile Include="Model\BooleanToColorErrorConverter.cs" />
     <Compile Include="Model\Launchers\HotMarkLauncher.cs" />
     <Compile Include="Model\Launchers\MusicCollectionManagerLauncher.cs" />
-    <Compile Include="Model\MusicDownloadsWatcher.cs" />
+    <Compile Include="Services\ChromeDownloadsWatcherService.cs" />
     <Compile Include="Model\Launchers\SwiftSearchLauncher.cs" />
     <Compile Include="Model\Settings\SettingsPropertyAttribute.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -209,8 +210,8 @@
     <Compile Include="Style\CustomizedWindow\VS2012WindowStyle.cs" />
     <Compile Include="ViewModels\HashTagFolders\FolderPatternViewModel.cs" />
     <Compile Include="ViewModels\HashTagFolders\FolderViewModel.cs" />
-    <Compile Include="ViewModels\HashTagFolders\HashTagFoldersViewModel.cs" />
-    <Compile Include="ViewModels\TrayMenu\TrayMenuViewModel.cs" />
+    <Compile Include="ViewModels\HashTagFoldersViewModel.cs" />
+    <Compile Include="ViewModels\TrayMenuViewModel.cs" />
     <Page Include="DesignData\BalloonTipViewModel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

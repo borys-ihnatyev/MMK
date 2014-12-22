@@ -11,7 +11,7 @@ using MMK.Notify.Views;
 using MMK.Wpf;
 using MMK.Wpf.ViewModel;
 
-namespace MMK.Notify.ViewModels.TrayMenu
+namespace MMK.Notify.ViewModels
 {
     public class TrayMenuViewModel : ViewModel
     {
