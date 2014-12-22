@@ -48,7 +48,10 @@ namespace MMK.Notify.Services
         private void InitializeTrayWindow()
         {
             trayMenuView = new TrayMenuView {DataContext = trayMenuViewModel};
-            trayMenuView.AfterLoad(shortcutService.Initialize, trayMenuViewModel.LoadData);
+            trayMenuView.Loaded += (s, a) => shortcutService.Initialize();
+            trayMenuView.Loaded += (s, a) => trayMenuViewModel.LoadData();
+            trayMenuView.Closed += (s, a) => trayMenuViewModel.UnloadData();
+            trayMenuView.Show();
         }
 
         private void InitializeTrayIcon()
@@ -67,8 +70,6 @@ namespace MMK.Notify.Services
         {
             trayMenuViewModel.IsVisible = false;
             trayIcon.MouseClick -= OnTrayIconMouseClick;
-
-            taskProgressService.Stop();
 
             var timer = new DispatcherTimer
             {
