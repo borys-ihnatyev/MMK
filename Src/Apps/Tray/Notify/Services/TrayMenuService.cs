@@ -43,12 +43,12 @@ namespace MMK.Notify.Services
         {
             InitializeTrayWindow();
             InitializeTrayIcon();
-            taskProgressService.IsActiveChanged += TaskProgressStateChanged;
+            taskProgressService.StateChanged += TaskProgressStateChanged;
         }
 
         private void InitializeTrayWindow()
         {
-            trayMenuWindow = new TrayMenuWindow();
+            trayMenuWindow = new TrayMenuWindow{ DataContext = trayMenuViewModel, Opacity = 0};
             trayMenuWindow.BeginInit();
 
             trayMenuWindow.DataContext = trayMenuViewModel;
@@ -57,6 +57,7 @@ namespace MMK.Notify.Services
             trayMenuWindow.Loaded += (sender, args) => trayMenuViewModel.LoadData();
 
             trayMenuWindow.EndInit();
+            trayMenuWindow.Show();
         }
 
         private void InitializeTrayIcon()
@@ -67,7 +68,8 @@ namespace MMK.Notify.Services
 
         private void OnTrayIconMouseClick(object sender, MouseEventArgs e)
         {
-            ShowTrayMenu();
+            trayMenuViewModel.IsVisible = true;
+            trayMenuWindow.Activate();
         }
 
         private void OnAppDeactivated(object sender, EventArgs eventArgs)
@@ -118,26 +120,26 @@ namespace MMK.Notify.Services
             if (!IsInitialized)
                 throw new Exception("Service was not Initialized");
 
-            trayIcon.Visible = true;
-            ShowTrayMenu();
-        }
-
-        private void ShowTrayMenu()
-        {
-            trayMenuViewModel.IsVisible = true;
-            trayMenuWindow.Show();
-            trayMenuWindow.Activate();
+            Dispatcher.CurrentDispatcher.Invoke(delegate
+            {
+                trayIcon.Visible = true;
+                trayMenuViewModel.IsVisible = true;
+                trayMenuWindow.Activate();
+            });
         }
 
         public override void Stop()
         {
-            trayMenuViewModel.IsVisible = false;
-            trayIcon.Visible = false;
+            Dispatcher.CurrentDispatcher.Invoke(delegate
+            {
+                trayMenuViewModel.IsVisible = false;
+                trayIcon.Visible = false;
+            });
         }
 
         public void Dispose()
         {
-            taskProgressService.IsActiveChanged -= TaskProgressStateChanged;
+            taskProgressService.StateChanged -= TaskProgressStateChanged;
 
             trayMenuWindow.Close();
             trayIcon.Dispose();

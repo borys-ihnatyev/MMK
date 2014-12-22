@@ -17,7 +17,7 @@
         <Style TargetType="{x:Type Window}">
             <Style.Triggers>
                 
-                <DataTrigger Binding="{Binding IsActive}" Value="True">
+                <DataTrigger Binding="{Binding IsProgress}" Value="True">
                     <DataTrigger.EnterActions>
                         <BeginStoryboard>
                             <Storyboard>

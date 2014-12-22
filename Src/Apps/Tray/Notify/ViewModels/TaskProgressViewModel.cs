@@ -17,7 +17,7 @@ namespace MMK.Notify.ViewModels
 
         private INotifyable currentInfo;
 
-        private bool isActive;
+        private bool isProgress;
         private int observedCount;
         private int queuedCount;
         private int failedCount;
@@ -32,14 +32,14 @@ namespace MMK.Notify.ViewModels
             }
         }
 
-        public bool IsActive
+        public bool IsProgress
         {
-            get { return isActive; }
+            get { return isProgress; }
             private set
             {
-                if(value == isActive)
+                if(value == isProgress)
                     return;
-                isActive = value;
+                isProgress = value;
                 NotifyPropertyChanged();
             }
         }
@@ -75,7 +75,7 @@ namespace MMK.Notify.ViewModels
                     return;
 
                 queuedCount = value;
-                IsActive = queuedCount != 0;
+                IsProgress = queuedCount != 0;
                 NotifyPropertyChanged();
             }
         }
