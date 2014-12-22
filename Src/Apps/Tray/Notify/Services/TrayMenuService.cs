@@ -26,7 +26,6 @@ namespace MMK.Notify.Services
             };
 
             trayMenuViewModel = new TrayMenuViewModel();
-
             this.shortcutService = shortcutService;
         }
 
