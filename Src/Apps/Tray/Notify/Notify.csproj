@@ -191,7 +191,6 @@
     </Compile>
     <Compile Include="Services\GlobalShortcutService.cs" />
     <Compile Include="Services\NotificationService.cs" />
-    <Compile Include="Services\TaskObserverService.cs" />
     <Compile Include="Services\TaskProgressService.cs" />
     <Compile Include="Services\TrayMenuService.cs" />
     <Compile Include="Model\NotifyTypeColorConverter.cs" />
