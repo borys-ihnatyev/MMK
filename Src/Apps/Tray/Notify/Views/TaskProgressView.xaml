@@ -6,12 +6,13 @@
                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                 xmlns:model="clr-namespace:MMK.Notify.Model"
                 mc:Ignorable="d"
+                Topmost="True"
                 Width="350" Height="120" d:DataContext="{d:DesignData Source=../DesignData/TaskProgressViewModel.xaml}">
     
     <wpf:TrayWindow.Style>
         <Style TargetType="{x:Type Window}" BasedOn="{StaticResource WindowBlackGlanceStyle}">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding IsProgress}" Value="True">
+                <DataTrigger Binding="{Binding IsVisible}" Value="False">
                     <DataTrigger.EnterActions>
                         <BeginStoryboard>
                             <Storyboard>

@@ -12,27 +12,15 @@ namespace MMK.Notify.Views
         {
             Opacity = 0;
             taskbar = new Taskbar();
-            InitializeComponent();
             MouseDown += OnMouseDown;
-            Loaded += (s, e) => base.Show();
+            Loaded += (s, e) => SetStartupPosition();
+            InitializeComponent();
         }
 
         private void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
                 DragMove();
-        }
-
-        public new void Show()
-        {
-            SetStartupPosition();
-            Opacity = 1;
-            Activate();
-        }
-
-        public new void Hide()
-        {
-            Opacity = 0;
         }
 
         private void SetStartupPosition()
