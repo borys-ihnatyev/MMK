@@ -49,7 +49,6 @@ namespace MMK.Notify.Services
         {
             trayMenuView = new TrayMenuView {DataContext = trayMenuViewModel};
             trayMenuView.AfterLoad(shortcutService.Initialize, trayMenuViewModel.LoadData);
-            trayMenuView.Show();
         }
 
         private void InitializeTrayIcon()
