@@ -19,8 +19,6 @@ namespace MMK.HotMark.ViewModels
         private readonly FileHashTagCollection files;
         private HashTagModelChangeModel hashTagModelChangeModel;
 
-        //TODO Remove window with Behavior on view
-        private readonly HotMarkMainView window = Application.Current.Windows.OfType<HotMarkMainView>().First();
         private string fileItemView;
 
         private HashTagViewModel selectedHashTag;
@@ -171,7 +169,7 @@ namespace MMK.HotMark.ViewModels
 #if DEBUG
             throw new Exception("Supposed any file path as cl argument");
 #else
-            window.Close();
+            CloseView();
 #endif
         }
 
@@ -280,7 +278,7 @@ namespace MMK.HotMark.ViewModels
                     Close();
 
             if (e.Key == System.Windows.Input.Key.Escape)
-                window.Close();
+                CloseView();
         }
 
         private void StandartKeyboardLayoutKeyDown(KeyEventArgs e)
@@ -315,7 +313,17 @@ namespace MMK.HotMark.ViewModels
         private void Close()
         {
             hashTagModelChangeModel.NotifyChange(GetNotEmptyHashTags());
-            window.Close();
+            CloseView();
+        }
+
+        private void CloseView()
+        {
+            var view = Application.Current.Windows
+                .OfType<HotMarkMainView>()
+                .FirstOrDefault(v => v.DataContext == this);
+
+            if(view != null)
+                view.Close();
         }
 
         private IEnumerable<HashTag> GetNotEmptyHashTags()
