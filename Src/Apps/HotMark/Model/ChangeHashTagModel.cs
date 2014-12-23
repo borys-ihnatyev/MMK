@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading;
-using System.Windows;
 using MMK.ApplicationServiceModel;
 using MMK.Marking;
 using MMK.Marking.Representation;
@@ -28,13 +26,13 @@ namespace MMK.HotMark.Model
             addHashTagModel -= notChangedHashTags;
             removeHashTagModel -= notChangedHashTags;
 
-            if(addHashTagModel.Count == 0 && removeHashTagModel.Count == 0)
+            if (addHashTagModel.Count == 0 && removeHashTagModel.Count == 0)
                 return;
 
             var notifyObserver = IoC.ServiceLocator.Get<INotifyObserver>();
 
             IEnumerable<Task> tasks;
-            
+
             if (removeHashTagModel.Count == 0 && addHashTagModel.Count > 0)
                 tasks = AddHashTagModelTask.Many(Paths, addHashTagModel);
             else
