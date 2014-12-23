@@ -128,7 +128,7 @@
     <Compile Include="Behaviors\PutCursorAtEndTextBoxBehavior.cs" />
     <Compile Include="Model\ChangeHashTagModel.cs" />
     <Compile Include="Model\Files\FileHashTagCollection.cs" />
-    <Compile Include="Model\HashTagModelChangeNotify.cs" />
+    <Compile Include="Model\HashTagModelChangeModel.cs" />
     <Compile Include="Model\PianoKeyBoard\KeyRecognizer.cs" />
     <Compile Include="Model\PianoKeyBoard\MidiInstrument.cs" />
     <Compile Include="Model\PianoKeyBoard\MidiNote.cs" />
