@@ -71,19 +71,7 @@ namespace MMK.HotMark.Model.Files
 
         private HashTagModel MakeConjointHashTagModel()
         {
-            if (files.Count == 0)
-                return new HashTagModel();
-
-            var jointHashTagModel = new HashTagModel(files.First().HashTagModel);
-
-            foreach (var fileItem in files)
-            {
-                jointHashTagModel.IntersectWith(fileItem.HashTagModel);
-                if (jointHashTagModel.Count == 0)
-                    break;
-            }
-
-            return jointHashTagModel;
+            return HashTagModel.Conjoint(files.Select(file => file.HashTagModel));
         }
 
         public IEnumerable<string> GetPaths()
