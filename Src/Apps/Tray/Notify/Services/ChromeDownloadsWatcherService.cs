@@ -1,24 +1,28 @@
 ﻿using System;
 using System.IO;
+using MMK.ApplicationServiceModel;
+using MMK.Notify.Model.Service;
 using MMK.Utils;
 
-namespace MMK.Notify.Model
+namespace MMK.Notify.Services
 {
-    /// <summary>
-    ///     TODO : provide for each browser specific (now is only for CHROME)
-    /// </summary>
-    public sealed class MusicDownloadsWatcher
+    public sealed class ChromeDownloadsWatcherService : Service, IDownloadsWatcher
     {
-        private static readonly string DefaultDownloadsPath = Environment.ExpandEnvironmentVariables("%USERPROFILE%") +
-                                                              @"\Downloads\";
+        private static readonly string DefaultDownloadsPath;
 
-        public MusicDownloadsWatcher()
+        private readonly FileSystemWatcher fileWatcher;
+
+        static ChromeDownloadsWatcherService()
+        {
+            DefaultDownloadsPath = Environment
+                .ExpandEnvironmentVariables("%USERPROFILE%") + @"\Downloads\";
+        }
+
+        public ChromeDownloadsWatcherService()
         {
             fileWatcher = new FileSystemWatcher(DefaultDownloadsPath);
             fileWatcher.Renamed += OnRenamed;
         }
-
-        private readonly FileSystemWatcher fileWatcher;
 
         private void OnRenamed(object sender, RenamedEventArgs e)
         {
@@ -32,12 +36,12 @@ namespace MMK.Notify.Model
                 FileDownloaded(filePath);
         }
 
-        public void Start()
+        public override void Start()
         {
             fileWatcher.EnableRaisingEvents = true;
         }
 
-        public void Stop()
+        public override void Stop()
         {
             fileWatcher.EnableRaisingEvents = false;
         }

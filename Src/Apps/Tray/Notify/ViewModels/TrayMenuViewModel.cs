@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using MMK.ApplicationServiceModel;
+using MMK.Notify.Model.Service;
 using MMK.Notify.Model.Settings;
 using MMK.Notify.Properties;
 using MMK.Notify.Services;
@@ -10,7 +11,7 @@ using MMK.Notify.Views;
 using MMK.Wpf;
 using MMK.Wpf.ViewModel;
 
-namespace MMK.Notify.ViewModels.TrayMenu
+namespace MMK.Notify.ViewModels
 {
     public class TrayMenuViewModel : ViewModel
     {
@@ -27,8 +28,8 @@ namespace MMK.Notify.ViewModels.TrayMenu
             StartListenShortcutsCommand = new Command(IoC.ServiceLocator.Get<GlobalShortcutService>().Start);
             StopListenShortcutsCommand = new Command(IoC.ServiceLocator.Get<GlobalShortcutService>().Stop);
 
-            /*StartDownloadsWatchingCommand = new Command(App.Current.MusicDownloadsWatcher.Start);
-            StopDownloadsWatchingCommand = new Command(App.Current.MusicDownloadsWatcher.Stop);*/
+            StartDownloadsWatchingCommand = new Command(IoC.ServiceLocator.Get<IDownloadsWatcher>().Start);
+            StopDownloadsWatchingCommand = new Command(IoC.ServiceLocator.Get<IDownloadsWatcher>().Stop);
 
             ExitCommand = new Command(ExitCommandAction);
             HideCommand = new Command(HideCommandAction);

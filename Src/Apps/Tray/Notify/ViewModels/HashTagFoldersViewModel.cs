@@ -1,11 +1,12 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 using MMK.ApplicationServiceModel;
+using MMK.Notify.ViewModels.HashTagFolders;
 using MMK.Processing.AutoFolder;
 using MMK.Wpf;
 using MMK.Wpf.ViewModel;
 
-namespace MMK.Notify.ViewModels.HashTagFolders
+namespace MMK.Notify.ViewModels
 {
     public class HashTagFoldersViewModel : ViewModel
     {

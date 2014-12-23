@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Windows;
 using MMK.ApplicationServiceModel;
@@ -22,9 +21,7 @@ namespace MMK.Notify.Model.Launchers
 
         private void OnPressed()
         {
-            var items = Explorer.GetForegroundSelectedItemsPaths()
-                .Where(path => File.Exists(path) || Directory.Exists(path))
-                .ToList();
+            var items = Explorer.GetForeGroundSelectedFilesAndDirs().ToList();
 
             if (items.Any())
                 launcher.Launch(items);

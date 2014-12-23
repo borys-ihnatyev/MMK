@@ -1,0 +1,97 @@
+﻿<wpf:TrayWindow x:Class="MMK.Notify.Views.TaskProgressView"
+                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                xmlns:wpf="clr-namespace:MMK.Wpf;assembly=MMK.Wpf"
+                xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                xmlns:model="clr-namespace:MMK.Notify.Model"
+                mc:Ignorable="d"
+                Topmost="True"
+                Width="350" Height="120" d:DataContext="{d:DesignData Source=../DesignData/TaskProgressViewModel.xaml}">
+    
+    <wpf:TrayWindow.Style>
+        <Style TargetType="{x:Type Window}" BasedOn="{StaticResource WindowBlackGlanceStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsVisible}" Value="False">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                 To="0"
+                                                 Duration="0:0:0.7" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+
+                    <DataTrigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+                                    Storyboard.TargetProperty="Opacity"
+                                    To="1"
+                                    Duration="0:0:0.7" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+
+            </Style.Triggers>
+        </Style>
+    </wpf:TrayWindow.Style>
+
+    <Window.Resources>
+        <model:NotifyTypeColorConverter x:Key="NotifyTypeColorConverter" />
+        <Style TargetType="{x:Type Label}">
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+    </Window.Resources>
+
+    <Border>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="1.1*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Column="1" FontSize="8pt">Done</Label>
+            <Label Grid.Row="0" Grid.Column="2" FontSize="8pt">Total</Label>
+
+            <TextBlock Grid.Row="1" Grid.Column="0"
+                       VerticalAlignment="Center"
+                       Padding="5"
+                       Text="{Binding CurrentInfo.CommonDescription}" />
+
+            <TextBlock Grid.Row="1" Grid.Column="1"
+                       VerticalAlignment="Center" TextAlignment="Center"
+                       FontWeight="DemiBold"
+                       Text="{Binding ObservedCount}" />
+
+
+            <TextBlock Grid.Row="1" Grid.Column="2"
+                       VerticalAlignment="Center" TextAlignment="Center"
+                       FontWeight="DemiBold"
+                       Text="{Binding QueuedCount}" />
+
+            <ProgressBar Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3"
+                         Value="{Binding ObservedCount}"
+                         Minimum="0"
+                         BorderThickness="0"
+                         Foreground="{Binding CurrentInfo.Type, Converter={StaticResource NotifyTypeColorConverter}}"
+                         Background="Transparent"
+                         Maximum="{Binding QueuedCount}"
+                         Height="5" />
+
+            <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3"
+                       VerticalAlignment="Center"
+                       Padding="5"
+                       Text="{Binding CurrentInfo.TargetObject}" />
+        </Grid>
+    </Border>
+</wpf:TrayWindow>

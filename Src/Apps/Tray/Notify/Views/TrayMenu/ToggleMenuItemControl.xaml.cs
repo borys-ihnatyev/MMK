@@ -33,7 +33,7 @@ namespace MMK.Notify.Views.TrayMenu
 
         private void CommandAction()
         {
-            if (IsPressed)
+            if (!IsPressed)
             {
                 if (ReleaseCommand != null)
                     ReleaseCommand.Execute(null);
@@ -44,7 +44,7 @@ namespace MMK.Notify.Views.TrayMenu
                     PressCommand.Execute(null);
             }
 
-            IsPressed = !IsPressed;
+            //IsPressed = !IsPressed;
         }
 
         public static readonly DependencyProperty IsPressedCommandProperty =

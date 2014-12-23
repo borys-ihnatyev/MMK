@@ -9,11 +9,26 @@ namespace System.Windows
 {
     public class Explorer
     {
-        public static IEnumerable<string> GetForegroundSelectedItemsPaths()
+        public static IEnumerable<string> GetForegroundSelectedItems()
         {
             var foregroundWindowHwnd = GetForegroundWindow();
-            return GetSelectedItemsPaths(foregroundWindowHwnd).Where(p => File.Exists(p) || Directory.Exists(p));
+            return GetSelectedItemsPaths(foregroundWindowHwnd);
         }
+
+        public static IEnumerable<string> GetForeGroundSelectedFiles()
+        {
+            return GetForegroundSelectedItems().Where(File.Exists);
+        }
+
+        public static IEnumerable<string> GetForeGroundSelectedDirectories()
+        {
+            return GetForegroundSelectedItems().Where(Directory.Exists);
+        }
+
+        public static IEnumerable<string> GetForeGroundSelectedFilesAndDirs()
+        {
+            return GetForegroundSelectedItems().Where(p => File.Exists(p) || Directory.Exists(p));
+        } 
 
         private static IEnumerable<string> GetSelectedItemsPaths(int hwnd)
         {

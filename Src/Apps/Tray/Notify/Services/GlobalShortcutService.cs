@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
 using System.Windows.Forms;
 using MMK.ApplicationServiceModel;
 using MMK.Notify.Model.Launchers;
@@ -24,7 +25,7 @@ namespace MMK.Notify.Services
 
         protected override void OnInitialize()
         {
-            var trayWindow = IoC.ServiceLocator.Get<TrayMenuService>().TrayMenuWindow;
+            var trayWindow = IoC.ServiceLocator.Get<TrayMenuService>().TrayMenuView;
 
             (shortcutProviders as IGlobalShortcutProvider).SetWindow(trayWindow);
 
@@ -42,13 +43,15 @@ namespace MMK.Notify.Services
 
         private void AddNormalizeHotKeyTasks()
         {
-            var paths = Explorer.GetForegroundSelectedItemsPaths();
+            var paths = Explorer.GetForegroundSelectedItems();
+            //Todo extract files
             observer.Observe(NormalizeTrackNameTask.Many(paths));
         }
 
         private void AddMoveFileToCollectionTasks()
         {
-            var paths = Explorer.GetForegroundSelectedItemsPaths();
+            var paths = Explorer.GetForegroundSelectedItems();
+            //Todo extract files
             observer.Observe(MoveFileToMusicFolderTask.Many(paths, folderCollection));
         }
 

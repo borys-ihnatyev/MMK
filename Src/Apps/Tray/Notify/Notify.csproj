@@ -139,7 +139,7 @@
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\NotifyLogo.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\logo-normal-256.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -183,35 +183,41 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\ServiceLocator.cs" />
+    <Compile Include="Model\Service\IDownloadsWatcher.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\GlobalShortcutService.cs" />
     <Compile Include="Services\NotificationService.cs" />
-    <Compile Include="Services\TaskObserverService.cs" />
+    <Compile Include="Services\TaskProgressService.cs" />
     <Compile Include="Services\TrayMenuService.cs" />
     <Compile Include="Model\NotifyTypeColorConverter.cs" />
     <Compile Include="ViewModels\BalloonTipViewModel.cs" />
+    <Compile Include="ViewModels\TaskProgressViewModel.cs" />
     <Compile Include="Views\BalloonTipWindow.xaml.cs">
       <DependentUpon>BalloonTipWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\BooleanToColorErrorConverter.cs" />
     <Compile Include="Model\Launchers\HotMarkLauncher.cs" />
     <Compile Include="Model\Launchers\MusicCollectionManagerLauncher.cs" />
-    <Compile Include="Model\MusicDownloadsWatcher.cs" />
+    <Compile Include="Services\ChromeDownloadsWatcherService.cs" />
     <Compile Include="Model\Launchers\SwiftSearchLauncher.cs" />
     <Compile Include="Model\Settings\SettingsPropertyAttribute.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Settings.cs" />
     <Compile Include="Style\CustomizedWindow\VS2012WindowStyle.cs" />
     <Compile Include="ViewModels\HashTagFolders\FolderPatternViewModel.cs" />
     <Compile Include="ViewModels\HashTagFolders\FolderViewModel.cs" />
-    <Compile Include="ViewModels\HashTagFolders\HashTagFoldersViewModel.cs" />
-    <Compile Include="ViewModels\TrayMenu\TrayMenuViewModel.cs" />
+    <Compile Include="ViewModels\HashTagFoldersViewModel.cs" />
+    <Compile Include="ViewModels\TrayMenuViewModel.cs" />
     <Page Include="DesignData\BalloonTipViewModel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DesignData\TaskProgressViewModel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\BalloonTipWindow.xaml">
       <SubType>Designer</SubType>
@@ -229,6 +235,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\TaskProgressView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\TrayMenu\MenuItemControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -237,7 +247,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\TrayMenu\TrayMenuWindow.xaml">
+    <Page Include="Views\TrayMenuView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -248,6 +258,9 @@
     <Compile Include="Views\HashTagFoldersWindow.xaml.cs">
       <DependentUpon>HashTagFoldersWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\TaskProgressView.xaml.cs">
+      <DependentUpon>TaskProgressView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TrayMenu\MenuItemControl.xaml.cs">
       <DependentUpon>MenuItemControl.xaml</DependentUpon>
     </Compile>
@@ -255,8 +268,8 @@
     <Compile Include="Views\TrayMenu\ToggleMenuItemControl.xaml.cs">
       <DependentUpon>ToggleMenuItemControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\TrayMenu\TrayMenuWindow.xaml.cs">
-      <DependentUpon>TrayMenuWindow.xaml</DependentUpon>
+    <Compile Include="Views\TrayMenuView.xaml.cs">
+      <DependentUpon>TrayMenuView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Style\Styles.xaml">
@@ -309,40 +322,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="OtherResources\NotifyLogo.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\NotifyLogo.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Layouts-32.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\exit-32.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\glasses-32.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\keyboard-32.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\save-32.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\settings-32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -401,7 +381,36 @@
       <Name>NotifyObserver</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\process-26.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo-normal-256.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo-normal-16.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo-warning-16.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo-processing-16.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo-normal-256.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

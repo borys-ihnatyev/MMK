@@ -7,28 +7,21 @@
                 xmlns:model="clr-namespace:MMK.Notify.Model"
                 xmlns:view="clr-namespace:MMK.Notify.Views"
                 mc:Ignorable="d"
-                WindowStyle="None"
-                AllowsTransparency="True"
                 Topmost="True"
-                MinWidth="250px"
-                Height="120px"
-                MinHeight="120px"
-                FontFamily="Segoe UI"
-                ShowActivated="False"
-                FontSize="9pt"
                 WindowStartupLocation="Manual"
+                ShowActivated="False"
                 SizeToContent="WidthAndHeight"
+                Style="{StaticResource WindowBlackGlanceStyle}"
                 d:DataContext="{d:DesignData Source=../DesignData/BalloonTipViewModel.xaml}">
-
     <Window.Resources>
         <model:NotifyTypeColorConverter x:Key="NotifyTypeColorConverter" />
     </Window.Resources>
-
-    <Border BorderThickness="1px" BorderBrush="#777">
+    
+    <Border>
         <Grid Height="auto">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
-                <ColumnDefinition Width="10px" />
+                <ColumnDefinition Width="6" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="25" />
@@ -42,7 +35,7 @@
             </Border>
 
             <TextBlock Grid.Row="0" Grid.Column="0"
-                       FontSize="14"
+                       FontSize="11pt"
                        Margin="0,5,0,0"
                        Padding="5,0,5,0"
                        TextAlignment="Right"

@@ -2,6 +2,7 @@
 using System.Windows;
 using MMK.ApplicationServiceModel.Locator;
 using MMK.Notify.Model;
+using MMK.Notify.Model.Service;
 using MMK.Notify.Observer;
 using MMK.Notify.Observer.Remoting;
 using MMK.Notify.Observer.Tasking.Observing;
@@ -73,30 +74,42 @@ namespace MMK.Notify
         private static void InitializeServices()
         {
             ServiceLocator.Bind<TaskObserver>().ToSelf().InSingletonScope();
-            ServiceLocator.Bind<INotifyObserver>().To<NotifyObserver>().InSingletonScope();
+
+            ServiceLocator.Bind<INotifyObserver>()
+                .To<NotifyObserver>()
+                .InSingletonScope();
+
+            ServiceLocator.Bind<IDownloadsWatcher>()
+                .To<ChromeDownloadsWatcherService>()
+                .InSingletonScope();
 
             ServiceLocator.Bind<HashTagFolderCollection>()
                 .ToMethod(c => Settings.Default.FolderCollection)
                 .InSingletonScope();
 
             ServiceLocator.Bind<NotificationService>().ToSelf().InSingletonScope();
-            ServiceLocator.Bind<TaskObserverService>().ToSelf().InSingletonScope();
+            ServiceLocator.Bind<TaskProgressService>().ToSelf().InSingletonScope();
+
             ServiceLocator.Bind<GlobalShortcutService>().ToSelf().InSingletonScope();
             ServiceLocator.Bind<TrayMenuService>().ToSelf().InSingletonScope();
 
             ServiceLocator.Get<TrayMenuService>().Initialize();
+            ServiceLocator.Get<TaskProgressService>().Initialize();
         }
 
         private static void StartServices()
         {
-            ServiceLocator.Get<TaskObserverService>().Start();
+            ServiceLocator.Get<TaskObserver>().Start();
+            ServiceLocator.Get<NotifyObserver>().Start();
             ServiceLocator.Get<TrayMenuService>().Start();
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
             ServiceLocator.Get<TrayMenuService>().Stop();
-            ServiceLocator.Get<TaskObserverService>().Stop();
+            ServiceLocator.Get<TaskProgressService>().Stop();
+            ServiceLocator.Get<NotifyObserver>().Stop();
+            ServiceLocator.Get<TaskObserver>().Cancell();
             base.OnExit(e);
         }
     }
