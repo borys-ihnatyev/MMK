@@ -44,7 +44,7 @@ namespace MMK.Wpf
 
         private void CreateWindow()
         {
-            Window = factoryMethod();
+            Window = WindowFactory();
 
             BindWindowEvents();
         }
