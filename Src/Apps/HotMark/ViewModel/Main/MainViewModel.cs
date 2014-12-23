@@ -39,7 +39,7 @@ namespace MMK.HotMark.ViewModel.Main
 
             SelectHashTagCommand = new Command<HashTagViewModel>(SelectHashTag);
             CloseCommand = new Command(Close);
-            
+
             AddHashTagCommand = new Command(AddHashTag);
             RemoveHashTagCommand = new Command<HashTagViewModel>(RemoveHashTag);
 
@@ -88,7 +88,7 @@ namespace MMK.HotMark.ViewModel.Main
         public PianoKeyBoardViewModel PianoKeyBoardViewModel
         {
             get { return pianoKeyBoardViewModel; }
-        } 
+        }
 
         public bool IsPianoKeyboardLayout
         {
@@ -113,7 +113,7 @@ namespace MMK.HotMark.ViewModel.Main
             get { return canDirectEditHashTags; }
             private set
             {
-                if(value == canDirectEditHashTags)
+                if (value == canDirectEditHashTags)
                     return;
                 canDirectEditHashTags = value;
                 NotifyPropertyChanged();
@@ -134,27 +134,18 @@ namespace MMK.HotMark.ViewModel.Main
             pianoKeyBoardViewModel.PropertyChanged += PianoKeyBoardViewModelOnPropertyChanged;
         }
 
-        private void PianoKeyBoardViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if(e.PropertyName != "RecognizedKey")
-                return;
-            if(!HasHashTags)
-                AddHashTag();
-            selectedHashTag.HashTagValue = pianoKeyBoardViewModel.RecognizedKey.ToString();
-        }
-
         /// <summary>
         ///     Loads file paths from command line args
         /// </summary>
         /// <returns>true if file paths was in command line</returns>
         private void LoadFilePaths()
         {
-            string[] commandLineArgs = Environment.GetCommandLineArgs();
+            var commandLineArgs = Environment.GetCommandLineArgs();
 
             if (commandLineArgs.Length <= 1 && files.Count == 0)
                 Shutdown();
 
-            for (int i = 1; i < commandLineArgs.Length; i++)
+            for (var i = 1; i < commandLineArgs.Length; i++)
                 files.Add(commandLineArgs[i]);
 
             if (files.Count == 0)
@@ -163,15 +154,6 @@ namespace MMK.HotMark.ViewModel.Main
             FileItemView = (files.Count == 1)
                 ? files.First().ClearName
                 : string.Format("< {0} files >", files.Count);
-        }
-
-        private void Shutdown()
-        {
-#if DEBUG
-            throw new Exception("Supposed any file path as cl argument");
-#else
-            window.Close();
-#endif
         }
 
         /// <summary>
@@ -184,9 +166,18 @@ namespace MMK.HotMark.ViewModel.Main
             TrySelectFirstHashTag();
         }
 
+        private void Shutdown()
+        {
+#if DEBUG
+            throw new Exception("Supposed any file path as cl argument");
+#else
+            window.Close();
+#endif
+        }
+
         private void LoadHashTags()
         {
-            foreach (HashTag hashTag in files.ConjointHashTagModel)
+            foreach (var hashTag in files.ConjointHashTagModel)
                 HashTags.Add(new HashTagViewModel(hashTag.TagValue));
         }
 
@@ -210,8 +201,17 @@ namespace MMK.HotMark.ViewModel.Main
             if (!HasHashTags) return;
 
             SelectedHashTag = HashTags[0];
-            
+
             UpdateCanDirectEditHashTags();
+        }
+
+        private void PianoKeyBoardViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != "RecognizedKey")
+                return;
+            if (!HasHashTags)
+                AddHashTag();
+            selectedHashTag.HashTagValue = pianoKeyBoardViewModel.RecognizedKey.ToString();
         }
 
         #endregion
@@ -255,12 +255,12 @@ namespace MMK.HotMark.ViewModel.Main
             else
                 SelectedHashTag = null;
         }
-        
+
         public ICommand KeyDownCommand { get; private set; }
 
         private void KeyDown(KeyEventArgs e)
         {
-            if(e.IsRepeat)
+            if (e.IsRepeat)
                 return;
 
             MergedLayoutKeyDown(e);
@@ -276,9 +276,9 @@ namespace MMK.HotMark.ViewModel.Main
             if (e.KeyboardDevice.Modifiers == ModifierKeys.Control)
                 if (e.Key == System.Windows.Input.Key.P)
                     IsPianoKeyboardLayout = !IsPianoKeyboardLayout;
-                else if(e.Key == System.Windows.Input.Key.Enter)
+                else if (e.Key == System.Windows.Input.Key.Enter)
                     Close();
-            
+
             if (e.Key == System.Windows.Input.Key.Escape)
                 window.Close();
         }
@@ -303,7 +303,7 @@ namespace MMK.HotMark.ViewModel.Main
 
         private void KeyUp(KeyEventArgs e)
         {
-            if(!IsPianoKeyboardLayout)
+            if (!IsPianoKeyboardLayout)
                 return;
 
             pianoKeyBoardViewModel.KeyUpCommand.Execute(e);
@@ -345,7 +345,7 @@ namespace MMK.HotMark.ViewModel.Main
         {
             if (!HasHashTags) return;
 
-            int selectedHashTagItemIndex = HashTags.IndexOf(SelectedHashTag);
+            var selectedHashTagItemIndex = HashTags.IndexOf(SelectedHashTag);
 
             if (selectedHashTagItemIndex == 0)
                 selectedHashTagItemIndex = HashTags.Count - 1;
