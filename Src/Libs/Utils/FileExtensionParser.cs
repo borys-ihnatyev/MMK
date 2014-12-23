@@ -1,13 +1,15 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace MMK.Utils
 {
     public static class FileExtensionParser
     {
-        private static bool HasExtension(string filePath, string extension)
+        public static bool HasExtension(string filePath, string extension)
         {
+            extension = extension.Trim(' ','*');
             var fileExtension = Path.GetExtension(filePath);
-            return fileExtension != null && fileExtension.ToLower() == extension;
+            return extension.Equals(fileExtension, StringComparison.OrdinalIgnoreCase);
         }
 
         public static bool IsMp3(string filePath)
