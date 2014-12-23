@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using MMK.Utils;
 using SHDocVw;
 
 // ReSharper disable once CheckNamespace
@@ -9,6 +10,27 @@ namespace System.Windows
 {
     public class Explorer
     {
+        public static IEnumerable<string> GetForegroundSelectedItemsFileTree(string extension = "")
+        {
+            var extensionFilter = "*" + extension;
+
+            var paths = GetForeGroundSelectedFilesAndDirs().ToList();
+
+            var files = paths.Where(File.Exists);
+
+            if (!String.IsNullOrWhiteSpace(extension))
+                files = files.Where(file => FileExtensionParser.HasExtension(file, extension));
+
+            var filesList = new LinkedList<string>(files);
+            
+            paths
+                .Where(Directory.Exists)
+                .SelectMany(d => Directory.EnumerateFiles(d, extensionFilter, SearchOption.AllDirectories))
+                .ForEach(file => filesList.AddLast(file));
+
+            return filesList;
+        } 
+
         public static IEnumerable<string> GetForegroundSelectedItems()
         {
             var foregroundWindowHwnd = GetForegroundWindow();
