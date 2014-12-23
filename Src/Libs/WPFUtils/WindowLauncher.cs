@@ -1,9 +1,22 @@
-﻿using System.Windows;
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.Windows;
 
 namespace MMK.Wpf
 {
-    public class WindowLauncher<TWindow> where TWindow : Window, new()
+    public class WindowLauncher<TWindow> where TWindow : Window
     {
+        private readonly Func<TWindow> factoryMethod;
+
+        public WindowLauncher(Func<TWindow> factoryMethod)
+        {
+            if(factoryMethod == null)
+                throw new ArgumentNullException("factoryMethod");
+            Contract.EndContractBlock();
+
+            this.factoryMethod = factoryMethod;
+        }
+
         public TWindow Window
         {
             get; private set;
@@ -26,14 +39,9 @@ namespace MMK.Wpf
 
         private void CreateWindow()
         {
-            Window = WindowFactory();
+            Window = factoryMethod();
 
             BindWindowEvents();
-        }
-
-        protected virtual TWindow WindowFactory()
-        {
-            return new TWindow();
         }
 
         protected virtual void BindWindowEvents()
