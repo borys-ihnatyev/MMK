@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 
-namespace MMK.Wpf
+namespace MMK.Wpf.Tools
 {
-    public static class FocusExtension
+    public static class DependencyObjectFocusExtension
     {
         public static bool GetIsFocused(DependencyObject obj)
         {
@@ -16,7 +16,7 @@ namespace MMK.Wpf
 
         public static readonly DependencyProperty IsFocusedProperty =
             DependencyProperty.RegisterAttached(
-             "IsFocused", typeof(bool), typeof(FocusExtension),
+             "IsFocused", typeof(bool), typeof(DependencyObjectFocusExtension),
              new UIPropertyMetadata(false, OnIsFocusedPropertyChanged));
 
 

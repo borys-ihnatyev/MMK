@@ -1,9 +1,7 @@
 ﻿using System.Globalization;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace MMK.Wpf.Tools
+namespace System.Windows.Controls
 {
     public static class ControlExtension
     {

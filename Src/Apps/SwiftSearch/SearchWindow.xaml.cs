@@ -7,7 +7,6 @@ using MMK.Marking;
 using MMK.SwiftSearch.SearchHandlers;
 using MMK.Wpf.Providers;
 using MMK.Wpf.Providers.Key;
-using MMK.Wpf.Tools;
 
 namespace MMK.SwiftSearch
 {

@@ -108,8 +108,8 @@
     <Compile Include="Windows\Taskbar.Rect.cs" />
     <Compile Include="Windows\Taskbar.cs" />
     <Compile Include="Tools\CenterConverter.cs" />
-    <Compile Include="Tools\ControlExtension.cs" />
-    <Compile Include="Tools\FocusExtension.cs" />
+    <Compile Include="System\Windows\Controls\ControlExtension.cs" />
+    <Compile Include="Tools\DependencyObjectFocusExtension.cs" />
     <Compile Include="Tools\InputBindingsManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\ColorHSV.cs" />
@@ -117,7 +117,7 @@
     <Compile Include="Tools\GridLengthAnimation.cs" />
     <Compile Include="Tools\InvokeDelegateCommandAction.cs" />
     <Compile Include="Tools\KeyColorConverter.cs" />
-    <Compile Include="Tools\SortedObservableCollection.cs" />
+    <Compile Include="System\Collections.ObjectModel\SortedObservableCollection.cs" />
     <Compile Include="TrayWindow.cs" />
     <Compile Include="ViewModel\ObservableObject.cs" />
     <Compile Include="ViewModel\ViewModel.cs" />
@@ -134,6 +134,7 @@
       <Name>Utils</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
