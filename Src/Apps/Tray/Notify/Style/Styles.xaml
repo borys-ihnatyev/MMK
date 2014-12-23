@@ -5,6 +5,8 @@
     
     <Style x:Key="WindowBlackGlanceStyle" TargetType="{x:Type Window}">
         <Style.Setters>
+            <Setter Property="MinHeight" Value="120"/>
+            <Setter Property="MinWidth" Value="350"/>
             <Setter Property="WindowStyle" Value="None" />
             <Setter Property="AllowsTransparency" Value="True" />
             <Setter Property="FontSize" Value="10pt" />
