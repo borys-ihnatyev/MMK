@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 
 namespace MMK.Marking.Representation
@@ -7,6 +8,19 @@ namespace MMK.Marking.Representation
     [Serializable]
     public partial class HashTagModel : SortedSet<HashTag>
     {
+        public static HashTagModel Conjoint(IEnumerable<HashTagModel> hashTagModels)
+        {
+            var hashTagModelsList = hashTagModels.ToList();
+            if(hashTagModelsList.Count == 0)
+                return new HashTagModel();
+
+            var initialHashTagModel = new HashTagModel(hashTagModelsList.First());
+            
+            hashTagModelsList.ForEach(initialHashTagModel.IntersectWith);
+
+            return initialHashTagModel;
+        }
+
         public HashTagModel()
             : base(new HashTag.Comparer())
         { }
