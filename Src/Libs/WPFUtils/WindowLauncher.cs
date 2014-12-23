@@ -17,6 +17,11 @@ namespace MMK.Wpf
             this.factoryMethod = factoryMethod;
         }
 
+        public WindowLauncher()
+        {
+            
+        }
+
         public TWindow Window
         {
             get; private set;
@@ -42,6 +47,15 @@ namespace MMK.Wpf
             Window = factoryMethod();
 
             BindWindowEvents();
+        }
+
+        protected virtual TWindow WindowFactory()
+        {
+            if(factoryMethod == null)
+                throw new InvalidOperationException("if no factory method passed in ctor, then WindowFactory must be overriden");
+            Contract.EndContractBlock();
+
+            return factoryMethod();
         }
 
         protected virtual void BindWindowEvents()
