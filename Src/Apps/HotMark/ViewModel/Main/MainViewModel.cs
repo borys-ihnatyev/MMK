@@ -17,7 +17,7 @@ namespace MMK.HotMark.ViewModel.Main
     public class MainViewModel : Wpf.ViewModel.ViewModel
     {
         private readonly FileHashTagCollection files;
-        private HashTagModelChangeNotify hashTagModelChangeNotify;
+        private HashTagModelChangeModel hashTagModelChangeModel;
 
         //TODO Remove window with Behavior on view
         private readonly MainView window = Application.Current.Windows.OfType<MainView>().First();
@@ -193,9 +193,9 @@ namespace MMK.HotMark.ViewModel.Main
         private void SetHashTagModelChangeNotify()
         {
             if (CalcFileItemMaxHashTagCount() == HashTags.Count)
-                hashTagModelChangeNotify = new RewriteHashTagModel(files.GetPaths(), files.ConjointHashTagModel);
+                hashTagModelChangeModel = new RewriteHashTagModel(files.GetPaths(), files.ConjointHashTagModel);
             else
-                hashTagModelChangeNotify = new ChangeHashTagModel(files.GetPaths(), files.ConjointHashTagModel);
+                hashTagModelChangeModel = new ChangeHashTagModel(files.GetPaths(), files.ConjointHashTagModel);
         }
 
         private int CalcFileItemMaxHashTagCount()
@@ -314,7 +314,7 @@ namespace MMK.HotMark.ViewModel.Main
 
         private void Close()
         {
-            hashTagModelChangeNotify.NotifyChange(GetNotEmptyHashTags());
+            hashTagModelChangeModel.NotifyChange(GetNotEmptyHashTags());
             window.Close();
         }
 

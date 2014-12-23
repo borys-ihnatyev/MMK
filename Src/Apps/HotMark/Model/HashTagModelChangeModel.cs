@@ -6,9 +6,9 @@ using MMK.Marking.Representation;
 
 namespace MMK.HotMark.Model
 {
-    public abstract class HashTagModelChangeNotify
+    public abstract class HashTagModelChangeModel
     {
-        protected HashTagModelChangeNotify(IEnumerable<string> paths, IEnumerable<HashTag> initialConjointHashTagModel)
+        protected HashTagModelChangeModel(IEnumerable<string> paths, IEnumerable<HashTag> initialConjointHashTagModel)
         {
             Paths = paths as string[] ?? paths.ToArray();
             InitialConjointHashTagModel = new HashTagModel(initialConjointHashTagModel);
