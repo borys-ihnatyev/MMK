@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using MMK.HotMark.ViewModel.PianoKeyBoard;
+using MMK.HotMark.ViewModels.PianoKeyBoard;
 using Sanford.Multimedia.Midi;
 
 namespace MMK.HotMark.PianoKeyboardUsage

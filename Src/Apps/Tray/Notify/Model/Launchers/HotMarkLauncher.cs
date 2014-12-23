@@ -2,7 +2,8 @@
 using System.Linq;
 using System.Windows;
 using MMK.ApplicationServiceModel;
-using MMK.HotMark.View;
+using MMK.HotMark.ViewModels;
+using MMK.HotMark.Views;
 using MMK.Notify.Services;
 using MMK.Wpf;
 using MMK.Wpf.Providers;
@@ -27,20 +28,20 @@ namespace MMK.Notify.Model.Launchers
                 launcher.Launch(items);
         }
 
-        private class HotMarkWindowLauncher : WindowLauncher<MainView>
+        private class HotMarkWindowLauncher : WindowLauncher<HotMarkMainView>
         {
             private IEnumerable<string> paths = new string[0];
 
             public void Launch(IEnumerable<string> filePaths)
             {
                 paths = filePaths;
-
                 Launch();
             }
 
-            protected override MainView WindowFactory()
+            protected override HotMarkMainView WindowFactory()
             {
-                return new MainView(paths);
+                var viewModel = new HotMarkViewModel(paths);
+                return new HotMarkMainView(viewModel);
             }
 
             protected override void BeforeLaunch()

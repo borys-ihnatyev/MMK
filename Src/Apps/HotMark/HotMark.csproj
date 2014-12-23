@@ -133,20 +133,20 @@
     <Compile Include="Model\PianoKeyBoard\MidiInstrument.cs" />
     <Compile Include="Model\PianoKeyBoard\MidiNote.cs" />
     <Compile Include="Model\PianoKeyBoard\PianoKeyBoardMidiMapper.cs" />
-    <Compile Include="ViewModel\PianoKeyBoard\NoteEventArgs.cs" />
-    <Compile Include="ViewModel\PianoKeyBoard\PianoKeyBoardViewModel.cs" />
-    <Compile Include="ViewModel\PianoKeyBoard\PianoKeyViewModel.cs" />
-    <Compile Include="View\PianoKeyBoardControl.xaml.cs">
+    <Compile Include="ViewModels\PianoKeyBoard\NoteEventArgs.cs" />
+    <Compile Include="ViewModels\PianoKeyBoard\PianoKeyBoardViewModel.cs" />
+    <Compile Include="ViewModels\PianoKeyBoard\PianoKeyViewModel.cs" />
+    <Compile Include="Views\PianoKeyBoardControl.xaml.cs">
       <DependentUpon>PianoKeyBoardControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\PianoKeyControl.xaml.cs">
+    <Compile Include="Views\PianoKeyControl.xaml.cs">
       <DependentUpon>PianoKeyControl.xaml</DependentUpon>
     </Compile>
     <Page Include="Style\PianoKeyBoardStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\MainView.xaml">
+    <Page Include="Views\HotMarkMainView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -154,19 +154,19 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="View\MainView.xaml.cs">
-      <DependentUpon>MainView.xaml</DependentUpon>
+    <Compile Include="Views\HotMarkMainView.xaml.cs">
+      <DependentUpon>HotMarkMainView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Style\Style.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\PianoKeyBoardControl.xaml">
+    <Page Include="Views\PianoKeyBoardControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\PianoKeyControl.xaml">
+    <Page Include="Views\PianoKeyControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -174,9 +174,9 @@
   <ItemGroup>
     <Compile Include="Model\RewriteHashTagModel.cs" />
     <Compile Include="Model\Files\FileHashTagModel.cs" />
-    <Compile Include="ViewModel\Main\HashTagViewModel.Comparer.cs" />
-    <Compile Include="ViewModel\Main\HashTagViewModel.cs" />
-    <Compile Include="ViewModel\Main\MainViewModel.cs" />
+    <Compile Include="ViewModels\HashTagViewModel.Comparer.cs" />
+    <Compile Include="ViewModels\HashTagViewModel.cs" />
+    <Compile Include="ViewModels\HotMarkViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

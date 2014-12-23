@@ -11,7 +11,7 @@ namespace MMK.Notify.Model.Launchers
 {
     public sealed class SwiftSearchLauncher : GlobalShortcutProviderCollection
     {
-        private readonly WindowLauncher<SearchWindow> launcher = new WindowLauncher<SearchWindow>();
+        private readonly WindowLauncher<SearchWindow> launcher = new WindowLauncher<SearchWindow>(() => new SearchWindow());
 
         private bool isSetStartShortcut;
 

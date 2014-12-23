@@ -3,7 +3,7 @@ using MMK.Marking;
 using MMK.Wpf;
 using MMK.Wpf.ViewModel;
 
-namespace MMK.HotMark.ViewModel.Main
+namespace MMK.HotMark.ViewModels
 {
     public partial class HashTagViewModel : ObservableObject
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using MMK.Marking;
 
-namespace MMK.HotMark.ViewModel.Main
+namespace MMK.HotMark.ViewModels
 {
     public partial class HashTagViewModel
     {

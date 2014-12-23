@@ -1,4 +1,4 @@
-﻿namespace MMK.HotMark.View
+﻿namespace MMK.HotMark.Views
 {
     public partial class PianoKeyControl
     {

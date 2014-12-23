@@ -7,20 +7,20 @@ using System.Windows;
 using System.Windows.Input;
 using MMK.HotMark.Model;
 using MMK.HotMark.Model.Files;
-using MMK.HotMark.View;
-using MMK.HotMark.ViewModel.PianoKeyBoard;
+using MMK.HotMark.ViewModels.PianoKeyBoard;
+using MMK.HotMark.Views;
 using MMK.Marking;
 using MMK.Wpf;
 
-namespace MMK.HotMark.ViewModel.Main
+namespace MMK.HotMark.ViewModels
 {
-    public class MainViewModel : Wpf.ViewModel.ViewModel
+    public class HotMarkViewModel : Wpf.ViewModel.ViewModel
     {
         private readonly FileHashTagCollection files;
         private HashTagModelChangeModel hashTagModelChangeModel;
 
         //TODO Remove window with Behavior on view
-        private readonly MainView window = Application.Current.Windows.OfType<MainView>().First();
+        private readonly HotMarkMainView window = Application.Current.Windows.OfType<HotMarkMainView>().First();
         private string fileItemView;
 
         private HashTagViewModel selectedHashTag;
@@ -30,7 +30,7 @@ namespace MMK.HotMark.ViewModel.Main
         private bool isPianoKeyboardLayout;
         private bool canDirectEditHashTags;
 
-        public MainViewModel()
+        public HotMarkViewModel()
         {
             files = new FileHashTagCollection();
             HashTags = new SortedObservableCollection<HashTagViewModel>(new HashTagViewModel.Comparer());
@@ -47,7 +47,7 @@ namespace MMK.HotMark.ViewModel.Main
             KeyUpCommand = new Command<KeyEventArgs>(KeyUp);
         }
 
-        public MainViewModel(IEnumerable<string> paths) : this()
+        public HotMarkViewModel(IEnumerable<string> paths) : this()
         {
             paths.ForEach(files.Add);
         }

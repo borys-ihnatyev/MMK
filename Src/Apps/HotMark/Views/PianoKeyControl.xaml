@@ -1,14 +1,14 @@
-﻿<UserControl x:Class="MMK.HotMark.View.PianoKeyControl"
+﻿<UserControl x:Class="MMK.HotMark.Views.PianoKeyControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:viewModel="clr-namespace:MMK.HotMark.ViewModel.PianoKeyBoard"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:interactivity="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:wpf="clr-namespace:MMK.Wpf;assembly=MMK.Wpf"
+             xmlns:pianoKeyBoard="clr-namespace:MMK.HotMark.ViewModels.PianoKeyBoard"
              mc:Ignorable="d"
              Width="15"
-             d:DataContext="{d:DesignInstance viewModel:PianoKeyViewModel}">
+             d:DataContext="{d:DesignInstance pianoKeyBoard:PianoKeyViewModel}">
     
     <interactivity:Interaction.Triggers>
         <interactivity:EventTrigger EventName="MouseDown">

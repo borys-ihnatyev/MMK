@@ -1,31 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
-using MMK.HotMark.ViewModel.Main;
+using MMK.HotMark.ViewModels;
 
-namespace MMK.HotMark.View
+namespace MMK.HotMark.Views
 {
-    public partial class MainView
+    public partial class HotMarkMainView
     {
-        private readonly MainViewModel viewModel;
-
-        public MainView() : this(new string[0])
-        {
-            
-        }
-
-        public MainView(IEnumerable<string> paths)
+        public HotMarkMainView(HotMarkViewModel viewModel)
         {
             InitializeComponent();
             
-            viewModel = new MainViewModel(paths);
             DataContext = viewModel;
-            
+
+            Loaded += (s, e) => viewModel.LoadData();
+            Loaded += Window_Loaded;
+
+            Closing += (s, e) => viewModel.UnloadData();
+
             isCloseStoryboardStarted = false;
             isCloseStoryboardCompletted = false;
-            
-            Loaded += Window_Loaded;
         }
 
         #region Animation Flags
@@ -39,13 +33,12 @@ namespace MMK.HotMark.View
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            viewModel.LoadData();
             Focus();
+            Activate();
         }
 
         private void CloseStoryboard_Completed(object sender, EventArgs e)
         {
-            viewModel.UnloadData();
             isCloseStoryboardCompletted = true;
             Close();
         }
@@ -73,7 +66,7 @@ namespace MMK.HotMark.View
                 "UserClose",
                 RoutingStrategy.Direct,
                 typeof (RoutedEventHandler),
-                typeof (MainView)
+                typeof (HotMarkMainView)
                 );
 
         public event RoutedEventHandler UserClose

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using MMK.HotMark.ViewModel.PianoKeyBoard;
+using MMK.HotMark.ViewModels.PianoKeyBoard;
 
-namespace MMK.HotMark.View
+namespace MMK.HotMark.Views
 {
     public partial class PianoKeyBoardControl
     {

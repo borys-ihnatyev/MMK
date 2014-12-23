@@ -1,14 +1,14 @@
 ﻿<wpf:TrayWindow
-    x:Class="MMK.HotMark.View.MainView"
+    x:Class="MMK.HotMark.Views.HotMarkMainView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:wpf="clr-namespace:MMK.Wpf;assembly=MMK.Wpf"
-    xmlns:view="clr-namespace:MMK.HotMark.View"
+    xmlns:views="clr-namespace:MMK.HotMark.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:main="clr-namespace:MMK.HotMark.ViewModel.Main"
     xmlns:tools="clr-namespace:MMK.Wpf.Tools;assembly=MMK.Wpf"
+    xmlns:viewModels="clr-namespace:MMK.HotMark.ViewModels"
     mc:Ignorable="d"
     AllowsTransparency="True"
     WindowStartupLocation="CenterScreen"
@@ -23,7 +23,7 @@
     ScrollViewer.VerticalScrollBarVisibility="Disabled"
     FontFamily="Consolas"
     Foreground="White"
-    d:DataContext="{d:DesignInstance main:MainViewModel}">
+    d:DataContext="{d:DesignInstance viewModels:HotMarkViewModel}">
     
     <wpf:TrayWindow.Background>
         <SolidColorBrush x:Name="BackgroundBrush" Opacity="0.9" Color="#111"/>
@@ -79,7 +79,7 @@
             </BeginStoryboard>
         </EventTrigger>
 
-        <EventTrigger RoutedEvent="view:MainView.UserClose">
+        <EventTrigger RoutedEvent="views:HotMarkMainView.UserClose">
             <BeginStoryboard>
                 <Storyboard x:Name="CloseStoryboard" Completed="CloseStoryboard_Completed">
                     <DoubleAnimation
@@ -214,7 +214,7 @@
                     Content="#" Margin="3,1,3,2" />
         </StackPanel>
 
-        <view:PianoKeyBoardControl
+        <views:PianoKeyBoardControl
             DataContext="{Binding PianoKeyBoardViewModel}"
             Grid.Row="2" 
             Height="50px"/>
