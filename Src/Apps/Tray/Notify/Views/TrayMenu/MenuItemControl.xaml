@@ -11,16 +11,12 @@
             Background="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"
             Command="{Binding Command, RelativeSource={RelativeSource AncestorType={x:Type trayMenu:MenuItemControl}}}"
             Style="{StaticResource ClearButtonStyle}">
-        <Grid Height="32px">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="32px" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Image
+        <DockPanel Height="32px">
+            <Image DockPanel.Dock="Left"
                 Source="{Binding Image, RelativeSource={RelativeSource AncestorType={x:Type trayMenu:MenuItemControl}}}"
                 Margin="6px" />
-            <TextBlock Grid.Column="1" VerticalAlignment="Center"
+            <TextBlock DockPanel.Dock="Left" VerticalAlignment="Center"
                        Text="{Binding Title, RelativeSource={RelativeSource AncestorType={x:Type trayMenu:MenuItemControl}}}" />
-        </Grid>
+        </DockPanel>
     </Button>
 </trayMenu:MenuItemControlBase>
