@@ -22,10 +22,10 @@ namespace MMK.Notify.Model.Launchers
 
         private void OnPressed()
         {
-            var items = Explorer.GetForeGroundSelectedFilesAndDirs().ToList();
-
-            if (items.Any())
-                launcher.Launch(items);
+            var filesEnumer = Explorer.GetForegroundSelectedItemsFileTree(".mp3");
+            var files = filesEnumer as IList<string> ?? filesEnumer.ToList();
+            if (files.Any())
+                launcher.Launch(files);
         }
 
         private class HotMarkWindowLauncher : WindowLauncher<HotMarkMainView>
