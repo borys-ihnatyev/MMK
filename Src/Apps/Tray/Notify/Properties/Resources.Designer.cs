@@ -61,36 +61,6 @@ namespace MMK.Notify.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap exit_26 {
-            get {
-                object obj = ResourceManager.GetObject("exit_26", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap glasses_26 {
-            get {
-                object obj = ResourceManager.GetObject("glasses_26", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap keyboard_26 {
-            get {
-                object obj = ResourceManager.GetObject("keyboard_26", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon logo_normal {
@@ -133,6 +103,16 @@ namespace MMK.Notify.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        internal static System.Drawing.Icon logo_processing_256 {
+            get {
+                object obj = ResourceManager.GetObject("logo_processing_256", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         internal static System.Drawing.Icon logo_warning {
             get {
                 object obj = ResourceManager.GetObject("logo_warning", resourceCulture);
@@ -147,26 +127,6 @@ namespace MMK.Notify.Properties {
             get {
                 object obj = ResourceManager.GetObject("MusicCollectionManagerLogo", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap process_26 {
-            get {
-                object obj = ResourceManager.GetObject("process_26", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap settings_26 {
-            get {
-                object obj = ResourceManager.GetObject("settings_26", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

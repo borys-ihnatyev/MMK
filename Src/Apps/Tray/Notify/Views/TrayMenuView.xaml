@@ -104,20 +104,18 @@
                 <trayMenu:ToggleMenuItemControl
                     IsPressed="{Binding IsEnableHotKeys, Mode=TwoWay}"
                     Title="Hotkeys"
-                    Image="pack://siteoforigin:,,,/Resources/keyboard-26.png"
                     PressCommand="{Binding StartListenShortcutsCommand}"
                     ReleaseCommand="{Binding StopListenShortcutsCommand}" />
 
                 <trayMenu:ToggleMenuItemControl
                     IsPressed="{Binding IsEnableDownloadsWatch, Mode=TwoWay}"
                     Title="Downloads watching"
-                    Image="pack://siteoforigin:,,,/Resources/glasses-26.png"
                     PressCommand="{Binding StartDownloadsWatchingCommand}"
                     ReleaseCommand="{Binding StopDownloadsWatchingCommand}" />
 
                 <trayMenu:MenuItemControl
+                    Padding="16,0,0,0"
                     Title="Exit"
-                    Image="pack://siteoforigin:,,,/Resources/exit-26.png"
                     Command="{Binding ExitCommand}" />
             </ListBox.Items>
         </ListBox>
