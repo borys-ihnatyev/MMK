@@ -20,5 +20,10 @@ namespace MMK.ApplicationServiceModel
                 return assemblyServiceLocator;
             }
         }
+
+        public static TService Get<TService>()
+        {
+            return ServiceLocator.Get<TService>();
+        }
     }
 }
