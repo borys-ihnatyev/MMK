@@ -1,14 +1,10 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Forms;
 using MMK.ApplicationServiceModel;
 using MMK.Notify.Model.Launchers;
 using MMK.Notify.Observer.Remoting;
 using MMK.Notify.Observer.Tasking.Common;
 using MMK.Processing.AutoFolder;
-using MMK.Utils;
 using MMK.Wpf.Providers;
 
 namespace MMK.Notify.Services
@@ -43,7 +39,6 @@ namespace MMK.Notify.Services
 
             shortcutProviders.Add(swiftSearchLauncher);
         }
-
 
 
         private void AddNormalizeHotKeyTasks()
