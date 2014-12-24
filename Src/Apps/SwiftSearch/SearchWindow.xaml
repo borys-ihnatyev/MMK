@@ -3,13 +3,14 @@
                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                 xmlns:wpf="clr-namespace:MMK.Wpf;assembly=MMK.Wpf"
                 Title="SearchWindow"
+                Width="220"
                 MinWidth="220"
                 MaxWidth="1024"
-                Width="220"
                 Height="70"
                 Topmost="True"
                 WindowStartupLocation="CenterScreen"
                 WindowStyle="None"
+                SizeToContent="Width"
                 AllowsTransparency="True"
                 Background="Transparent">
     <wpf:TrayWindow.Triggers>
@@ -30,7 +31,7 @@
         <Border.Background>
             <SolidColorBrush Opacity="0.9" Color="#111" />
         </Border.Background>
-        <Grid>
+        <Grid Margin="10,5">
             <TextBox x:Name="SearchTextBox"
                      Background="Transparent"
                      BorderThickness="0"
@@ -40,8 +41,7 @@
                      TextChanged="SearchTextBoxTextChanged"
                      TextAlignment="Center"
                      FontSize="40px"
-                     FontWeight="ExtraLight"
-                     Margin="10,5" />
+                     FontWeight="ExtraLight"/>
         </Grid>
     </Border>
 </wpf:TrayWindow>

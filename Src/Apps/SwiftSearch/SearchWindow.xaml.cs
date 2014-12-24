@@ -26,9 +26,15 @@ namespace MMK.SwiftSearch
         {
             InitializeComponent();
             Loaded += OnLoaded;
+            SizeChanged += OnSizeChanged;
 
             shortcutProviderCollection = new GlobalShortcutProviderCollection(this);
             keyShortcutProvider = new GlobalKeyShortcutProvider();
+        }
+
+        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            Left = (Screen.PrimaryScreen.WorkingArea.Width - Width)/2;
         }
 
         public SearchWindow(string search) : this()
@@ -46,7 +52,6 @@ namespace MMK.SwiftSearch
 
                 SearchTextBox.Text = value;
                 SearchTextBox.CaretIndex = value.Length;
-                RecalcWindowWidth();
             }
         }
 
@@ -267,7 +272,6 @@ namespace MMK.SwiftSearch
                 RemoveLastHotkeyInsert();
 
             ResetLastHotkeyInsert();
-            RecalcWindowWidth();
         }
 
         private bool CanRemoveLastHotkeyInsert(TextChange change)
@@ -299,24 +303,8 @@ namespace MMK.SwiftSearch
         private void RemoveLastHotkeyInsert()
         {
             isChangingSearchBoxManually = true;
-
             Search = SearchTextBox.Text.Remove(lastInsertIndex, lastInsertLength - 1);
-
             isChangingSearchBoxManually = false;
-        }
-
-        private void RecalcWindowWidth()
-        {
-            double textWidth = SearchTextBox.MeasureText().Width;
-
-            if (textWidth < MinWidth)
-                textWidth = MinWidth;
-            else if (textWidth > MaxWidth)
-                textWidth = MaxWidth;
-
-            Width = textWidth + SearchTextBox.Margin.Left + SearchTextBox.Margin.Right + 10;
-
-            Left = (1366 - Width)/2;
         }
     }
 }
