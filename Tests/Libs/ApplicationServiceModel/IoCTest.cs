@@ -11,7 +11,7 @@ namespace MMK.ApplicationServiceModel
         [ExpectedException(typeof(ServiceLocatorNotFoundException))]
         public void ThrowsServiceLocatorNotFoundException()
         {
-            IoC.ServiceLocator.Get<object>();
+            IoC.Get<object>();
         }
     }
 }

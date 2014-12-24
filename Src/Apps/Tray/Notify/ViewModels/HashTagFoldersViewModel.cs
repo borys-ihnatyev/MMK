@@ -42,10 +42,10 @@ namespace MMK.Notify.ViewModels
         private void LoadFolderCollection()
         {
             //add folders
-            foreach (var path in IoC.ServiceLocator.Get<HashTagFolderCollection>().Folders)
+            foreach (var path in IoC.Get<HashTagFolderCollection>().Folders)
             {
                 var folderViewModel = new FolderViewModel(path);
-                foreach (var pattern in IoC.ServiceLocator.Get<HashTagFolderCollection>().GetPatternsForFolder(path))
+                foreach (var pattern in IoC.Get<HashTagFolderCollection>().GetPatternsForFolder(path))
                 {
                     var folderPatternViewModel = new FolderPatternViewModel
                     {

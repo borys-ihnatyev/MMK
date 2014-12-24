@@ -34,9 +34,9 @@ namespace MMK.Notify.Model.Launchers
 
         private void Start()
         {
-            IoC.ServiceLocator.Get<GlobalShortcutService>().Stop();
+            IoC.Get<GlobalShortcutService>().Stop();
             launcher.Launch();
-            launcher.Window.Closed += (s, e) => IoC.ServiceLocator.Get<GlobalShortcutService>().Start();
+            launcher.Window.Closed += (s, e) => IoC.Get<GlobalShortcutService>().Start();
             ;
         }
 

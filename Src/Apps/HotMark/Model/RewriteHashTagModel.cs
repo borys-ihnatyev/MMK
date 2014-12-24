@@ -14,7 +14,7 @@ namespace MMK.HotMark.Model
 
         protected override void OnNotifyChange()
         {
-            var notifyObserver = IoC.ServiceLocator.Get<INotifyObserver>();
+            var notifyObserver = IoC.Get<INotifyObserver>();
             notifyObserver.Observe(RewriteHashTagModelTask.Many(Paths, FinalHashTagModel));
         }
     }

@@ -12,7 +12,7 @@ namespace MMK.Notify.ViewModels
     {
         private static NotificationService Notification
         {
-            get { return IoC.ServiceLocator.Get<NotificationService>(); }
+            get { return IoC.Get<NotificationService>(); }
         }
 
         private INotifyable currentInfo;
@@ -100,7 +100,7 @@ namespace MMK.Notify.ViewModels
 
         protected override void OnLoadData()
         {
-            var observer = IoC.ServiceLocator.Get<TaskObserver>();
+            var observer = IoC.Get<TaskObserver>();
             observer.TaskQueued += OnTaskQueued;
             observer.QueueEmpty += OnQueueEmpty;
             observer.TaskObserved += OnTaskObserved;
@@ -109,7 +109,7 @@ namespace MMK.Notify.ViewModels
 
         protected override void OnUnloadData()
         {
-            var observer = IoC.ServiceLocator.Get<TaskObserver>();
+            var observer = IoC.Get<TaskObserver>();
             observer.TaskQueued -= OnTaskQueued;
             observer.QueueEmpty -= OnQueueEmpty;
             observer.TaskObserved -= OnTaskObserved;

@@ -25,11 +25,11 @@ namespace MMK.Notify.ViewModels
         {
             OpenHashTagFoldersWindowCommand = new Command(OpenHashTagFoldersWindowCommandAction);
 
-            StartListenShortcutsCommand = new Command(IoC.ServiceLocator.Get<GlobalShortcutService>().Start);
-            StopListenShortcutsCommand = new Command(IoC.ServiceLocator.Get<GlobalShortcutService>().Stop);
+            StartListenShortcutsCommand = new Command(IoC.Get<GlobalShortcutService>().Start);
+            StopListenShortcutsCommand = new Command(IoC.Get<GlobalShortcutService>().Stop);
 
-            StartDownloadsWatchingCommand = new Command(IoC.ServiceLocator.Get<IDownloadsWatcher>().Start);
-            StopDownloadsWatchingCommand = new Command(IoC.ServiceLocator.Get<IDownloadsWatcher>().Stop);
+            StartDownloadsWatchingCommand = new Command(IoC.Get<IDownloadsWatcher>().Start);
+            StopDownloadsWatchingCommand = new Command(IoC.Get<IDownloadsWatcher>().Stop);
 
             ExitCommand = new Command(ExitCommandAction);
             HideCommand = new Command(HideCommandAction);

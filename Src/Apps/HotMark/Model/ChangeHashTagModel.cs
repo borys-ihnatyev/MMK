@@ -29,7 +29,7 @@ namespace MMK.HotMark.Model
             if (addHashTagModel.Count == 0 && removeHashTagModel.Count == 0)
                 return;
 
-            var notifyObserver = IoC.ServiceLocator.Get<INotifyObserver>();
+            var notifyObserver = IoC.Get<INotifyObserver>();
 
             IEnumerable<Task> tasks;
 

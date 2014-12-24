@@ -46,13 +46,13 @@ namespace MMK.Notify.Model.Launchers
 
             protected override void BeforeLaunch()
             {
-                IoC.ServiceLocator.Get<GlobalShortcutService>().Stop();
+                IoC.Get<GlobalShortcutService>().Stop();
             }
 
             protected override void BindWindowEvents()
             {
                 base.BindWindowEvents();
-                Window.Closed += (sender, args) => IoC.ServiceLocator.Get<GlobalShortcutService>().Start();
+                Window.Closed += (sender, args) => IoC.Get<GlobalShortcutService>().Start();
             }
         }
     }
