@@ -8,7 +8,7 @@
                 xmlns:trayMenu="clr-namespace:MMK.Notify.Views.TrayMenu"
                 xmlns:viewModels="clr-namespace:MMK.Notify.ViewModels"
                 mc:Ignorable="d"
-                Height="185"
+                Height="148"
                 Width="286"
                 d:DataContext="{d:DesignInstance viewModels:TrayMenuViewModel}">
 
@@ -100,10 +100,7 @@
                  Style="{StaticResource ClearListBoxStyle}"
                  VerticalAlignment="Top">
             <ListBox.Items>
-                <trayMenu:MenuItemControl
-                    Title="Music collection manager"
-                    Image="pack://siteoforigin:,,,/Resources/musiccollectionmanagerlogo.ico" />
-
+                
                 <trayMenu:ToggleMenuItemControl
                     IsPressed="{Binding IsEnableHotKeys, Mode=TwoWay}"
                     Title="Hotkeys"

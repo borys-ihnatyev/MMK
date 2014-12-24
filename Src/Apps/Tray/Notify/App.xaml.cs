@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using System;
+using System.IO;
+using System.Threading;
 using System.Windows;
 using MMK.ApplicationServiceModel.Locator;
 using MMK.Notify.Model;
@@ -25,7 +27,6 @@ namespace MMK.Notify
         }
 
 #if !DEBUG
-
         static App()
         {
             AppDomain.CurrentDomain.UnhandledException += DomainUnhandledException;
