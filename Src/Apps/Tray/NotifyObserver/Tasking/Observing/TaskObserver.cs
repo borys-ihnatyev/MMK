@@ -8,7 +8,7 @@ using Timer = System.Timers.Timer;
 
 namespace MMK.Notify.Observer.Tasking.Observing
 {
-    public partial class TaskObserver : IDisposable
+    public sealed partial class TaskObserver : IDisposable
     {
         public const int FailedTaskRerunPauseSeconds = 5;
 
@@ -39,21 +39,21 @@ namespace MMK.Notify.Observer.Tasking.Observing
             thread = new Thread(TaskObserverProc);
         }
 
-        protected virtual void OnQueueEmpty()
+        private void OnQueueEmpty()
         {
             var handler = QueueEmpty;
             if (handler != null) 
                 handler(this, new EventArgs(this));
         }
 
-        protected virtual void OnTaskQueued(int taskCount)
+        private void OnTaskQueued(int taskCount)
         {
             var handler = TaskQueued;
             if(handler!= null)
                 handler(this, new TaskQueuedEventArgs(this, taskCount));
         }
 
-        protected virtual void OnTaskObserved(Task.ObservedInfo info)
+        private void OnTaskObserved(Task.ObservedInfo info)
         {
             Contract.Requires(info != null);
 
@@ -209,32 +209,22 @@ namespace MMK.Notify.Observer.Tasking.Observing
 
         public void Add(IEnumerable<Task> newTasks)
         {
-            newTasks = BeforeQueue(newTasks);
-
-            var taskArray = newTasks as Task[] ?? newTasks.ToArray();
-
-            foreach (var task in taskArray)
+            var queuedTaskCount = newTasks.Count(task =>
+            {
                 tasks.Enqueue(task);
+                return true;
+            });
 
-            AfterQueue(taskArray);
+            OnTaskQueued(queuedTaskCount);
 
             lock (tasks)
                 taskRunEvent.Set();
         }
 
-        protected virtual IEnumerable<Task> BeforeQueue(IEnumerable<Task> newTasks)
-        {
-            return newTasks;
-        }
-
-        protected virtual void AfterQueue(IEnumerable<Task> newTasks)
-        {
-            OnTaskQueued(newTasks.Count());
-        }
 
         #endregion
 
-        public virtual void Dispose()
+        public void Dispose()
         {
             Cancell();
             taskRunEvent.Dispose();

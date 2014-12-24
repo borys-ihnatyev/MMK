@@ -130,13 +130,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NotifyType.cs" />
-    <Compile Include="Tasking\GroupedTask.cs" />
     <Compile Include="Tasking\Common\Base\Mp3FileChangeTask.cs" />
-    <Compile Include="Tasking\Observing\GroupTaskObserver.cs" />
     <Compile Include="Tasking\Observing\TaskObserver.EventArgs.cs" />
     <Compile Include="Tasking\Observing\TaskObserver.TaskQueuedEventArgs.cs" />
     <Compile Include="Tasking\Task.Cancel.cs" />
-    <Compile Include="Tasking\TaskGroup.cs" />
     <Compile Include="Tasking\Common\AddHashTagModelTask.cs" />
     <Compile Include="Tasking\Common\ChangeHashTagModelTask.cs" />
     <Compile Include="Tasking\Common\Base\FileChangeTask.cs" />
