@@ -88,6 +88,11 @@ namespace MMK.HotMark.ViewModels
             get { return pianoKeyBoardViewModel; }
         }
 
+        public PlayerViewModel PlayerViewModel
+        {
+            get; private set;
+        }
+
         public bool IsPianoKeyboardLayout
         {
             get { return isPianoKeyboardLayout; }
@@ -149,9 +154,14 @@ namespace MMK.HotMark.ViewModels
             if (files.Count == 0)
                 Shutdown();
 
-            FileItemView = (files.Count == 1)
-                ? files.First().ClearName
-                : string.Format("< {0} files >", files.Count);
+            if (files.Count == 1)
+            {
+                PlayerViewModel = new PlayerViewModel(files.First().Path);
+            }
+            else
+            {
+                FileItemView = string.Format("< {0} files >", files.Count);
+            }
         }
 
         /// <summary>
@@ -312,6 +322,9 @@ namespace MMK.HotMark.ViewModels
 
         private void Close()
         {
+            if(PlayerViewModel != null)
+                PlayerViewModel.Pause();
+
             hashTagModelChangeModel.NotifyChange(GetNotEmptyHashTags());
             CloseView();
         }
