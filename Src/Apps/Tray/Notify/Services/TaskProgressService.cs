@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Windows;
 using MMK.ApplicationServiceModel;
 using MMK.Notify.ViewModels;
 using MMK.Notify.Views;
@@ -36,7 +35,7 @@ namespace MMK.Notify.Services
 
         public override void Start()
         {
-            if(!taskProgressViewModel.IsProgress)
+            if (!taskProgressViewModel.IsProgress)
                 return;
 
             taskProgressViewModel.IsVisible = true;
