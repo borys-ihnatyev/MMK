@@ -38,7 +38,7 @@ namespace MMK.Notify.ViewModels
             get { return isVisible; }
             set
             {
-                if(value == isVisible)
+                if (value == isVisible)
                     return;
                 isVisible = value;
                 NotifyPropertyChanged();
@@ -51,9 +51,9 @@ namespace MMK.Notify.ViewModels
             get { return isProgress; }
             private set
             {
-                if(value == isProgress)
+                if (value == isProgress)
                     return;
-                
+
                 isProgress = value;
 
                 IsVisible = IsProgress;
@@ -130,10 +130,10 @@ namespace MMK.Notify.ViewModels
         private void OnTaskFailed(object sender, TaskObserver.NotifyEventArgs e)
         {
             ++failedCount;
-            
-            if(failedCount == QueuedCount)
+
+            if (failedCount == QueuedCount)
                 return;
-            
+
             Notification.Push(e.Message);
         }
 
@@ -164,11 +164,14 @@ namespace MMK.Notify.ViewModels
 
         private INotifyable BuildNotifyMessage()
         {
-            if (QueuedCount == 1)
-                if(CurrentInfo != null)
-                return CurrentInfo;
+            Contract.Ensures(Contract.Result<INotifyable>()!= null);
+            Contract.EndContractBlock();
 
-            if(failedCount == 0)
+            if (QueuedCount == 1)
+                if (CurrentInfo != null)
+                    return CurrentInfo;
+
+            if (failedCount == 0)
                 return new NotifyMessage
                 {
                     Type = NotifyType.Success,
@@ -181,14 +184,15 @@ namespace MMK.Notify.ViewModels
                 {
                     Type = NotifyType.Error,
                     CommonDescription = "All tasks failed.",
-                    DetailedDescription = String.Format("{0}/{1} Tasks",failedCount, QueuedCount)
+                    DetailedDescription = String.Format("{0}/{1} Tasks", failedCount, QueuedCount)
                 };
 
             return new NotifyMessage
             {
                 Type = NotifyType.Warning,
                 CommonDescription = "Some tasks failed.",
-                DetailedDescription = String.Format("Done {1}/{0};\nFailed {2}", QueuedCount, ObservedCount - failedCount, failedCount )
+                DetailedDescription =
+                    String.Format("Done {1}/{0};\nFailed {2}", QueuedCount, ObservedCount - failedCount, failedCount)
             };
         }
     }
