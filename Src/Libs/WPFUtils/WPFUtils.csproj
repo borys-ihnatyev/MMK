@@ -125,7 +125,7 @@
     <Compile Include="Windows\Taskbar.TaskbarPosition.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MMK\MMK.csproj">
+    <ProjectReference Include="..\Core\MMK\MMK.csproj">
       <Project>{a9193781-f0f5-406c-bc5f-312ae4f516f3}</Project>
       <Name>MMK</Name>
     </ProjectReference>

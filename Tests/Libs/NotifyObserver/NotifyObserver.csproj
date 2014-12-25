@@ -79,10 +79,6 @@
       <Project>{4bcd57ea-bcdc-4f58-90f9-55aab0d4526d}</Project>
       <Name>NotifyObserver</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Src\Libs\MMK\MMK.csproj">
-      <Project>{a9193781-f0f5-406c-bc5f-312ae4f516f3}</Project>
-      <Name>MMK</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Src\Libs\Utils\Utils.csproj">
       <Project>{1a83dd41-36ab-493f-a3c1-2acad7ff152f}</Project>
       <Name>Utils</Name>

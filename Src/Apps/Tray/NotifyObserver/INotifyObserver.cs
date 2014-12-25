@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using MMK.Marking.Representation;
 using MMK.Notify.Observer.Tasking;
-using MMK.Processing.AutoFolder;
 
 namespace MMK.Notify.Observer
 {
