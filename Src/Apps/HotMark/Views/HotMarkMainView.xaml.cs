@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Forms;
+using System.Windows.Input;
 using MMK.HotMark.ViewModels;
 
 namespace MMK.HotMark.Views
@@ -15,11 +17,29 @@ namespace MMK.HotMark.Views
 
             Loaded += (s, e) => viewModel.LoadData();
             Loaded += Window_Loaded;
+            SizeChanged += OnSizeChanged;
+            MouseDown += OnMouseDown;
 
             Closing += (s, e) => viewModel.UnloadData();
 
             isCloseStoryboardStarted = false;
             isCloseStoryboardCompletted = false;
+        }
+
+        private void OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                SizeChanged -= OnSizeChanged;
+                DragMove();
+            }
+        }
+
+        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if(!e.WidthChanged)
+                return;
+            Left = (Screen.PrimaryScreen.WorkingArea.Width - Width)/2;
         }
 
         #region Animation Flags
