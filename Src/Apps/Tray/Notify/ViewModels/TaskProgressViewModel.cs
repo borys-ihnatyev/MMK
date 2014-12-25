@@ -165,6 +165,7 @@ namespace MMK.Notify.ViewModels
         private INotifyable BuildNotifyMessage()
         {
             if (QueuedCount == 1)
+                if(CurrentInfo != null)
                 return CurrentInfo;
 
             if(failedCount == 0)
