@@ -100,6 +100,10 @@
     <Compile Include="Providers\Key\GlobalKeyShortcutProvider.cs" />
     <Compile Include="Providers\Key\GlobalKeyShortcutRegister.cs" />
     <Compile Include="System\Windows\FrameworkElementExtension.cs" />
+    <Compile Include="ViewModel\CommandLoader.cs" />
+    <Compile Include="ViewModel\CommandResolveException.cs" />
+    <Compile Include="ViewModel\CommandResolver.cs" />
+    <Compile Include="ViewModel\CommandNamingConventionException.cs" />
     <Compile Include="ViewModel\ViewModelLoader.cs" />
     <Compile Include="Windows\TaskBar.Native.cs" />
     <Compile Include="Windows\TaskBar.Abe.cs" />

@@ -8,10 +8,12 @@ namespace MMK.Wpf.ViewModel
     public abstract class ViewModel : ObservableObject, IDataErrorInfo
     {
         private readonly ViewModelLoader viewModelsLoader;
+        private readonly CommandLoader commandLoader;
 
         protected ViewModel()
         {
             viewModelsLoader = new ViewModelLoader(this);
+            commandLoader = new CommandLoader(this);
         }
 
         public bool IsDataLoaded { get; set; }
@@ -22,7 +24,10 @@ namespace MMK.Wpf.ViewModel
             if (IsDataLoaded) return;
 
             OnLoadData();
+            
             viewModelsLoader.Load();
+            commandLoader.BindCommands();
+
             IsDataLoaded = true;
         }
 
