@@ -79,12 +79,19 @@
         <KeyBinding Key="Escape" Command="{Binding CloseViewCommand}"/>
         <KeyBinding Key="Enter" Modifiers="Control" Command="{Binding CloseCommand}"/>
 
-        <KeyBinding Key="N" Modifiers="Control+Shift" Command="{Binding AddHashTagCommand}"/>
-        <KeyBinding Key="Right" Modifiers="Alt" Command="{Binding SelectNextHashTagCommand}"/>
-        <KeyBinding Key="Left" Modifiers="Alt" Command="{Binding SelectPreviousHashTagCommand}"/>
-
         <KeyBinding Key="P" Modifiers="Control" Command="{Binding ChangeLayoutCommand}"/>
+
+        <KeyBinding Key="N" Modifiers="Control+Shift" Command="{Binding AddHashTagCommand}"/>
+        <KeyBinding Key="Right" Modifiers="Shift+Alt" Command="{Binding SelectNextHashTagCommand}"/>
+        <KeyBinding Key="Left" Modifiers="Shift+Alt" Command="{Binding SelectPreviousHashTagCommand}"/>
         
+        <KeyBinding Key="Right" Modifiers="Alt" Command="{Binding PlayerViewModel.PositionIncreaseCommand}"/>
+        <KeyBinding Key="Left" Modifiers="Alt" Command="{Binding PlayerViewModel.PositionDecreaseCommand}"/>
+
+        <KeyBinding Key="Up" Command="{Binding PlayerViewModel.VolumeIncreaseCommand}"/>
+        <KeyBinding Key="Down" Command="{Binding PlayerViewModel.VolumeDecreaseCommand}"/>
+
+
     </Window.InputBindings>
     
     <Grid IsHitTestVisible="True" Margin="10">
