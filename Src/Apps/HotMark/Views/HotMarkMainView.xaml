@@ -23,19 +23,19 @@
     Foreground="White"
     d:DataContext="{d:DesignData Source=../DesignData/HotMarkViewModel.xaml}">
 
-    <wpf:TrayWindow.Background>
+    <Window.Background>
         <SolidColorBrush x:Name="BackgroundBrush" Opacity="0.9" Color="#111" />
-    </wpf:TrayWindow.Background>
+    </Window.Background>
 
-    <wpf:TrayWindow.Resources>
+    <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../Style/Style.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-    </wpf:TrayWindow.Resources>
+    </Window.Resources>
 
-    <wpf:TrayWindow.Triggers>
+    <Window.Triggers>
         <EventTrigger RoutedEvent="FrameworkElement.Loaded">
             <BeginStoryboard>
                 <Storyboard x:Name="LoadStoryboard">
@@ -58,7 +58,7 @@
                 </Storyboard>
             </BeginStoryboard>
         </EventTrigger>
-    </wpf:TrayWindow.Triggers>
+    </Window.Triggers>
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="KeyDown">
@@ -74,6 +74,19 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
+    <Window.InputBindings>
+        
+        <KeyBinding Key="Escape" Command="{Binding CloseViewCommand}"/>
+        <KeyBinding Key="Enter" Modifiers="Control" Command="{Binding CloseCommand}"/>
+
+        <KeyBinding Key="N" Modifiers="Control+Shift" Command="{Binding AddHashTagCommand}"/>
+        <KeyBinding Key="Right" Modifiers="Alt" Command="{Binding SelectNextHashTagCommand}"/>
+        <KeyBinding Key="Left" Modifiers="Alt" Command="{Binding SelectPreviousHashTagCommand}"/>
+
+        <KeyBinding Key="P" Modifiers="Control" Command="{Binding ChangeLayoutCommand}"/>
+        
+    </Window.InputBindings>
+    
     <Grid IsHitTestVisible="True" Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -89,7 +102,7 @@
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsPianoKeyboardLayout}" Value="true">
                             <DataTrigger.Setters>
-                                <Setter Property="Visibility" Value="Hidden"/>
+                                <Setter Property="Visibility" Value="Hidden" />
                             </DataTrigger.Setters>
                             <DataTrigger.EnterActions>
                                 <BeginStoryboard>
@@ -132,13 +145,13 @@
             <WrapPanel.Style>
                 <Style TargetType="{x:Type WrapPanel}">
                     <Style.Setters>
-                        <Setter Property="Opacity" Value="0"/>
-                        <Setter Property="Visibility" Value="Hidden"/>
+                        <Setter Property="Opacity" Value="0" />
+                        <Setter Property="Visibility" Value="Hidden" />
                     </Style.Setters>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsPianoKeyboardLayout}" Value="true">
                             <DataTrigger.Setters>
-                                <Setter Property="Visibility" Value="Visible"/>
+                                <Setter Property="Visibility" Value="Visible" />
                             </DataTrigger.Setters>
                             <DataTrigger.EnterActions>
                                 <BeginStoryboard>
