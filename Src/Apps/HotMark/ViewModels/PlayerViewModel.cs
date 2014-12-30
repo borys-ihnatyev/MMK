@@ -13,8 +13,8 @@ namespace MMK.HotMark.ViewModels
 {
     public class PlayerViewModel : ViewModel
     {
-        public const double VolumeIncreaseStep = 0.2;
-        public readonly double PositionIncreaseStep = TimeSpan.FromSeconds(7).TotalMilliseconds;
+        public const double VolumeIncreaseStep = 0.05;
+        public readonly double PositionIncreaseStep = TimeSpan.FromSeconds(15).TotalMilliseconds;
 
         private readonly MediaPlayer player;
         private readonly MediaTimeline timeline;
