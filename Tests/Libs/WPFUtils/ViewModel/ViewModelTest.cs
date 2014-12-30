@@ -1,5 +1,4 @@
-﻿using System.Windows.Input;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace MMK.Wpf.ViewModel
 {
@@ -85,23 +84,6 @@ namespace MMK.Wpf.ViewModel
         {
             var vm = new ViewModelWithCommandHandlerOverloads();
             vm.LoadData();
-        }
-    }
-
-    public class ViewModelWithCommandHandlerOverloads : ViewModel
-    {
-        public bool IsTestExecuted { get; private set; }
-        
-        public ICommand TestCommand { get; private set; }
-
-        public void Test()
-        {
-            IsTestExecuted = true;
-        }
-
-        public void Test(bool isExecuted)
-        {
-            IsTestExecuted = isExecuted;
         }
     }
 }
