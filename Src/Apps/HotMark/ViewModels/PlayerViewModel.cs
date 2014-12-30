@@ -3,7 +3,7 @@ using System.Diagnostics.Contracts;
 using System.IO;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Threading;
+using System.Windows.Media.Animation;
 using MMK.HotMark.Model.Files;
 using MMK.Wpf.ViewModel;
 using IOFile = System.IO.File;
@@ -17,7 +17,7 @@ namespace MMK.HotMark.ViewModels
         public readonly double PositionIncreaseStep = TimeSpan.FromSeconds(7).TotalMilliseconds;
 
         private readonly MediaPlayer player;
-        private readonly DispatcherTimer playClock;
+        private readonly MediaTimeline timeline;
 
         private bool isPlaying;
         private double positionMax;
@@ -31,8 +31,8 @@ namespace MMK.HotMark.ViewModels
 
             File = filePath;
 
-            playClock = new DispatcherTimer {Interval = TimeSpan.FromSeconds(0.5), IsEnabled = false};
-            playClock.Tick += (s, e) => OnPositionChanged();
+            timeline = new MediaTimeline(new Uri(File.Path, UriKind.Absolute));
+            timeline.CurrentTimeInvalidated += (s, e) => OnPositionChanged();
 
             player = new MediaPlayer();
             player.MediaFailed += OnFileOpenFailed;
@@ -40,6 +40,10 @@ namespace MMK.HotMark.ViewModels
             player.MediaEnded += OnPlaybackEnd;
         }
 
+        private ClockController PlaybackController
+        {
+            get { return player.Clock.Controller; }
+        }
 
         public FileHashTagModel File { get; private set; }
 
@@ -79,7 +83,7 @@ namespace MMK.HotMark.ViewModels
                 else if (value > PositionMax)
                     value = positionMax;
 
-                player.Position = TimeSpan.FromMilliseconds(value);
+                PlaybackController.Seek(TimeSpan.FromMilliseconds(value), TimeSeekOrigin.BeginTime);
 
                 OnPositionChanged();
             }
@@ -126,8 +130,8 @@ namespace MMK.HotMark.ViewModels
 
         private void OnPositionChanged()
         {
-            NotifyPropertyChanged("ElapsedTime"); 
-            NotifyPropertyChanged("ReminedTime"); 
+            NotifyPropertyChanged("ElapsedTime");
+            NotifyPropertyChanged("ReminedTime");
             NotifyPropertyChanged("Position");
         }
 
@@ -144,8 +148,6 @@ namespace MMK.HotMark.ViewModels
 
         private void OnPlaybackEnd(object sender, EventArgs eventArgs)
         {
-            player.Stop();
-            playClock.Stop();
             IsPlaying = false;
         }
 
@@ -153,23 +155,21 @@ namespace MMK.HotMark.ViewModels
 
         protected override void OnLoadData()
         {
-            var uri = new Uri(File.Path, UriKind.Absolute);
-            player.Open(uri);
+            player.Clock = timeline.CreateClock();
         }
 
         protected override void OnUnloadData()
         {
-            Pause();
-            player.Stop();
-            player.Close();
+            PlaybackController.Stop();
+            IsPlaying = false;
         }
 
         #endregion
 
         #region Commands
 
+// ReSharper disable UnusedAutoPropertyAccessor.Local
         public ICommand PlaybackStateChangeCommand { get; private set; }
-
         public void PlaybackStateChange()
         {
             if (IsPlaying)
@@ -183,8 +183,7 @@ namespace MMK.HotMark.ViewModels
             if (IsPlaying)
                 return;
 
-            player.Play();
-            playClock.Start();
+            PlaybackController.Resume();
 
             IsPlaying = true;
         }
@@ -194,8 +193,7 @@ namespace MMK.HotMark.ViewModels
             if (!IsPlaying)
                 return;
 
-            player.Pause();
-            playClock.Stop();
+            PlaybackController.Pause();
 
             IsPlaying = false;
         }
@@ -230,6 +228,7 @@ namespace MMK.HotMark.ViewModels
             Position -= PositionIncreaseStep;
         }
 
+        // ReSharper restore UnusedAutoPropertyAccessor.Local
         #endregion
 
         public event EventHandler FileOpened
