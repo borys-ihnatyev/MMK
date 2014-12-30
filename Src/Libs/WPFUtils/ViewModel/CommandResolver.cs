@@ -16,11 +16,6 @@ namespace MMK.Wpf.ViewModel
         private List<PropertyInfo> commandProperties;
         private Dictionary<PropertyInfo, MethodInfo> commandBindings;
 
-
-        public CommandResolver(Type rootType) : this(rootType, new List<PropertyInfo>())
-        {
-        }
-
         public CommandResolver(Type rootType, List<PropertyInfo> unresolvedCommandProperties)
         {
             this.rootType = rootType;
@@ -65,10 +60,10 @@ namespace MMK.Wpf.ViewModel
         private void CheckCommandNamingConventions()
         {
             var invaidNames = GetUnconventionalCommandNames().ToList();
-            
-            if(invaidNames.Count == 0)
+
+            if (invaidNames.Count == 0)
                 return;
-            throw new CommandNamingConventionException(rootType,invaidNames);   
+            throw new CommandNamingConventionException(rootType, invaidNames);
         }
 
 
@@ -79,45 +74,46 @@ namespace MMK.Wpf.ViewModel
 
         private static bool IsValidCommandName(string commandName)
         {
-            if (string.IsNullOrWhiteSpace(commandName))
-                throw new ArgumentException("must be not empty", "commandName");
-            Contract.EndContractBlock();
+            Contract.Assume(!string.IsNullOrWhiteSpace(commandName));
 
             return commandName.EndsWith(CommandSuffix);
         }
 
         private void TryResolveUnresolvedCommands()
         {
-            if(unresolvedCommandProperties.Count == 0)
+            if (unresolvedCommandProperties.Count == 0)
                 return;
 
-            var bindings = unresolvedCommandProperties
-                .Where(p => IsValidCommandName(p.Name))
-                .Select(c => new Tuple<PropertyInfo, MethodInfo>(c, FindCommandHandler(c)))
+            GetCommandBindings(unresolvedCommandProperties)
                 .Where(b => !ReferenceEquals(b.Item2, null))
-                .ToList();
-
-            bindings.ForEach(b => unresolvedCommandProperties.Remove(b.Item1));
-            bindings.ForEach(b => commandBindings.Add(b.Item1, b.Item2));
+                .ToList()
+                .ForEach(b =>
+                {
+                    unresolvedCommandProperties.Remove(b.Item1);
+                    commandBindings.Add(b.Item1, b.Item2);
+                });
         }
 
         private void TryResolveCommandProperties()
         {
-            if(CommandProperties.Count == 0)
+            if (CommandProperties.Count == 0)
                 return;
 
-            CommandProperties
-                .Where(p => IsValidCommandName(p.Name))
-                .Select(c => new Tuple<PropertyInfo, MethodInfo>(c, FindCommandHandler(c)))
-                .ForEach(ResolveBinding);
+            GetCommandBindings(CommandProperties)
+                .ForEach(b =>
+                {
+                    if (b.Item2 == null)
+                        unresolvedCommandProperties.Add(b.Item1);
+                    else
+                        commandBindings.Add(b.Item1, b.Item2);
+                });
         }
 
-        private void ResolveBinding(Tuple<PropertyInfo, MethodInfo> binding)
+        private IEnumerable<Tuple<PropertyInfo, MethodInfo>> GetCommandBindings(IEnumerable<PropertyInfo> properties)
         {
-            if (binding.Item2 == null)
-                unresolvedCommandProperties.Add(binding.Item1);
-            else
-                commandBindings.Add(binding.Item1, binding.Item2);
+            return properties
+                .Where(p => IsValidCommandName(p.Name))
+                .Select(c => new Tuple<PropertyInfo, MethodInfo>(c, FindCommandHandler(c)));
         }
 
 
@@ -144,7 +140,8 @@ namespace MMK.Wpf.ViewModel
         private IEnumerable<MethodInfo> GetCommandHandlers(string commandHandlerName)
         {
             return rootType
-                .GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
+                .GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Static |
+                            BindingFlags.Public | BindingFlags.NonPublic)
                 .Where(m => m.Name.Equals(commandHandlerName, StringComparison.Ordinal));
         }
     }
