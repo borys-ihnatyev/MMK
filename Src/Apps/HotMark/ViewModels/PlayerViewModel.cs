@@ -5,7 +5,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using MMK.HotMark.Model.Files;
-using MMK.Wpf;
 using MMK.Wpf.ViewModel;
 using IOFile = System.IO.File;
 
@@ -14,6 +13,9 @@ namespace MMK.HotMark.ViewModels
 {
     public class PlayerViewModel : ViewModel
     {
+        public const double VolumeIncreaseStep = 0.2;
+        public readonly double PositionIncreaseStep = TimeSpan.FromSeconds(7).TotalMilliseconds;
+
         private readonly MediaPlayer player;
         private readonly DispatcherTimer playClock;
 
@@ -33,14 +35,11 @@ namespace MMK.HotMark.ViewModels
             playClock.Tick += (s, e) => OnPositionChanged();
 
             player = new MediaPlayer();
-            player.MediaFailed += FileOpenFailed;
-            player.MediaOpened += FileOpened;
+            player.MediaFailed += OnFileOpenFailed;
+            player.MediaOpened += OnFileOpened;
             player.MediaEnded += OnPlaybackEnd;
-
-            var uri = new Uri(File.Path);
-            player.Open(uri);
-            PlaybackStateChangeCommand = new Command(PlaybackStateChange);
         }
+
 
         public FileHashTagModel File { get; private set; }
 
@@ -55,6 +54,7 @@ namespace MMK.HotMark.ViewModels
                 NotifyPropertyChanged();
             }
         }
+
 
         public double PositionMax
         {
@@ -74,7 +74,10 @@ namespace MMK.HotMark.ViewModels
                 if (!IsDataLoaded)
                     return;
 
-                CheckPosition(value);
+                if (value < 0)
+                    value = 0;
+                else if (value > PositionMax)
+                    value = positionMax;
 
                 player.Position = TimeSpan.FromMilliseconds(value);
 
@@ -82,24 +85,15 @@ namespace MMK.HotMark.ViewModels
             }
         }
 
-        [ContractInvariantMethod]
-        private void CheckPosition(double value)
-        {
-            if (value < 0)
-                throw new ArgumentException(
-                    String.Format(@"value must be >= 0 but was : {0}", value),
-                    "value");
-            if (value > PositionMax)
-                throw new ArgumentException(
-                    String.Format(@"value must be <= {0} but was : {1}", PositionMax, value),
-                    "value");
-            Contract.EndContractBlock();
-        }
 
-        private void OnPositionChanged()
+        public double Volume
         {
-            ElapsedTime = ReminedTime = TimeSpan.Zero;
-            NotifyPropertyChanged("Position");
+            get { return player.Volume; }
+            set
+            {
+                player.Volume = value;
+                NotifyPropertyChanged();
+            }
         }
 
 
@@ -114,8 +108,7 @@ namespace MMK.HotMark.ViewModels
                 duration = value;
 
                 PositionMax = duration.TotalMilliseconds;
-                ReminedTime = TimeSpan.Zero;
-
+                NotifyPropertyChanged("ReminedTime");
                 NotifyPropertyChanged();
             }
         }
@@ -123,53 +116,30 @@ namespace MMK.HotMark.ViewModels
         public TimeSpan ElapsedTime
         {
             get { return player.Position; }
-            private set { NotifyPropertyChanged(); }
         }
 
         public TimeSpan ReminedTime
         {
             get { return Duration - ElapsedTime; }
-            private set { NotifyPropertyChanged(); }
         }
 
 
-        public double Volume
+        private void OnPositionChanged()
         {
-            get { return player.Volume; }
-            set
-            {
-                CheckVolume(value);
-
-                player.Volume = value;
-                NotifyPropertyChanged();
-            }
+            NotifyPropertyChanged("ElapsedTime"); 
+            NotifyPropertyChanged("ReminedTime"); 
+            NotifyPropertyChanged("Position");
         }
 
-        [ContractInvariantMethod]
-        private void CheckVolume(double value)
+        private void OnFileOpenFailed(object sender, ExceptionEventArgs e)
         {
-            if (value < 0)
-                throw new ArgumentException(@"value must be >= 0", "value");
-            if (value > 1)
-                throw new ArgumentException(@"value must be <= 1", "value");
-            Contract.EndContractBlock();
+            throw e.ErrorException;
         }
 
-        private void FileOpenFailed(object sender, ExceptionEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void FileOpened(object sender, EventArgs eventArgs)
+        private void OnFileOpened(object sender, EventArgs eventArgs)
         {
             Contract.Assert(player.NaturalDuration.HasTimeSpan);
             Duration = player.NaturalDuration.TimeSpan;
-        }
-
-        protected override void OnUnloadData()
-        {
-            Pause();
-            player.Close();
         }
 
         private void OnPlaybackEnd(object sender, EventArgs eventArgs)
@@ -179,17 +149,34 @@ namespace MMK.HotMark.ViewModels
             IsPlaying = false;
         }
 
+        #region Loading
+
+        protected override void OnLoadData()
+        {
+            var uri = new Uri(File.Path, UriKind.Absolute);
+            player.Open(uri);
+        }
+
+        protected override void OnUnloadData()
+        {
+            Pause();
+            player.Stop();
+            player.Close();
+        }
+
+        #endregion
+
+        #region Commands
 
         public ICommand PlaybackStateChangeCommand { get; private set; }
 
-        private void PlaybackStateChange()
+        public void PlaybackStateChange()
         {
             if (IsPlaying)
                 Pause();
             else
                 Play();
         }
-
 
         public void Play()
         {
@@ -211,6 +198,44 @@ namespace MMK.HotMark.ViewModels
             playClock.Stop();
 
             IsPlaying = false;
+        }
+
+        public ICommand VolumeIncreaseCommand { get; private set; }
+
+        public void VolumeIncrease()
+        {
+            Volume += VolumeIncreaseStep;
+        }
+
+
+        public ICommand VolumeDecreaseCommand { get; private set; }
+
+        public void VolumeDecrease()
+        {
+            Volume -= VolumeIncreaseStep;
+        }
+
+        public ICommand PositionIncreaseCommand { get; private set; }
+
+        public void PositionIncrease()
+        {
+            Position += PositionIncreaseStep;
+        }
+
+
+        public ICommand PositionDecreaseCommand { get; private set; }
+
+        public void PositionDecrease()
+        {
+            Position -= PositionIncreaseStep;
+        }
+
+        #endregion
+
+        public event EventHandler FileOpened
+        {
+            add { player.MediaOpened += value; }
+            remove { player.MediaOpened += value; }
         }
     }
 }
