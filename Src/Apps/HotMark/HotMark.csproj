@@ -128,7 +128,7 @@
     <Compile Include="Behaviors\PutCursorAtEndTextBoxBehavior.cs" />
     <Compile Include="Model\ChangeHashTagModel.cs" />
     <Compile Include="Model\Files\FileHashTagCollection.cs" />
-    <Compile Include="Model\HashTagModelChangeModel.cs" />
+    <Compile Include="Model\HashTagModelChangeNotify.cs" />
     <Compile Include="Model\PianoKeyBoard\KeyRecognizer.cs" />
     <Compile Include="Model\PianoKeyBoard\MidiInstrument.cs" />
     <Compile Include="Model\PianoKeyBoard\MidiNote.cs" />
@@ -146,10 +146,10 @@
     <Compile Include="Views\PlayerControl.xaml.cs">
       <DependentUpon>PlayerControl.xaml</DependentUpon>
     </Compile>
-    <Page Include="DesignData\HotMarkViewModel.xaml">
+    <DesignData Include="DesignData\HotMarkViewModel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
+    </DesignData>
     <Page Include="Style\PianoKeyBoardStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
