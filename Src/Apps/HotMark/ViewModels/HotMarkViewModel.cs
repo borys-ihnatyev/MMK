@@ -10,23 +10,23 @@ using MMK.HotMark.Model.Files;
 using MMK.HotMark.ViewModels.PianoKeyBoard;
 using MMK.HotMark.Views;
 using MMK.Marking;
-using MMK.Wpf;
+using MMK.Wpf.ViewModel;
 
 namespace MMK.HotMark.ViewModels
 {
-    public class HotMarkViewModel : Wpf.ViewModel.ViewModel
+    public class HotMarkViewModel : ViewModel
     {
-        private readonly FileHashTagCollection files;
-        private HashTagModelChangeModel hashTagModelChangeModel;
-
         private string fileItemView;
+        private readonly FileHashTagCollection files;
+        private HashTagModelChangeNotify hashTagModelChangeNotify;
 
         private HashTagViewModel selectedHashTag;
-
         private readonly PianoKeyBoardViewModel pianoKeyBoardViewModel;
 
         private bool isPianoKeyboardLayout;
         private bool canDirectEditHashTags;
+
+        #region Ctors
 
         public HotMarkViewModel()
         {
@@ -34,21 +34,14 @@ namespace MMK.HotMark.ViewModels
             HashTags = new SortedObservableCollection<HashTagViewModel>(new HashTagViewModel.Comparer());
 
             pianoKeyBoardViewModel = new PianoKeyBoardViewModel();
-
-            SelectHashTagCommand = new Command<HashTagViewModel>(SelectHashTag);
-            CloseCommand = new Command(Close);
-
-            AddHashTagCommand = new Command(AddHashTag);
-            RemoveHashTagCommand = new Command<HashTagViewModel>(RemoveHashTag);
-
-            KeyDownCommand = new Command<KeyEventArgs>(KeyDown);
-            KeyUpCommand = new Command<KeyEventArgs>(KeyUp);
         }
 
         public HotMarkViewModel(IEnumerable<string> paths) : this()
         {
             paths.ForEach(files.Add);
         }
+
+        #endregion
 
         public string FileItemView
         {
@@ -88,10 +81,8 @@ namespace MMK.HotMark.ViewModels
             get { return pianoKeyBoardViewModel; }
         }
 
-        public PlayerViewModel PlayerViewModel
-        {
-            get; private set;
-        }
+        public PlayerViewModel PlayerViewModel { get; private set; }
+
 
         public bool IsPianoKeyboardLayout
         {
@@ -99,7 +90,6 @@ namespace MMK.HotMark.ViewModels
             private set
             {
                 if (!(isPianoKeyboardLayout ^ value)) return;
-
                 isPianoKeyboardLayout = value;
                 UpdateCanDirectEditHashTags();
                 NotifyPropertyChanged();
@@ -157,11 +147,17 @@ namespace MMK.HotMark.ViewModels
             if (files.Count == 1)
             {
                 PlayerViewModel = new PlayerViewModel(files.First().Path);
+                PlayerViewModel.FileOpened += PlayerViewModelOnFileOpened;
             }
             else
-            {
                 FileItemView = string.Format("< {0} files >", files.Count);
-            }
+        }
+
+        private void PlayerViewModelOnFileOpened(object sender, EventArgs eventArgs)
+        {
+            PlayerViewModel.Position = PlayerViewModel.PositionMax*0.4;
+            PlayerViewModel.Volume = 0.3;
+            PlayerViewModel.Play();
         }
 
         /// <summary>
@@ -170,38 +166,16 @@ namespace MMK.HotMark.ViewModels
         private void LoadHashTagModels()
         {
             LoadHashTags();
-            SetHashTagModelChangeNotify();
-            TrySelectFirstHashTag();
-        }
 
-        private void Shutdown()
-        {
-#if DEBUG
-            throw new Exception("Supposed any file path as cl argument");
-#else
-            CloseView();
-#endif
+            hashTagModelChangeNotify = HashTagModelChangeNotify.Create(files);
+
+            TrySelectFirstHashTag();
         }
 
         private void LoadHashTags()
         {
             foreach (var hashTag in files.ConjointHashTagModel)
                 HashTags.Add(new HashTagViewModel(hashTag.TagValue));
-        }
-
-        private void SetHashTagModelChangeNotify()
-        {
-            if (CalcFileItemMaxHashTagCount() == HashTags.Count)
-                hashTagModelChangeModel = new RewriteHashTagModel(files.GetPaths(), files.ConjointHashTagModel);
-            else
-                hashTagModelChangeModel = new ChangeHashTagModel(files.GetPaths(), files.ConjointHashTagModel);
-        }
-
-        private int CalcFileItemMaxHashTagCount()
-        {
-            return files.Count == 0
-                ? 0
-                : files.Select(fileItem => fileItem.HashTagModel.Count).Max();
         }
 
         private void TrySelectFirstHashTag()
@@ -212,6 +186,7 @@ namespace MMK.HotMark.ViewModels
 
             UpdateCanDirectEditHashTags();
         }
+
 
         private void PianoKeyBoardViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -226,9 +201,17 @@ namespace MMK.HotMark.ViewModels
 
         #region Commands
 
+        public ICommand ChangeLayoutCommand { get; private set; }
+
+        public void ChangeLayout()
+        {
+            IsPianoKeyboardLayout = !IsPianoKeyboardLayout;
+        }
+
+
         public ICommand SelectHashTagCommand { get; private set; }
 
-        private void SelectHashTag(HashTagViewModel item)
+        public void SelectHashTag(HashTagViewModel item)
         {
             SelectedHashTag = item;
         }
@@ -236,7 +219,7 @@ namespace MMK.HotMark.ViewModels
 
         public ICommand AddHashTagCommand { get; private set; }
 
-        private void AddHashTag()
+        public void AddHashTag()
         {
             SelectedHashTag = new HashTagViewModel();
             HashTags.Add(SelectedHashTag);
@@ -246,7 +229,7 @@ namespace MMK.HotMark.ViewModels
 
         public ICommand RemoveHashTagCommand { get; private set; }
 
-        private void RemoveHashTag(HashTagViewModel hashTag)
+        public void RemoveHashTag(HashTagViewModel hashTag)
         {
             HashTags.Remove(hashTag);
 
@@ -266,50 +249,18 @@ namespace MMK.HotMark.ViewModels
 
         public ICommand KeyDownCommand { get; private set; }
 
-        private void KeyDown(KeyEventArgs e)
+        public void KeyDown(KeyEventArgs e)
         {
-            if (e.IsRepeat)
+            if (!IsPianoKeyboardLayout)
                 return;
 
-            MergedLayoutKeyDown(e);
-
-            if (IsPianoKeyboardLayout)
-                pianoKeyBoardViewModel.KeyDownCommand.Execute(e);
-            else
-                StandartKeyboardLayoutKeyDown(e);
-        }
-
-        private void MergedLayoutKeyDown(KeyEventArgs e)
-        {
-            if (e.KeyboardDevice.Modifiers == ModifierKeys.Control)
-                if (e.Key == System.Windows.Input.Key.P)
-                    IsPianoKeyboardLayout = !IsPianoKeyboardLayout;
-                else if (e.Key == System.Windows.Input.Key.Enter)
-                    Close();
-
-            if (e.Key == System.Windows.Input.Key.Escape)
-                CloseView();
-        }
-
-        private void StandartKeyboardLayoutKeyDown(KeyEventArgs e)
-        {
-            if (e.KeyboardDevice.Modifiers == ModifierKeys.Control)
-                if (e.Key == System.Windows.Input.Key.N)
-                    AddHashTag();
-
-            if (e.Key != System.Windows.Input.Key.Tab) return;
-
-            if (e.KeyboardDevice.Modifiers == ModifierKeys.Shift)
-                SelectPreviousHashTag();
-
-            if (e.KeyboardDevice.Modifiers == ModifierKeys.None)
-                SelectNextHashTag();
+            pianoKeyBoardViewModel.KeyDownCommand.Execute(e);
         }
 
 
         public ICommand KeyUpCommand { get; private set; }
 
-        private void KeyUp(KeyEventArgs e)
+        public void KeyUp(KeyEventArgs e)
         {
             if (!IsPianoKeyboardLayout)
                 return;
@@ -320,23 +271,13 @@ namespace MMK.HotMark.ViewModels
 
         public ICommand CloseCommand { get; private set; }
 
-        private void Close()
+        public void Close()
         {
-            if(PlayerViewModel != null)
+            if (PlayerViewModel != null)
                 PlayerViewModel.Pause();
 
-            hashTagModelChangeModel.NotifyChange(GetNotEmptyHashTags());
+            hashTagModelChangeNotify.NotifyChange(GetNotEmptyHashTags());
             CloseView();
-        }
-
-        private void CloseView()
-        {
-            var view = Application.Current.Windows
-                .OfType<HotMarkMainView>()
-                .FirstOrDefault(v => v.DataContext == this);
-
-            if(view != null)
-                view.Close();
         }
 
         private IEnumerable<HashTag> GetNotEmptyHashTags()
@@ -346,9 +287,22 @@ namespace MMK.HotMark.ViewModels
                 .Where(hashTag => !hashTag.IsEmpty());
         }
 
-        #endregion
 
-        private void SelectNextHashTag()
+        public ICommand CloseViewCommand { get; private set; }
+
+        public void CloseView()
+        {
+            var view = Application.Current.Windows
+                .OfType<HotMarkMainView>()
+                .FirstOrDefault(v => v.DataContext == this);
+
+            if (view != null)
+                view.Close();
+        }
+
+        public ICommand SelectNextHashTagCommand { get; private set; }
+
+        public void SelectNextHashTag()
         {
             if (!HasHashTags) return;
 
@@ -362,7 +316,9 @@ namespace MMK.HotMark.ViewModels
             SelectedHashTag = HashTags[selectedHashTagItemIndex];
         }
 
-        private void SelectPreviousHashTag()
+        public ICommand SelectPreviousHashTagCommand { get; private set; }
+
+        public void SelectPreviousHashTag()
         {
             if (!HasHashTags) return;
 
@@ -374,6 +330,17 @@ namespace MMK.HotMark.ViewModels
                 --selectedHashTagItemIndex;
 
             SelectedHashTag = HashTags[selectedHashTagItemIndex];
+        }
+
+        #endregion
+
+        private void Shutdown()
+        {
+#if DEBUG
+            throw new Exception("Supposed any file path as cl argument");
+#else
+            CloseView();
+#endif
         }
     }
 }
