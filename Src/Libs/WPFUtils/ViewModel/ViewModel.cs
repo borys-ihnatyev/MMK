@@ -16,8 +16,7 @@ namespace MMK.Wpf.ViewModel
             commandLoader = new CommandLoader(this);
         }
 
-        public bool IsDataLoaded { get; set; }
-
+        public bool IsDataLoaded { get; private set; }
 
         public void LoadData()
         {
