@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data.Odbc;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -221,9 +222,18 @@ namespace MMK.HotMark.ViewModels
 
         public void AddHashTag()
         {
-            SelectedHashTag = new HashTagViewModel();
-            HashTags.Add(SelectedHashTag);
-            UpdateCanDirectEditHashTags();
+            var emptyHashTag = HashTags.FirstOrDefault(vm => vm.HashTag.IsEmpty());
+
+            if (emptyHashTag == null)
+            {
+                SelectedHashTag = new HashTagViewModel();
+                HashTags.Add(SelectedHashTag);
+                UpdateCanDirectEditHashTags();
+            }
+            else
+            {
+                SelectedHashTag = emptyHashTag;
+            }
         }
 
 

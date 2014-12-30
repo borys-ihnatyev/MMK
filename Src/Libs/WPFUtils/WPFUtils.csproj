@@ -121,7 +121,7 @@
     <Compile Include="Tools\Command.cs" />
     <Compile Include="Tools\GridLengthAnimation.cs" />
     <Compile Include="Tools\InvokeDelegateCommandAction.cs" />
-    <Compile Include="Tools\KeyColorConverter.cs" />
+    <Compile Include="Tools\KeyBrushConverter.cs" />
     <Compile Include="System\Collections.ObjectModel\SortedObservableCollection.cs" />
     <Compile Include="TrayWindow.cs" />
     <Compile Include="ViewModel\ObservableObject.cs" />

@@ -72,8 +72,9 @@ namespace MMK.HotMark.ViewModels
                 if (Equals(value, hashTag)) return;
 
                 hashTag = value;
+
                 if (hashTag is KeyHashTag)
-                    ItemBackground = KeyColorConverter.Convert((hashTag as KeyHashTag).Key);
+                    ItemBackground = KeyBrushConverter.Convert((hashTag as KeyHashTag).Key);
                 else
                     ItemBackground = Brushes.White;
 

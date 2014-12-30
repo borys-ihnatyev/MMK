@@ -32,6 +32,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../Style/Style.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <wpf:KeyBrushConverter x:Key="KeyColorConverter" DefaultBrush="White"/>
         </ResourceDictionary>
     </Window.Resources>
 
@@ -142,7 +143,7 @@
                      Style="{StaticResource HashTagEditTextBoxStyle}"
                      IsEnabled="{Binding CanDirectEditHashTags}"
                      tools:DependencyObjectFocusExtension.IsFocused="{Binding CanDirectEditHashTags}"
-                     Foreground="{Binding SelectedHashTag.ItemBackground}"
+                     Foreground="{Binding SelectedHashTag.HashTag, Converter={StaticResource KeyColorConverter}}"
                      Text="{Binding SelectedHashTag.HashTagValue, UpdateSourceTrigger=PropertyChanged}" />
         </DockPanel>
 
@@ -244,7 +245,7 @@
 
                                 <TextBlock Grid.Column="1"
                                            Text="{Binding HashTagValue}"
-                                           Foreground="{Binding ItemBackground}"
+                                           Foreground="{Binding HashTag, Converter={StaticResource KeyColorConverter}}"
                                            Margin="0"
                                            Padding="2"
                                            Style="{StaticResource ClearTextBlockStyle}" HorizontalAlignment="Center"
