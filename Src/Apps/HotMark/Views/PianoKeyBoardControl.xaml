@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:pianoKeyBoard="clr-namespace:MMK.HotMark.ViewModels.PianoKeyBoard"
              mc:Ignorable="d"
+             Focusable="False"
              d:DataContext="{d:DesignInstance pianoKeyBoard:PianoKeyBoardViewModel}">
     <Canvas x:Name="Layout">    
     </Canvas>

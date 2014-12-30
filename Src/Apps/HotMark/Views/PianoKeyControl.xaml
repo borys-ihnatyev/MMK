@@ -7,6 +7,7 @@
              xmlns:wpf="clr-namespace:MMK.Wpf;assembly=MMK.Wpf"
              xmlns:pianoKeyBoard="clr-namespace:MMK.HotMark.ViewModels.PianoKeyBoard"
              mc:Ignorable="d"
+             Focusable="False"
              Width="15"
              d:DataContext="{d:DesignInstance pianoKeyBoard:PianoKeyViewModel}">
     
