@@ -56,6 +56,7 @@ namespace MMK.HotMark.Model.Files
             get { return files.Count; }
         }
 
+
         public HashTagModel ConjointHashTagModel
         {
             get
@@ -65,6 +66,7 @@ namespace MMK.HotMark.Model.Files
                     conjointHashTagModel = MakeConjointHashTagModel();
                     wasCahnged = false;
                 }
+
                 return conjointHashTagModel;
             }
         }
@@ -73,6 +75,19 @@ namespace MMK.HotMark.Model.Files
         {
             return HashTagModel.Conjoint(files.Select(file => file.HashTagModel));
         }
+
+        public bool HasEqualHashTagModel
+        {
+            get { return CalcMaxHashTagCount() == ConjointHashTagModel.Count; }
+        }
+
+        private int CalcMaxHashTagCount()
+        {
+            return files.Count == 0
+                ? 0
+                : files.Select(fileItem => fileItem.HashTagModel.Count).Max();
+        }
+
 
         public IEnumerable<string> GetPaths()
         {
