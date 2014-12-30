@@ -73,8 +73,12 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModel\SimpleViewModelWithStringProperty.cs" />
+    <Compile Include="ViewModel\ViewModelWithCommandAndPrivateCommandHandler.cs" />
+    <Compile Include="ViewModel\ViewModelWithStringProperty.cs" />
     <Compile Include="ViewModel\ViewModelTest.cs" />
+    <Compile Include="ViewModel\ViewModelWithBadNamedCommand.cs" />
+    <Compile Include="ViewModel\ViewModelWithCommandAndPublicCommandHandler.cs" />
+    <Compile Include="ViewModel\ViewModelWithCommandWithoutCommandHandler.cs" />
     <Compile Include="ViewModel\ViewModelWithPropertyOfViewModelType.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -2,6 +2,6 @@
 {
     internal class ViewModelWithPropertyOfViewModelType : ViewModel
     {
-        public SimpleViewModelWithStringProperty ChildViewModel { get; set; }
+        public ViewModelWithStringProperty ChildViewModel { get; set; }
     }
 }

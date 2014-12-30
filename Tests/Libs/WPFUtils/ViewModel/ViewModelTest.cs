@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using NUnit.Core;
+﻿using System.Windows.Input;
 using NUnit.Framework;
 
 namespace MMK.Wpf.ViewModel
@@ -10,7 +9,7 @@ namespace MMK.Wpf.ViewModel
         [Test]
         public void NotifyPropertyChangedRaisedWhenPropertyChanged()
         {
-            var vm = new SimpleViewModelWithStringProperty();
+            var vm = new ViewModelWithStringProperty();
             vm.PropertyChanged += (s, e) => Assert.AreEqual(e.PropertyName, "Property");
             vm.Property = "Hello world";
         }
@@ -27,7 +26,7 @@ namespace MMK.Wpf.ViewModel
         {
             var vm = new ViewModelWithPropertyOfViewModelType
             {
-                ChildViewModel = new SimpleViewModelWithStringProperty()
+                ChildViewModel = new ViewModelWithStringProperty()
             };
 
             vm.LoadData();
@@ -35,6 +34,74 @@ namespace MMK.Wpf.ViewModel
             Assert.IsTrue(vm.ChildViewModel.IsDataLoaded);
         }
 
+        [Test, ExpectedException(typeof (CommandNamingConventionException))]
+        public void MustThrow_NameConventionException_When_CommandName_NotEndsWith_Command()
+        {
+            var vm = new ViewModelWithBadNamedCommand();
+            vm.LoadData();
+        }
 
+        [Test]
+        public void Command_MustBe_Null_When_CommandHandler_WasNotFounded()
+        {
+            var vm = new ViewModelWithCommandWithoutCommandHandler();
+            vm.LoadData();
+            Assert.IsNull(vm.TestCommand);
+        }
+
+        [Test]
+        public void Command_MustBe_NotNull_When_Public_CommandHandlerWasFounded()
+        {
+            var vm = new ViewModelWithCommandAndPublicCommandHandler();
+            vm.LoadData();
+            Assert.IsNotNull(vm.TestCommand);
+        }
+
+        [Test]
+        public void Command_MustBe_NotNull_When_Private_CommandHandlerWasFounded()
+        {
+            var vm = new ViewModelWithCommandAndPrivateCommandHandler();
+            vm.LoadData();
+            Assert.IsNotNull(vm.TestCommand);
+        }
+
+        [Test]
+        public void Command_NotChangedByCommandLoader_When_IsManualySetup()
+        {
+            var vm = new ViewModelWithCommandAndPublicCommandHandler();
+
+            var isLocalExecuted = false;
+
+            var command = new Command(() => isLocalExecuted = true);
+            vm.TestCommand = command;
+
+            vm.LoadData();
+
+            Assert.AreEqual(vm.TestCommand, command);
+        }
+
+        [Test, ExpectedException(typeof (CommandResolveException))]
+        public void Throws_CommandResolveException_When_CommandHandler_HasManyOverloads()
+        {
+            var vm = new ViewModelWithCommandHandlerOverloads();
+            vm.LoadData();
+        }
+    }
+
+    public class ViewModelWithCommandHandlerOverloads : ViewModel
+    {
+        public bool IsTestExecuted { get; private set; }
+        
+        public ICommand TestCommand { get; private set; }
+
+        public void Test()
+        {
+            IsTestExecuted = true;
+        }
+
+        public void Test(bool isExecuted)
+        {
+            IsTestExecuted = isExecuted;
+        }
     }
 }
