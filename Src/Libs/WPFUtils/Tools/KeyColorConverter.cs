@@ -19,7 +19,7 @@ namespace MMK.Wpf
 
         public static SolidColorBrush Convert(Key key) 
         {
-            var color = new ColorHSV { H = 0.0, S = 1.0, V = 1.0 };
+            var color = new ColorHsv { H = 0.0, S = 1.0, V = 1.0 };
             const double hStep = 1.0 / 12;
 
             var keyToneEnumer = CircleOfFifths.MinorKeys.GetEnumerator();

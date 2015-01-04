@@ -7,7 +7,6 @@
     xmlns:views="clr-namespace:MMK.HotMark.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:tools="clr-namespace:MMK.Wpf.Tools;assembly=MMK.Wpf"
     xmlns:viewModels="clr-namespace:MMK.HotMark.ViewModels"
     mc:Ignorable="d"
     AllowsTransparency="True"
@@ -121,7 +120,7 @@
             <TextBox x:Name="HashTagEditBox"
                      Style="{StaticResource HashTagEditTextBoxStyle}"
                      IsEnabled="{Binding CanDirectEditHashTags}"
-                     tools:DependencyObjectFocusExtension.IsFocused="{Binding CanDirectEditHashTags}"
+                     wpf:DependencyObjectFocusExtension.IsFocused="{Binding CanDirectEditHashTags}"
                      Foreground="{Binding SelectedHashTag.ItemBackground}"
                      Text="{Binding SelectedHashTag.HashTagValue, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>

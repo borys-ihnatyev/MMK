@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace MMK.Wpf.Tools
+namespace MMK.Wpf
 {
     public static class DependencyObjectFocusExtension
     {
