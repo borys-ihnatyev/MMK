@@ -84,7 +84,7 @@ namespace MMK.Processing.AutoFolder
             var lastLocation = GetLastLocation(DateTime.Now.Year);
 
             var lastLocationInfo = new DirectoryInfo(lastLocation.Path);
-            if (lastLocationInfo.CreationTime + InnerFolderCreatePeriod >= DateTime.Now)
+            if (DateTime.Now >= lastLocationInfo.CreationTime + InnerFolderCreatePeriod)
                 ++lastLocation;
 
             return lastLocation;
