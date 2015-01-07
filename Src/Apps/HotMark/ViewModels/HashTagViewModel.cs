@@ -59,5 +59,15 @@ namespace MMK.HotMark.ViewModels
                 NotifyPropertyChanged();
             }
         }
+
+        public bool IsEmpty
+        {
+            get { return HashTagValue == ""; }
+        }
+
+        public override string ToString()
+        {
+            return HashTag.ToString();
+        }
     }
 }
