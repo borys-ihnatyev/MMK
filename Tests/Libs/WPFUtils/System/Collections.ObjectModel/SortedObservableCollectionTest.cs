@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using NUnit.Framework;
 
@@ -16,22 +17,22 @@ namespace System.Collections.ObjectModel
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [ExpectedException(typeof (ArgumentNullException))]
         public void ThrowsArgumentNullException_When_NullComparerPassed()
         {
             collection = new SortedObservableCollection<ObservbleInt32>(null);
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void ThrowsArgumentNullException_WhenConstructWithEnumerable_NullComparerPassed()
+        [ExpectedException(typeof (ArgumentNullException))]
+        public void ThrowsArgumentNullException_When_ConstructWithEnumerable_NullComparerPassed()
         {
-            collection = new SortedObservableCollection<ObservbleInt32>(CreateTestEnumerable(),null);
+            collection = new SortedObservableCollection<ObservbleInt32>(CreateTestEnumerable(), null);
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void ThrowsArgumentNullException_WhenConstructWithEnumerable_NullEnumerablePassed()
+        [ExpectedException(typeof (ArgumentNullException))]
+        public void ThrowsArgumentNullException_When_ConstructWithEnumerable_NullEnumerablePassed()
         {
             collection = new SortedObservableCollection<ObservbleInt32>(null, null);
         }
@@ -51,7 +52,7 @@ namespace System.Collections.ObjectModel
         }
 
         [Test]
-        public void RaiseCollectionChanged_WhenItemPropertyChanged()
+        public void RaiseCollectionChanged_When_ItemPropertyChanged()
         {
             var observableInt32 = new ObservbleInt32(0);
             collection.Add(observableInt32);
@@ -66,7 +67,7 @@ namespace System.Collections.ObjectModel
         }
 
         [Test]
-        public void ResortCollection_WhenAdd()
+        public void ResortCollection_When_Add()
         {
             collection.Add(100);
             collection.Add(0);
@@ -151,7 +152,7 @@ namespace System.Collections.ObjectModel
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [ExpectedException(typeof (InvalidOperationException))]
         public void ThrowsInvalidOperatioException_When_AccessIndexerSetter()
         {
             collection.Add(100);
@@ -162,18 +163,18 @@ namespace System.Collections.ObjectModel
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [ExpectedException(typeof (InvalidOperationException))]
         public void ThrowsInvalidOperatioException_When_Move()
         {
-            collection.Add(100);    
+            collection.Add(100);
             collection.Add(200);
             collection.Add(300);
 
-            collection.Move(0,1);
+            collection.Move(0, 1);
         }
 
         [Test]
-        public void WhenRemove_CountDecreased()
+        public void CountDecreased_When_Remove()
         {
             var observableInt32 = new ObservbleInt32(0);
             collection.Add(observableInt32);
@@ -186,13 +187,167 @@ namespace System.Collections.ObjectModel
             Assert.AreEqual(initialCount - 1, collection.Count);
         }
 
+        [Test]
+        public void NotRaiseCollectionChanged_When_ChangeRemovedElement()
+        {
+            var observable = new ObservbleInt32(12);
+
+            collection.Add(observable);
+            collection.Remove(observable);
+
+            var wasRaised = false;
+            collection.CollectionChanged += (s, e) => wasRaised = true;
+
+            observable.Number = 100;
+
+            Assert.IsFalse(wasRaised);
+        }
+
+        [Test(Description = "Event behavior")]
+        public void NotRaiseCollectionChanged_After_ClearNotEmptyCollection_When_ChangeRemovedElement()
+        {
+            var observable = new ObservbleInt32(12);
+            var observable2 = new ObservbleInt32(13);
+
+            collection.Add(observable);
+            collection.Add(observable2);
+            collection.Clear();
+
+            var wasRaised = false;
+            collection.CollectionChanged += (s, e) => wasRaised = true;
+
+            observable.Number = 100;
+
+            Assert.IsFalse(wasRaised);
+        }
+
+        [Test(Description = "Event behavior")]
+        public void CollectionChangedAddAction_RaisedOnce_When_InsertOneItem()
+        {
+            var addCount = 0;
+            var otherCount = 0;
+
+            collection.Add(10);
+            collection.Add(9);
+
+            collection.CollectionChanged += (s, e) =>
+            {
+                if (e.Action == NotifyCollectionChangedAction.Add)
+                    ++addCount;
+                else
+                    ++otherCount;
+            };
+
+            collection.Add(12);
+
+            Assert.AreEqual(1, addCount);
+            Assert.AreEqual(0, otherCount);
+        }
+
+        [Test(Description = "Event behavior")]
+        public void CollectionChangedMoveAction_NotRaised_When_UpdateOneItem_Witout_ExpectedChange()
+        {
+            var moveCount = 0;
+            var otherCount = 0;
+
+            var observable = new ObservbleInt32(12);
+            collection.Add(observable);
+            collection.Add(13);
+            collection.Add(14);
+            collection.CollectionChanged += (s, e) =>
+            {
+                if (e.Action == NotifyCollectionChangedAction.Move)
+                    ++moveCount;
+                else
+                    ++otherCount;
+            };
+
+            observable.Number = 10;
+
+            Assert.AreEqual(0, moveCount);
+            Assert.AreEqual(0, otherCount);
+        }
+
+        [Test(Description = "Event behavior")]
+        public void CollectionChangedMoveAction_RaisedOnce_When_UpdateItem_With_ExpectedChange()
+        {
+            var moveCount = 0;
+            var otherCount = 0;
+
+            var observable = new ObservbleInt32(12);
+            collection.Add(observable);
+            collection.Add(13);
+            collection.Add(14);
+            collection.CollectionChanged += (s, e) =>
+            {
+                if (e.Action == NotifyCollectionChangedAction.Move)
+                    ++moveCount;
+                else
+                    ++otherCount;
+            };
+
+            observable.Number = 16;
+
+            Assert.AreEqual(1, moveCount);
+            Assert.AreEqual(0, otherCount);
+        }
+
+        [Test(Description = "Event behavior")]
+        public void CollectionChangedRemoveAction_RaisedOnce_When_RemoveItem()
+        {
+            var removeCount = 0;
+            var otherCount = 0;
+
+            var observable = new ObservbleInt32(12);
+            collection.Add(observable);
+            collection.Add(13);
+            collection.Add(14);
+            collection.CollectionChanged += (s, e) =>
+            {
+                if (e.Action == NotifyCollectionChangedAction.Remove)
+                    ++removeCount;
+                else
+                    ++otherCount;
+            };
+
+            collection.Remove(observable);
+
+            Assert.AreEqual(1, removeCount);
+            Assert.AreEqual(0, otherCount);
+        }
+
+        [Test(Description = "Event behavior")]
+        public void CollectionChangedResetAction_RaisedOnce_When_ClearItems()
+        {
+            var clearCount = 0;
+            var otherCount = 0;
+
+            collection.Add(13);
+            collection.Add(11);
+            collection.Add(12);
+            collection.Add(14);
+            
+            collection.CollectionChanged += (s, e) =>
+            {
+                if (e.Action == NotifyCollectionChangedAction.Reset)
+                    ++clearCount;
+                else
+                    ++otherCount;
+            };
+
+            collection.Clear();
+
+            Assert.AreEqual(1, clearCount);
+            Assert.AreEqual(0, otherCount);
+        }
+
         private void AssertCollectionIsSorted()
         {
             var array = collection.ToArray();
             Array.Sort(array, new ObservbleInt32.Comparer());
 
             for (var i = 0; i < array.Length; i++)
-                Assert.AreEqual(array[i],collection[i]);
+                Assert.AreEqual(array[i], collection[i]);
         }
     }
 }

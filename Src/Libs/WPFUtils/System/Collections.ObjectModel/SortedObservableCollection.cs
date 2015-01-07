@@ -2,6 +2,8 @@
 using System.ComponentModel;
 using System.Diagnostics.Contracts;
 
+// ReSharper disable once CheckNamespace
+
 namespace System.Collections.ObjectModel
 {
     public class SortedObservableCollection<T> : ObservableCollection<T> where T : INotifyPropertyChanged
@@ -35,15 +37,16 @@ namespace System.Collections.ObjectModel
 
         #endregion
 
-        protected override sealed void InsertItem(int index, T item)
+        protected override void InsertItem(int index, T item)
         {
-            item.PropertyChanged -= OnItemChanged;
-            item.PropertyChanged += OnItemChanged;
+            CheckReentrancy();
+            item.PropertyChanged -= OnItemPropertyChanged;
+            item.PropertyChanged += OnItemPropertyChanged;
             base.InsertItem(GetInsertItemIndex(item), item);
         }
 
         /// <summary>
-        /// For items added in collection
+        ///     For items added in collection
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -51,10 +54,10 @@ namespace System.Collections.ObjectModel
         {
             if (Count == 0)
                 return 0;
-            
+
             for (var i = 0; i < Count; i++)
             {
-                if(comparer.Compare(item,Items[i]) == 1)
+                if (comparer.Compare(item, Items[i]) == 1)
                     continue;
                 return i;
             }
@@ -63,7 +66,7 @@ namespace System.Collections.ObjectModel
         }
 
         /// <summary>
-        /// For elements that still in collection
+        ///     For elements that still in collection
         /// </summary>
         /// <param name="item"></param>
         /// <param name="index"></param>
@@ -87,7 +90,7 @@ namespace System.Collections.ObjectModel
 
             if (isIterFor && !isIterBack)
                 return GetIndexIteratingForward(item, index);
-            
+
             if (isIterBack && !isIterFor)
                 return GetIndexIteratingBackward(item, index);
 
@@ -119,32 +122,43 @@ namespace System.Collections.ObjectModel
             return 0;
         }
 
-        sealed protected override void RemoveItem(int index)
+        protected override void RemoveItem(int index)
         {
-            this[index].PropertyChanged -= OnItemChanged;
+            this[index].PropertyChanged -= OnItemPropertyChanged;
             base.RemoveItem(index);
         }
 
-        private void OnItemChanged(object sender, PropertyChangedEventArgs e)
+        private void OnItemPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            var itemIndex = IndexOf((T) sender);
-            UpdateItem(itemIndex);
+            OnItemPropertyChanged((T)sender);
         }
 
-        protected virtual void UpdateItem(int index)
+        protected virtual void OnItemPropertyChanged(T item)
         {
-            var item = this[index];
-            base.MoveItem(index, GetReplaceItemIndex(item, index));
+            var index = IndexOf(item);
+            var newIndex = GetReplaceItemIndex(item, index);
+
+            if (newIndex != index)
+                base.MoveItem(index, newIndex);
         }
 
-        sealed protected override void SetItem(int index, T item)
+
+        protected override sealed void SetItem(int index, T item)
         {
-            throw new InvalidOperationException("You can't replace items by index property");
+            throw new InvalidOperationException("You can't replace items by index property in sorted collection");
         }
 
-        sealed protected override void MoveItem(int oldIndex, int newIndex)
+        protected override sealed void MoveItem(int oldIndex, int newIndex)
         {
             throw new InvalidOperationException("Can't manualy move items in sorted collection");
+        }
+
+        protected override void ClearItems()
+        {
+            CheckReentrancy();
+            foreach (var item in Items)
+                item.PropertyChanged -= OnItemPropertyChanged;
+            base.ClearItems();
         }
     }
 }
