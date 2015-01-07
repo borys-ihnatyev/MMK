@@ -82,15 +82,15 @@
 
         <KeyBinding Key="P" Modifiers="Control" Command="{Binding ChangeLayoutCommand}"/>
 
-        <KeyBinding Key="N" Modifiers="Control+Shift" Command="{Binding AddHashTagCommand}"/>
-        <KeyBinding Key="Right" Modifiers="Shift+Alt" Command="{Binding SelectNextHashTagCommand}"/>
-        <KeyBinding Key="Left" Modifiers="Shift+Alt" Command="{Binding SelectPreviousHashTagCommand}"/>
+        <KeyBinding Key="N" Modifiers="Control+Shift" Command="{Binding HashTags.AddNewCommand}"/>
+        <KeyBinding Key="Right" Modifiers="Shift+Alt" Command="{Binding HashTags.SelectNextCommand}"/>
+        <KeyBinding Key="Left" Modifiers="Shift+Alt" Command="{Binding HashTags.SelectPreviousCommand}"/>
         
         <KeyBinding Key="Right" Modifiers="Alt" Command="{Binding PlayerViewModel.PositionIncreaseCommand}"/>
         <KeyBinding Key="Left" Modifiers="Alt" Command="{Binding PlayerViewModel.PositionDecreaseCommand}"/>
 
-        <KeyBinding Key="Up" Command="{Binding PlayerViewModel.VolumeIncreaseCommand}"/>
-        <KeyBinding Key="Down" Command="{Binding PlayerViewModel.VolumeDecreaseCommand}"/>
+        <KeyBinding Key="Up" Modifiers="Alt" Command="{Binding PlayerViewModel.VolumeIncreaseCommand}"/>
+        <KeyBinding Key="Down" Modifiers="Alt" Command="{Binding PlayerViewModel.VolumeDecreaseCommand}"/>
 
 
     </Window.InputBindings>
@@ -136,15 +136,17 @@
                     </Style.Triggers>
                 </Style>
             </DockPanel.Style>
+            
             <Label Style="{StaticResource HashTagEditRegionStyle}"
                    Foreground="#777"
-                   Content="#" />
+                   Content="#"/>
+            
             <TextBox x:Name="HashTagEditBox"
                      Style="{StaticResource HashTagEditTextBoxStyle}"
                      IsEnabled="{Binding CanDirectEditHashTags}"
                      wpf:DependencyObjectFocusExtension.IsFocused="{Binding CanDirectEditHashTags}"
-                     Foreground="{Binding SelectedHashTag.ItemBackground}"
-                     Text="{Binding SelectedHashTag.HashTagValue, UpdateSourceTrigger=PropertyChanged}"/>
+                     Foreground="{Binding HashTags.Selected.HashTag, Converter={StaticResource KeyColorConverter}}"
+                     Text="{Binding HashTags.Selected.HashTagValue, UpdateSourceTrigger=PropertyChanged}" />
         </DockPanel>
 
         <WrapPanel Grid.Row="0" x:Name="PianoKeyBoardEditContainer"
@@ -199,6 +201,8 @@
                 Text="{Binding FileItemView}" />
 
             <ListView ItemsSource="{Binding HashTags}"
+                      SelectionMode="Single"
+                      SelectedItem="{Binding HashTags.Selected}"
                       BorderThickness="0"
                       Padding="0"
                       VerticalAlignment="Center"
@@ -208,11 +212,13 @@
                       Background="Transparent"
                       Foreground="White"
                       Height="26">
+
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel />
                     </ItemsPanelTemplate>
                 </ListView.ItemsPanel>
+                
                 <ListView.ItemContainerStyle>
                     <Style TargetType="{x:Type Control}">
                         <Setter Property="BorderThickness" Value="0" />
@@ -231,13 +237,6 @@
                                     <ColumnDefinition Width="auto" />
                                     <ColumnDefinition Width="auto" />
                                 </Grid.ColumnDefinitions>
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="MouseDown">
-                                        <i:InvokeCommandAction
-                                            Command="{Binding DataContext.SelectHashTagCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                                            CommandParameter="{Binding}" />
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
 
                                 <Label Foreground="#777"
                                        FontSize="13"
@@ -252,7 +251,7 @@
                                            VerticalAlignment="Center" />
 
                                 <Button Grid.Column="2"
-                                        Command="{Binding DataContext.RemoveHashTagCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                        Command="{Binding DataContext.HashTags.RemoveCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                                         CommandParameter="{Binding}"
                                         Width="20"
                                         Margin="0,-1,-1,-1"
@@ -271,7 +270,7 @@
 
             <Button DockPanel.Dock="Left"
                     Style="{StaticResource ClearButtonStyle}"
-                    Command="{Binding AddHashTagCommand}"
+                    Command="{Binding HashTags.AddNewCommand}"
                     Width="23"
                     Background="Transparent"
                     Content="#" Margin="3,1,3,2" />
