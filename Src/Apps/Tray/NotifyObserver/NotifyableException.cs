@@ -14,6 +14,8 @@ namespace MMK.Notify.Observer
         public NotifyableException(Exception innerException):base(innerException.Message,innerException)
         {
             Contract.Requires(innerException != null);
+            Contract.EndContractBlock();
+
             CanContinue = false;
             DetailedDescription = innerException.Message;
         }

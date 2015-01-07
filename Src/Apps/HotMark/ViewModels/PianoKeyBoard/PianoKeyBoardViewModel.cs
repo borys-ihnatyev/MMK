@@ -44,7 +44,7 @@ namespace MMK.HotMark.ViewModels.PianoKeyBoard
         private void KeyRecognizerOnKeyRecognized(object sender, EventArgs<Key> eventArgs)
         {
             RecognizedKey = eventArgs.Arg;
-            var recognizedKeyBrush = KeyColorConverter.Convert(RecognizedKey);
+            var recognizedKeyBrush = KeyBrushConverter.Convert(RecognizedKey);
             keyViewModels.ForEach(vm => vm.PressedColor = recognizedKeyBrush);
         }
 

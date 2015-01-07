@@ -26,6 +26,7 @@ namespace MMK.SwiftSearch
         {
             InitializeComponent();
             Loaded += OnLoaded;
+            SizeChanged += (s,e) => SetAmazingPosition();
 
             shortcutProviderCollection = new GlobalShortcutProviderCollection(this);
             keyShortcutProvider = new GlobalKeyShortcutProvider();
@@ -46,7 +47,6 @@ namespace MMK.SwiftSearch
 
                 SearchTextBox.Text = value;
                 SearchTextBox.CaretIndex = value.Length;
-                RecalcWindowWidth();
             }
         }
 
@@ -59,8 +59,6 @@ namespace MMK.SwiftSearch
 
         private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
         {
-            SetAmazingPosition();
-
             LoadShortcutCollection();
             (keyShortcutProvider as IGlobalShortcutProvider).SetWindow(this);
 
@@ -74,19 +72,18 @@ namespace MMK.SwiftSearch
 
         private void SetAmazingPosition()
         {
-            double screenHeight = SystemParameters.PrimaryScreenHeight;
-
-            Top = screenHeight*goldenRatio - Height;
+            Top = SystemParameters.WorkArea.Top + SystemParameters.WorkArea.Height* goldenRatio - Height;
+            Left = SystemParameters.WorkArea.Left + (SystemParameters.WorkArea.Width - Width)/2;
         }
 
         private void LoadSearchTextBoxText()
         {
             if (!string.IsNullOrWhiteSpace(Search)) return;
 
-            string[] clArgs = Environment.GetCommandLineArgs();
+            var clArgs = Environment.GetCommandLineArgs();
             if (clArgs.Length <= 1) return;
 
-            string search = string.Join(" ", clArgs, 1, clArgs.Length - 1);
+            var search = string.Join(" ", clArgs, 1, clArgs.Length - 1);
 
             Search = search;
         }
@@ -145,13 +142,13 @@ namespace MMK.SwiftSearch
 
             shortcutProviderCollection.Add(
                 KeyModifyers.Ctrl | KeyModifyers.Shift,
-                (int)Keys.D,
+                (int) Keys.D,
                 () => InsertIntoSearchBoxTextAsHashTag("deep")
                 );
 
             shortcutProviderCollection.Add(
                 KeyModifyers.Ctrl | KeyModifyers.Shift,
-                (int)Keys.N,
+                (int) Keys.N,
                 () => InsertIntoSearchBoxTextAsHashTag("newdisco")
                 );
 
@@ -175,13 +172,13 @@ namespace MMK.SwiftSearch
 
             shortcutProviderCollection.Add(
                 KeyModifyers.Ctrl | KeyModifyers.Shift,
-                (int)Keys.U,
+                (int) Keys.U,
                 () => InsertIntoSearchBoxTextAsHashTag("urban")
                 );
 
             shortcutProviderCollection.Add(
                 KeyModifyers.Ctrl | KeyModifyers.Shift,
-                (int)Keys.E,
+                (int) Keys.E,
                 () => InsertIntoSearchBoxTextAsHashTag("electronic")
                 );
 
@@ -194,24 +191,22 @@ namespace MMK.SwiftSearch
 
         private static string GetAllIdentifyers()
         {
-            return string.Join(
-                " ",
+            return string.Join(" ",
                 GoodleSearchHandler.Identifyer,
                 VkSearchHandler.Identifyer,
                 ZaycevNetSearchHandler.Identifyer
-                );
+             );
         }
-
 
         private void InsertSearchTextBoxTextParalelKeys(Key key)
         {
-            string keyStr = string.Format("<#{0}|#{1}>", key, CircleOfFifths.GetParalel(key));
+            var keyStr = string.Format("<#{0}|#{1}>", key, CircleOfFifths.GetParalel(key));
             InsertIntoSearchBoxText(keyStr);
         }
 
         private void InsertIntoSearchBoxTextAsHashTag(string value)
         {
-            string insertValue = new HashTag(value).ToString();
+            var insertValue = new HashTag(value).ToString();
 
             InsertIntoSearchBoxText(insertValue);
         }
@@ -220,7 +215,7 @@ namespace MMK.SwiftSearch
         {
             isChangingSearchBoxManually = true;
 
-            int insertIndex = SearchTextBox.CaretIndex;
+            var insertIndex = SearchTextBox.CaretIndex;
 
             insertValue += " ";
 
@@ -240,7 +235,6 @@ namespace MMK.SwiftSearch
             }
 
             SearchTextBox.CaretIndex = insertIndex + insertValue.Length;
-
 
             isChangingSearchBoxManually = false;
 
@@ -267,7 +261,6 @@ namespace MMK.SwiftSearch
                 RemoveLastHotkeyInsert();
 
             ResetLastHotkeyInsert();
-            RecalcWindowWidth();
         }
 
         private bool CanRemoveLastHotkeyInsert(TextChange change)
@@ -299,24 +292,8 @@ namespace MMK.SwiftSearch
         private void RemoveLastHotkeyInsert()
         {
             isChangingSearchBoxManually = true;
-
             Search = SearchTextBox.Text.Remove(lastInsertIndex, lastInsertLength - 1);
-
             isChangingSearchBoxManually = false;
-        }
-
-        private void RecalcWindowWidth()
-        {
-            double textWidth = SearchTextBox.MeasureText().Width;
-
-            if (textWidth < MinWidth)
-                textWidth = MinWidth;
-            else if (textWidth > MaxWidth)
-                textWidth = MaxWidth;
-
-            Width = textWidth + SearchTextBox.Margin.Left + SearchTextBox.Margin.Right + 10;
-
-            Left = (1366 - Width)/2;
         }
     }
 }

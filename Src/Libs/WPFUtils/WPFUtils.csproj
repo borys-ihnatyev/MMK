@@ -100,6 +100,11 @@
     <Compile Include="Providers\Key\GlobalKeyShortcutProvider.cs" />
     <Compile Include="Providers\Key\GlobalKeyShortcutRegister.cs" />
     <Compile Include="System\Windows\FrameworkElementExtension.cs" />
+    <Compile Include="ViewModel\CommandLoader.cs" />
+    <Compile Include="ViewModel\CommandResolveException.cs" />
+    <Compile Include="ViewModel\CommandResolver.cs" />
+    <Compile Include="ViewModel\CommandNamingConventionException.cs" />
+    <Compile Include="ViewModel\ViewModelLoader.cs" />
     <Compile Include="Tools\DependencyObjectFocusExtension.cs" />
     <Compile Include="Windows\TaskBar.Native.cs" />
     <Compile Include="Windows\TaskBar.Abe.cs" />
@@ -113,7 +118,7 @@
     <Compile Include="System\Windows\Media\ColorHsv.cs" />
     <Compile Include="Tools\Command.cs" />
     <Compile Include="Tools\InvokeDelegateCommandAction.cs" />
-    <Compile Include="Tools\KeyColorConverter.cs" />
+    <Compile Include="Tools\KeyBrushConverter.cs" />
     <Compile Include="System\Collections.ObjectModel\SortedObservableCollection.cs" />
     <Compile Include="TrayWindow.cs" />
     <Compile Include="ViewModel\ObservableObject.cs" />
@@ -122,7 +127,7 @@
     <Compile Include="Windows\Taskbar.TaskbarPosition.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MMK\MMK.csproj">
+    <ProjectReference Include="..\Core\MMK\MMK.csproj">
       <Project>{a9193781-f0f5-406c-bc5f-312ae4f516f3}</Project>
       <Name>MMK</Name>
     </ProjectReference>

@@ -132,13 +132,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="policy.2.0.taglib-sharp">
-      <HintPath>..\..\..\packages\taglib.2.1.0.0\lib\policy.2.0.taglib-sharp.dll</HintPath>
+      <HintPath>..\..\..\..\packages\taglib.2.1.0.0\lib\policy.2.0.taglib-sharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
     <Reference Include="taglib-sharp">
-      <HintPath>..\..\..\packages\taglib.2.1.0.0\lib\taglib-sharp.dll</HintPath>
+      <HintPath>..\..\..\..\packages\taglib.2.1.0.0\lib\taglib-sharp.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -171,7 +171,6 @@
   <ItemGroup>
     <Compile Include="Processing\AutoFolder\HashTagFolderCollection.SerializationItem.cs" />
     <Compile Include="Processing\AutoFolder\HashTagFolderCollection.Pattern.cs" />
-    <None Include="packages.config" />
     <Compile Include="Processing\AutoFolder\MusicFolderLocation.Parser.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -247,12 +246,13 @@
     <None Include="KeyColors\gmoll.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Utils\Utils.csproj">
+    <ProjectReference Include="..\..\Utils\Utils.csproj">
       <Project>{1a83dd41-36ab-493f-a3c1-2acad7ff152f}</Project>
       <Name>Utils</Name>
     </ProjectReference>

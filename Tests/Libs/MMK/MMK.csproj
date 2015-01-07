@@ -84,8 +84,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Src\Libs\MMK\MMK.csproj">
-      <Project>{a9193781-f0f5-406c-bc5f-312ae4f516f3}</Project>
+    <ProjectReference Include="..\..\..\Src\Libs\Core\MMK\MMK.csproj">
+      <Project>{A9193781-F0F5-406C-BC5F-312AE4F516F3}</Project>
       <Name>MMK</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Src\Libs\Utils\Utils.csproj">

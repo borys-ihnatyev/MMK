@@ -128,20 +128,29 @@
     <Compile Include="Behaviors\PutCursorAtEndTextBoxBehavior.cs" />
     <Compile Include="Model\ChangeHashTagModel.cs" />
     <Compile Include="Model\Files\FileHashTagCollection.cs" />
-    <Compile Include="Model\HashTagModelChangeModel.cs" />
+    <Compile Include="Model\HashTagModelChangeNotify.cs" />
     <Compile Include="Model\PianoKeyBoard\KeyRecognizer.cs" />
     <Compile Include="Model\PianoKeyBoard\MidiInstrument.cs" />
     <Compile Include="Model\PianoKeyBoard\MidiNote.cs" />
     <Compile Include="Model\PianoKeyBoard\PianoKeyBoardMidiMapper.cs" />
+    <Compile Include="ViewModels\HashTagCollectionViewModel.cs" />
     <Compile Include="ViewModels\PianoKeyBoard\NoteEventArgs.cs" />
     <Compile Include="ViewModels\PianoKeyBoard\PianoKeyBoardViewModel.cs" />
     <Compile Include="ViewModels\PianoKeyBoard\PianoKeyViewModel.cs" />
+    <Compile Include="ViewModels\PlayerViewModel.cs" />
     <Compile Include="Views\PianoKeyBoardControl.xaml.cs">
       <DependentUpon>PianoKeyBoardControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PianoKeyControl.xaml.cs">
       <DependentUpon>PianoKeyControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\PlayerControl.xaml.cs">
+      <DependentUpon>PlayerControl.xaml</DependentUpon>
+    </Compile>
+    <DesignData Include="DesignData\HotMarkViewModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </DesignData>
     <Page Include="Style\PianoKeyBoardStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -170,6 +179,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\PlayerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\RewriteHashTagModel.cs" />
@@ -194,6 +207,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Resource Include="fonts\fontawesome-webfont.ttf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -205,12 +219,12 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Libs\ApplicationServiceModel\ApplicationServiceModel.csproj">
-      <Project>{b7d69bf7-b8f9-46ff-963c-93ed9c8d5f47}</Project>
+    <ProjectReference Include="..\..\Libs\Core\ApplicationServiceModel\ApplicationServiceModel.csproj">
+      <Project>{B7D69BF7-B8F9-46FF-963C-93ED9C8D5F47}</Project>
       <Name>ApplicationServiceModel</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Libs\MMK\MMK.csproj">
-      <Project>{a9193781-f0f5-406c-bc5f-312ae4f516f3}</Project>
+    <ProjectReference Include="..\..\Libs\Core\MMK\MMK.csproj">
+      <Project>{A9193781-F0F5-406C-BC5F-312AE4F516F3}</Project>
       <Name>MMK</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Libs\Utils\Utils.csproj">
@@ -226,7 +240,6 @@
       <Name>NotifyObserver</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

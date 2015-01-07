@@ -1,0 +1,9 @@
+﻿<HotMarkViewModel xmlns="clr-namespace:MMK.HotMark.ViewModels"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <HotMarkViewModel.HashTags>
+        <HashTagViewModel HashTagValue="pop"/>
+        <HashTagViewModel HashTagValue="amoll"/>
+        <HashTagViewModel HashTagValue="dmoll"/>
+        <HashTagViewModel HashTagValue="dance"/>
+    </HotMarkViewModel.HashTags>
+</HotMarkViewModel>

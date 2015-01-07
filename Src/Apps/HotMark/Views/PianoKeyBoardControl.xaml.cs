@@ -10,10 +10,11 @@ namespace MMK.HotMark.Views
     public partial class PianoKeyBoardControl
     {
         private static readonly double GoldenRatio = (Math.Sqrt(5) - 1)/2;
+
         public PianoKeyBoardControl()
         {
-            InitializeComponent();
             DataContextChanged += OnDataContextChanged;
+            InitializeComponent();
         }
 
         private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -31,8 +32,7 @@ namespace MMK.HotMark.Views
 
             var left = 0.0;
 
-            viewModel
-                .Keys
+            viewModel.Keys
                 .Select(pianoKeyViewModel => CreatePianoKeyView(pianoKeyViewModel, ref left))
                 .ForEach(view => Layout.Children.Add(view));
 

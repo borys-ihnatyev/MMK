@@ -6,13 +6,24 @@ using MMK.Marking;
 
 namespace MMK.Wpf
 {
-    public class KeyColorConverter : IValueConverter
+    public class KeyBrushConverter : IValueConverter
     {
+        public KeyBrushConverter()
+        {
+            DefaultBrush = Brushes.Transparent;
+        }
+
+        public Brush DefaultBrush
+        {
+            get; set;
+        }
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var keyHashTag = value as KeyHashTag;
+            
             if (keyHashTag == null)
-                return Colors.Transparent;
+                return DefaultBrush;
 
             return Convert(keyHashTag.Key);
         }

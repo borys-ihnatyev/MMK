@@ -80,8 +80,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Src\Libs\ApplicationServiceModel\ApplicationServiceModel.csproj">
-      <Project>{b7d69bf7-b8f9-46ff-963c-93ed9c8d5f47}</Project>
+    <ProjectReference Include="..\..\..\Src\Libs\Core\ApplicationServiceModel\ApplicationServiceModel.csproj">
+      <Project>{B7D69BF7-B8F9-46FF-963C-93ED9C8D5F47}</Project>
       <Name>ApplicationServiceModel</Name>
     </ProjectReference>
   </ItemGroup>

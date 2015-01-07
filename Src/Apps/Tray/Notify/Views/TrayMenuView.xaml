@@ -8,7 +8,7 @@
                 xmlns:trayMenu="clr-namespace:MMK.Notify.Views.TrayMenu"
                 xmlns:viewModels="clr-namespace:MMK.Notify.ViewModels"
                 mc:Ignorable="d"
-                Height="148"
+                SizeToContent="Height"
                 Width="286"
                 d:DataContext="{d:DesignInstance viewModels:TrayMenuViewModel}">
 
@@ -27,7 +27,7 @@
                 <Setter Property="WindowStyle" Value="None" />
                 <Setter Property="AllowsTransparency" Value="True" />
                 <Setter Property="Topmost" Value="True" />
-                <Setter Property="Foreground" Value="White"></Setter>
+                <Setter Property="Foreground" Value="White"/>
                 <Setter Property="Background" Value="{StaticResource WindowBlackGlanceBrush}"/>
             </Style.Setters>
             <Style.Triggers>

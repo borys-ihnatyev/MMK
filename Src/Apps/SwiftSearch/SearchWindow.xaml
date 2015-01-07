@@ -3,15 +3,14 @@
                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                 xmlns:wpf="clr-namespace:MMK.Wpf;assembly=MMK.Wpf"
                 Title="SearchWindow"
-                MinWidth="220"
-                MaxWidth="1024"
                 Width="220"
+                MinWidth="220"
+                MaxWidth="800"
                 Height="70"
                 Topmost="True"
-                WindowStartupLocation="CenterScreen"
                 WindowStyle="None"
-                AllowsTransparency="True"
-                Background="Transparent">
+                SizeToContent="Width"
+                AllowsTransparency="True">
     <wpf:TrayWindow.Triggers>
         <EventTrigger RoutedEvent="FrameworkElement.Loaded">
             <BeginStoryboard>
@@ -30,18 +29,36 @@
         <Border.Background>
             <SolidColorBrush Opacity="0.9" Color="#111" />
         </Border.Background>
-        <Grid>
+        
+        <DockPanel Margin="10,5">
+            <TextBlock Text="&#xf002;"
+                       Margin="0,0,10,0"
+                       FontSize="40px"
+                       Foreground="White"
+                       TextAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontFamily="pack://application:,,,/MMK.SwiftSearch;component/fonts/#FontAwesome" 
+                       RenderTransformOrigin="0.5,0.5">
+                <TextBlock.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleY="1" ScaleX="-1"/>
+                        <SkewTransform AngleY="0" AngleX="0"/>
+                        <RotateTransform Angle="0"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </TextBlock.RenderTransform>
+            </TextBlock>
+
             <TextBox x:Name="SearchTextBox"
                      Background="Transparent"
                      BorderThickness="0"
-                     CaretBrush="Transparent"
+                     CaretBrush="White"
                      Foreground="White"
                      IsReadOnlyCaretVisible="True"
                      TextChanged="SearchTextBoxTextChanged"
                      TextAlignment="Center"
                      FontSize="40px"
-                     FontWeight="ExtraLight"
-                     Margin="10,5" />
-        </Grid>
+                     FontWeight="ExtraLight"/>
+        </DockPanel>
     </Border>
 </wpf:TrayWindow>
