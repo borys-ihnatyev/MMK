@@ -133,6 +133,7 @@
     <Compile Include="Model\PianoKeyBoard\MidiInstrument.cs" />
     <Compile Include="Model\PianoKeyBoard\MidiNote.cs" />
     <Compile Include="Model\PianoKeyBoard\PianoKeyBoardMidiMapper.cs" />
+    <Compile Include="ViewModels\HashTagCollectionViewModel.cs" />
     <Compile Include="ViewModels\PianoKeyBoard\NoteEventArgs.cs" />
     <Compile Include="ViewModels\PianoKeyBoard\PianoKeyBoardViewModel.cs" />
     <Compile Include="ViewModels\PianoKeyBoard\PianoKeyViewModel.cs" />
