@@ -86,14 +86,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -106,7 +100,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="SearchWindow.xaml">
+    <Page Include="Views\SwiftSearchView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -117,12 +111,13 @@
     <Compile Include="SearchHandlers\EverythingSearchHandler.cs" />
     <Compile Include="SearchHandlers\GoodleSearchHandler.cs" />
     <Compile Include="Model\SearchHandler.cs" />
-    <Compile Include="SearchHandlers\MultiSearchHandler.cs" />
+    <Compile Include="SearchHandlers\SearchHandlerFactory.cs" />
     <Compile Include="SearchHandlers\VkSearchHandler.cs" />
     <Compile Include="Model\WebSearchHandler.cs" />
     <Compile Include="SearchHandlers\ZaycevNetSearchHandler.cs" />
-    <Compile Include="SearchWindow.xaml.cs">
-      <DependentUpon>SearchWindow.xaml</DependentUpon>
+    <Compile Include="ViewModels\SwiftSearchViewModel.cs" />
+    <Compile Include="Views\SwiftSearchView.xaml.cs">
+      <DependentUpon>SwiftSearchView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

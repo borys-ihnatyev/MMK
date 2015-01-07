@@ -4,15 +4,8 @@ namespace MMK.SwiftSearch.SearchHandlers
 {
     sealed public class ZaycevNetSearchHandler : WebSearchHandler
     {
-        public const string Identifyer = "@zn";
-
         public ZaycevNetSearchHandler(string searchModel) : base(searchModel)
         {
-        }
-
-        public override string IdentifyerTag
-        {
-            get { return Identifyer; }
         }
 
         protected override string UrlFormat

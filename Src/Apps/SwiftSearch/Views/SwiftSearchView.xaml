@@ -1,0 +1,105 @@
+﻿<wpf:TrayWindow x:Class="MMK.SwiftSearch.Views.SwiftSearchView"
+                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                xmlns:wpf="clr-namespace:MMK.Wpf;assembly=MMK.Wpf"
+                xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                xmlns:viewModels="clr-namespace:MMK.SwiftSearch.ViewModels"
+                mc:Ignorable="d"
+                Title="SearchWindow"
+                Width="400"
+                MinWidth="400"
+                MaxWidth="800"
+                Topmost="True"
+                WindowStyle="None"
+                SizeToContent="WidthAndHeight"
+                AllowsTransparency="True" d:DataContext="{d:DesignInstance viewModels:SwiftSearchViewModel}">
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <BeginStoryboard>
+                <Storyboard x:Name="LoadStoryboard">
+                    <DoubleAnimation
+                        Storyboard.TargetProperty="Opacity"
+                        From="0"
+                        To="1"
+                        Duration="0:0:0.17" />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
+    
+    <Window.InputBindings>
+        <KeyBinding Key="R" Modifiers="Control" Command="{Binding ToggleSearchCommand}"/>
+        <KeyBinding Key="Enter" Command="{Binding ApplySearchCommand}"/>
+        <KeyBinding Key="Escape" Command="{Binding CancelCommand}"/>
+        <KeyBinding Key="Space" Modifiers="Control" Command="{Binding CancelCommand}"/>
+        
+        <KeyBinding Key="E" Modifiers="Alt" Command="{Binding SetSearchHandlerCommand}" CommandParameter=""/>
+        <KeyBinding Key="G" Modifiers="Alt" Command="{Binding SetSearchHandlerCommand}" CommandParameter="g"/>
+        <KeyBinding Key="V" Modifiers="Alt" Command="{Binding SetSearchHandlerCommand}" CommandParameter="vk"/>
+        <KeyBinding Key="Z" Modifiers="Alt" Command="{Binding SetSearchHandlerCommand}" CommandParameter="zn"/>
+
+
+        <KeyBinding Key="R" Modifiers="Control+Shift" Command="{Binding AddSearchCommand}" CommandParameter="&lt;#dance|#pop|#spec|#house&gt;"/>
+        <KeyBinding Key="H" Modifiers="Control+Shift" Command="{Binding AddSearchCommand}" CommandParameter="#house"/>
+        <KeyBinding Key="D" Modifiers="Control+Shift" Command="{Binding AddSearchCommand}" CommandParameter="#deep"/>
+        <KeyBinding Key="P" Modifiers="Control+Shift" Command="{Binding AddSearchCommand}" CommandParameter="#pop"/>
+        <KeyBinding Key="S" Modifiers="Control+Shift" Command="{Binding AddSearchCommand}" CommandParameter="#spec"/>
+        <KeyBinding Key="U" Modifiers="Control+Shift" Command="{Binding AddSearchCommand}" CommandParameter="#urban"/>
+        <KeyBinding Key="E" Modifiers="Control+Shift" Command="{Binding AddSearchCommand}" CommandParameter="#electronic"/>
+        <KeyBinding Key="L" Modifiers="Control+Shift" Command="{Binding AddSearchCommand}" CommandParameter="#slow"/>
+        
+    </Window.InputBindings>
+    
+    <Border>
+        <Border.Background>
+            <SolidColorBrush Opacity="0.9" Color="#111" />
+        </Border.Background>
+        <Grid Margin="10,5">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <DockPanel Grid.Row="0">
+                <TextBlock Text="{Binding SearchHandlerIconText}"
+                           Margin="0,0,10,0"
+                           FontSize="40px"
+                           Foreground="White"
+                           TextAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontFamily="pack://application:,,,/MMK.SwiftSearch;component/fonts/#FontAwesome" />
+
+                <TextBox Text="{Binding Search, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         x:Name="SearchTextBox"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         CaretBrush="White"
+                         Foreground="White"
+                         IsReadOnlyCaretVisible="True"
+                         FontSize="40px"
+                         FontWeight="ExtraLight" />
+            </DockPanel>
+
+            <TextBlock Grid.Row="1"
+                       Text="{Binding SearchToggle}"
+                       Background="Transparent"
+                       Foreground="Violet"
+                       TextAlignment="Center"
+                       FontSize="20px"
+                       FontWeight="ExtraLight">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text,RelativeSource={RelativeSource Self}}" Value="">
+                                <DataTrigger.Setters>
+                                    <Setter Property="Height" Value="0" />
+                                </DataTrigger.Setters>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </Grid>
+    </Border>
+</wpf:TrayWindow>
