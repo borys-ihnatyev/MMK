@@ -36,7 +36,7 @@ namespace MMK.SwiftSearch.ViewModels
 
         public SwiftSearchViewModel(string search)
         {
-            Search = search;
+            Search = SanitizeText(search);
             SetSearchHandler();
             keyShortcutProvider = new GlobalKeyShortcutProvider();
             keyShortcutProvider.HotKeyPressed += AddSearchParalelKeys;
@@ -59,7 +59,6 @@ namespace MMK.SwiftSearch.ViewModels
             get { return search; }
             set
             {
-                value = SanitizeText(value);
                 if (value == search) return;
                 search = value;
 
@@ -81,7 +80,7 @@ namespace MMK.SwiftSearch.ViewModels
             get { return Settings.Default.SearchToggle; }
             set
             {
-                value = value.Trim();
+                value = SanitizeText(value);
                 if (String.Equals(value, Settings.Default.SearchToggle, StringComparison.Ordinal))
                     return;
                 Settings.Default.SearchToggle = value;
