@@ -8,18 +8,18 @@ namespace MMK.Wpf.Providers
 {
     public class GlobalShortcutProviderCollection : IGlobalShortcutProvider, ICollection<IGlobalShortcutProvider>
     {
-        private Window window;
+        private Window ownerWindow;
 
         private readonly HashSet<IGlobalShortcutProvider> hotkeyProviders;
 
-        public GlobalShortcutProviderCollection()
+        public GlobalShortcutProviderCollection() : this(null)
         {
-            hotkeyProviders = new HashSet<IGlobalShortcutProvider>();
         }
 
-        public GlobalShortcutProviderCollection(Window window):this()
+        public GlobalShortcutProviderCollection(Window ownerWindow)
         {
-            this.window = window;
+            hotkeyProviders = new HashSet<IGlobalShortcutProvider>();
+            this.ownerWindow = ownerWindow;
         }
 
         public void StartListen()
@@ -36,7 +36,7 @@ namespace MMK.Wpf.Providers
 
         public bool Add(IGlobalShortcutProvider provider)
         {
-            provider.SetWindow(window);
+            provider.SetWindow(ownerWindow);
             return hotkeyProviders.Add(provider);
         }
 
@@ -65,7 +65,7 @@ namespace MMK.Wpf.Providers
 
         public bool Add(KeyModifyers modifyer, int keyCode, Action pressed)
         {
-            var provider = new GlobalShortcutProvider(window, modifyer, keyCode);
+            var provider = new GlobalShortcutProvider(ownerWindow, modifyer, keyCode);
             provider.Pressed += pressed;
             return Add(provider);
         }
@@ -91,7 +91,7 @@ namespace MMK.Wpf.Providers
             if(startListen)
                 StartListen();
 
-            window = newWindow;
+            ownerWindow = newWindow;
         }
 
         void IGlobalShortcutProvider.StartListen()

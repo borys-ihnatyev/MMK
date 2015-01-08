@@ -153,6 +153,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\ObjectExtension.cs" />
     <Compile Include="System\ChangedEventArgs.cs" />
     <Compile Include="System\IO\FileSystemInfoExtension.cs" />
     <Compile Include="System\IO\PathExtension.cs" />

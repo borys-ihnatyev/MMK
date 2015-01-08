@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace MMK.Wpf.Providers.Key
 {
@@ -20,7 +21,7 @@ namespace MMK.Wpf.Providers.Key
         {
             CircleOfFifths.AllKeys
                 .Select(key => new GlobalKeyShortcut(key, hwnd))
-                .Count(globakHotkey => globalHotKeys.AddLast(globakHotkey) != null);
+                .ForEach(globakHotkey => globalHotKeys.AddLast(globakHotkey));
         }
 
         public void RegisterGlobalHotkeys()
@@ -29,7 +30,7 @@ namespace MMK.Wpf.Providers.Key
             {
                 if (globalHotkey.Register()) continue;
 
-                var errorMsg = string.Format("Not registered global hotkey : id {0}", globalHotkey.GetHashCode());
+                var errorMsg = string.Format("Not registered global hotkey : id {0}. Error Code : {1}", globalHotkey.GetHashCode(), GetLastError());
                 OnError(new UnhandledExceptionEventArgs(new Exception(errorMsg), false));
             }
         }
@@ -39,8 +40,8 @@ namespace MMK.Wpf.Providers.Key
             foreach (var globalHotkey in globalHotKeys)
             {
                 if (globalHotkey.Unregister()) continue;
-                
-                var errorMsg = string.Format("Not unregistered global hotkey : id {0}", globalHotkey.GetHashCode());
+
+                var errorMsg = string.Format("Not unregistered global hotkey : id {0}. Error Code : {1}", globalHotkey.GetHashCode(), GetLastError());
                 OnError(new UnhandledExceptionEventArgs(new Exception(errorMsg), false));
             }
         }
@@ -54,5 +55,8 @@ namespace MMK.Wpf.Providers.Key
         }
 
         public event EventHandler<UnhandledExceptionEventArgs> Error;
+
+        [DllImport("Kernel32.dll")]
+        private static extern Int32 GetLastError();
     }
 }
