@@ -149,6 +149,7 @@
 
         <Slider Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Height="20"
                 IsMoveToPointEnabled="True"
+                Focusable="False"
                 Value="{Binding Position}"
                 Minimum="0"
                 Maximum="{Binding PositionMax}"/>

@@ -87,32 +87,17 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="Sanford.Collections">
-      <HintPath>..\..\..\packages\Sanford.MidiToolkit.5.0.2\lib\net40\Sanford.Collections.dll</HintPath>
-    </Reference>
     <Reference Include="Sanford.Multimedia">
       <HintPath>..\..\..\packages\Sanford.MidiToolkit.5.0.2\lib\net40\Sanford.Multimedia.dll</HintPath>
     </Reference>
     <Reference Include="Sanford.Multimedia.Midi">
       <HintPath>..\..\..\packages\Sanford.MidiToolkit.5.0.2\lib\net40\Sanford.Multimedia.Midi.dll</HintPath>
     </Reference>
-    <Reference Include="Sanford.Multimedia.Timers">
-      <HintPath>..\..\..\packages\Sanford.MidiToolkit.5.0.2\lib\net40\Sanford.Multimedia.Timers.dll</HintPath>
-    </Reference>
-    <Reference Include="Sanford.Threading">
-      <HintPath>..\..\..\packages\Sanford.MidiToolkit.5.0.2\lib\net40\Sanford.Threading.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>

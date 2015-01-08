@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
-using System.Windows.Forms;
+using System.Windows.Controls;
 using System.Windows.Input;
 using MMK.HotMark.ViewModels;
 
@@ -12,11 +12,12 @@ namespace MMK.HotMark.Views
         public HotMarkMainView(HotMarkViewModel viewModel)
         {
             InitializeComponent();
-            
-            DataContext = viewModel;
 
+            DataContext = viewModel;
+            (viewModel.HashTags as INotifyPropertyChanged).PropertyChanged += OnHashTagsPropertyChanged;
             Loaded += (s, e) => viewModel.LoadData();
-            Loaded += Window_Loaded;
+            Loaded += OnLoaded;
+
             SizeChanged += OnSizeChanged;
             MouseDown += OnMouseDown;
 
@@ -24,6 +25,41 @@ namespace MMK.HotMark.Views
 
             isCloseStoryboardStarted = false;
             isCloseStoryboardCompletted = false;
+        }
+
+        private void OnHashTagsPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Selected")
+                HashTagEditBoxFocus();
+        }
+
+        private void HashTagEditBoxFocus()
+        {
+            FocusManager.SetFocusedElement(this, HashTagEditBox);
+            HashTagEditBox.TextChanged += HashTagEditBoxPutCarretAtEndOnce;
+        }
+
+        private void HashTagEditBoxPutCarretAtEndOnce(object sender, TextChangedEventArgs textChangedEventArgs)
+        {
+            HashTagEditBox.CaretIndex = Int32.MaxValue;
+            HashTagEditBox.TextChanged -= HashTagEditBoxPutCarretAtEndOnce;
+        }
+
+        #region Animation Flags
+
+        private bool isCloseStoryboardStarted;
+
+        private bool isCloseStoryboardCompletted;
+
+        #endregion
+
+        #region Event Handlers
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            Focus();
+            Activate();
+            HashTagEditBoxFocus();
         }
 
         private void OnMouseDown(object sender, MouseButtonEventArgs e)
@@ -37,27 +73,12 @@ namespace MMK.HotMark.Views
 
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if(!e.WidthChanged)
+            if (!e.WidthChanged)
                 return;
-            Left = (Screen.PrimaryScreen.WorkingArea.Width - Width)/2;
+            Left = SystemParameters.WorkArea.Left + (SystemParameters.WorkArea.Width - e.NewSize.Width)/2;
         }
 
-        #region Animation Flags
-
-        private bool isCloseStoryboardStarted;
-        private bool isCloseStoryboardCompletted;
-
-        #endregion
-
-        #region Event Handlers
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            Focus();
-            Activate();
-        }
-
-        private void CloseStoryboard_Completed(object sender, EventArgs e)
+        private void OnCloseStoryboardCompleted(object sender, EventArgs e)
         {
             isCloseStoryboardCompletted = true;
             Close();

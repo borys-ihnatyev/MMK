@@ -15,6 +15,8 @@ namespace MMK.HotMark.ViewModels
             AddNewCommand = new Command(Add);
             RemoveCommand = new Command<HashTagViewModel>(vm => Remove(vm));
             SelectCommand = new Command<HashTagViewModel>(vm => Selected = vm);
+            SelectNextCommand = new Command(SelectNext);
+            SelectPreviousCommand = new Command(SelectPrevious);
         }
 
         public HashTagViewModel Selected

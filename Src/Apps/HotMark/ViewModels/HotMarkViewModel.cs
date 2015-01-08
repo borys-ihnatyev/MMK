@@ -20,6 +20,7 @@ namespace MMK.HotMark.ViewModels
         private readonly FileHashTagCollection files;
         private HashTagModelChangeNotify hashTagModelChangeNotify;
 
+        private PlayerViewModel playerViewModel;
         private readonly PianoKeyBoardViewModel pianoKeyBoardViewModel;
 
         private bool isPianoKeyboardLayout;
@@ -61,7 +62,15 @@ namespace MMK.HotMark.ViewModels
             get { return pianoKeyBoardViewModel; }
         }
 
-        public PlayerViewModel PlayerViewModel { get; private set; }
+        public PlayerViewModel PlayerViewModel
+        {
+            get { return playerViewModel; }
+            private set
+            {
+                playerViewModel = value;
+                NotifyPropertyChanged();
+            }
+        }
 
 
         public bool IsPianoKeyboardLayout
@@ -131,7 +140,10 @@ namespace MMK.HotMark.ViewModels
                 PlayerViewModel.FileOpened += PlayerViewModelOnFileOpened;
             }
             else
+            {
                 FileItemView = string.Format("< {0} files >", files.Count);
+                PlayerViewModel = null;
+            }
         }
 
         private void PlayerViewModelOnFileOpened(object sender, EventArgs eventArgs)
