@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
@@ -55,7 +54,7 @@ namespace MMK.HotMark.ViewModels
         private void InsetEmptyItem(int index, HashTagViewModel item)
         {
             var emptyHashTag = GetEmptyHashTag();
-                
+
             if (emptyHashTag == null)
             {
                 emptyHashTag = item;
@@ -100,12 +99,12 @@ namespace MMK.HotMark.ViewModels
                 else
                 {
                     Remove(emptyHashTag);
-                    base.OnItemPropertyChanged(item);                    
+                    base.OnItemPropertyChanged(item);
                     Selected = item;
-                }    
+                }
             }
             else
-                base.OnItemPropertyChanged(item);                                    
+                base.OnItemPropertyChanged(item);
         }
 
         #endregion
