@@ -31,14 +31,14 @@ namespace MMK.Notify.Properties
 
         private static HashTagFolderCollection DefaultFolderCollection()
         {
-            var popFolderPath = PathExtension.Normalize(@"D:\music\pop\");
-            var danceFolderPath = PathExtension.Normalize(@"D:\music\dance\");
-            var houseFolderPath = PathExtension.Normalize(@"D:\music\house\");
-            var electronicFolderPath = PathExtension.Normalize(@"D:\music\electronic\");
-            var urbanFolderPath = PathExtension.Normalize(@"D:\music\urban\");
-            var deepFolderPath = PathExtension.Normalize(@"D:\music\deep\");
-            var specFolderPath = PathExtension.Normalize(@"D:\music\spec\");
-            var mixesFolderPath = PathExtension.Normalize(@"D:\music\mixes\");
+            var popFolderPath = PathExtension.Normalize(@"H:\music\pop\");
+            var danceFolderPath = PathExtension.Normalize(@"H:\music\dance\");
+            var houseFolderPath = PathExtension.Normalize(@"H:\music\house\");
+            var electronicFolderPath = PathExtension.Normalize(@"H:\music\electronic\");
+            var urbanFolderPath = PathExtension.Normalize(@"H:\music\urban\");
+            var deepFolderPath = PathExtension.Normalize(@"H:\music\deep\");
+            var specFolderPath = PathExtension.Normalize(@"H:\music\spec\");
+            var mixesFolderPath = PathExtension.Normalize(@"H:\music\mixes\");
 
             return new HashTagFolderCollection
             {
