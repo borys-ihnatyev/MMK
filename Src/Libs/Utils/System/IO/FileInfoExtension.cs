@@ -32,7 +32,7 @@ namespace System.IO
             if (period > wait)
                 period = wait;
 
-            while (fileInfo.IsFileLocked() || wait.TotalMilliseconds <= 0)
+            while (fileInfo.IsFileLocked() && wait.TotalMilliseconds >= 0)
             {
                 Thread.Sleep(period);
                 wait -= period;
