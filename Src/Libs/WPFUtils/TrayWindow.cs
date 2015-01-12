@@ -11,10 +11,11 @@ namespace MMK.Wpf
         protected TrayWindow()
         {
             ShowInTaskbar = false;
-            Loaded += TrayWindow_Loaded;
+            ShowActivated = false;
+            Loaded += OnLoaded;
         }
 
-        private void TrayWindow_Loaded(object sender, RoutedEventArgs e)
+        private void OnLoaded(object sender, RoutedEventArgs e)
         {
             var wndHelper = new WindowInteropHelper(this);
 
