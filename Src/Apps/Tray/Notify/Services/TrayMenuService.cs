@@ -89,20 +89,6 @@ namespace MMK.Notify.Services
         private void TaskProgressStateChanged(object sender, ChangedEventArgs<bool> e)
         {
             trayIcon.Icon = e.NewValue ? Resources.logo_processing : Resources.logo_normal;
-
-            if (e.NewValue)
-            {
-                trayIcon.MouseMove += OnTrayIconMouseMove;
-                return;
-            }
-
-            trayIcon.MouseMove -= OnTrayIconMouseMove;
-            Application.Current.Dispatcher.Invoke(taskProgressService.Stop);
-        }
-
-        private void OnTrayIconMouseMove(object sender, MouseEventArgs e)
-        {
-            taskProgressService.Start();
         }
 
         #endregion
