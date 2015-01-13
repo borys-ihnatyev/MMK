@@ -22,6 +22,7 @@ namespace MMK.Notify.Services
         {
             taskProgressViewModel.PropertyChanged += OnTaskProgressViewModelPropertyChanged;
             taskProgressViewModel.LoadData();
+
             taskProgressView = new TaskProgressView {DataContext = taskProgressViewModel};
             taskProgressView.Closed += (s, e) => taskProgressViewModel.UnloadData();
             taskProgressView.Show();

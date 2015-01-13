@@ -135,7 +135,7 @@ namespace MMK.HotMark.ViewModels
             NotifyPropertyChanged("Position");
         }
 
-        private void OnFileOpenFailed(object sender, ExceptionEventArgs e)
+        private static void OnFileOpenFailed(object sender, ExceptionEventArgs e)
         {
             throw e.ErrorException;
         }
@@ -144,6 +144,7 @@ namespace MMK.HotMark.ViewModels
         {
             Contract.Assert(player.NaturalDuration.HasTimeSpan);
             Duration = player.NaturalDuration.TimeSpan;
+            PlaybackController.Pause();
         }
 
         private void OnPlaybackEnd(object sender, EventArgs eventArgs)
@@ -161,6 +162,7 @@ namespace MMK.HotMark.ViewModels
         protected override void OnUnloadData()
         {
             PlaybackController.Stop();
+
             IsPlaying = false;
         }
 

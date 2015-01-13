@@ -45,7 +45,6 @@ namespace MMK.Notify.ViewModels
             }
         }
 
-
         public bool IsProgress
         {
             get { return isProgress; }
@@ -98,6 +97,7 @@ namespace MMK.Notify.ViewModels
             }
         }
 
+
         protected override void OnLoadData()
         {
             var observer = IoC.Get<TaskObserver>();
@@ -115,6 +115,7 @@ namespace MMK.Notify.ViewModels
             observer.TaskObserved -= OnTaskObserved;
             observer.TaskFailed -= OnTaskFailed;
         }
+
 
         public void OnTaskQueued(object sender, TaskObserver.TaskQueuedEventArgs e)
         {
@@ -192,7 +193,7 @@ namespace MMK.Notify.ViewModels
                 Type = NotifyType.Warning,
                 CommonDescription = "Some tasks failed.",
                 DetailedDescription =
-                    String.Format("Done {1}/{0};\nFailed {2}", QueuedCount, ObservedCount - failedCount, failedCount)
+                    String.Format("Done {0}/{1};\nFailed {2}",ObservedCount - failedCount,  QueuedCount, failedCount)
             };
         }
     }
