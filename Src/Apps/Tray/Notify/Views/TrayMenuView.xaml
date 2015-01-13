@@ -19,6 +19,21 @@
         <Style TargetType="{x:Type trayMenu:ToggleMenuItemControl}">
             <Setter Property="Foreground" Value="White"/>
         </Style>
+
+        <Storyboard x:Key="HideStoryboard">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" Duration="0:0:0.2" To="0"/>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
+                <DiscreteObjectKeyFrame KeyTime="0:0:2" Value="{x:Static Visibility.Hidden}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+        
+        <Storyboard x:Key="ShowStoryboard">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" Duration="0:0:0.2" To="1"/>
+        </Storyboard>
     </Window.Resources>
     
     <Window.Style>
@@ -30,31 +45,6 @@
                 <Setter Property="Foreground" Value="White"/>
                 <Setter Property="Background" Value="{StaticResource WindowBlackGlanceBrush}"/>
             </Style.Setters>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsVisible}" Value="false">
-                    <DataTrigger.EnterActions>
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation
-                                    Storyboard.TargetProperty="Opacity"
-                                    To="0"
-                                    Duration="0:0:0.21" />
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </DataTrigger.EnterActions>
-
-                    <DataTrigger.ExitActions>
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation
-                                    Storyboard.TargetProperty="Opacity"
-                                    To="1"
-                                    Duration="0:0:0.21" />
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </DataTrigger.ExitActions>
-                </DataTrigger>
-            </Style.Triggers>
         </Style>
     </Window.Style>
 

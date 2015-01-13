@@ -15,7 +15,6 @@ namespace MMK.Notify.ViewModels
 {
     public class TrayMenuViewModel : ViewModel
     {
-        private bool isVisible = true;
         private Window hashTagFoldersWindow;
 
         private bool isEnableHotKeys;
@@ -23,30 +22,13 @@ namespace MMK.Notify.ViewModels
 
         public TrayMenuViewModel()
         {
-            OpenHashTagFoldersWindowCommand = new Command(OpenHashTagFoldersWindowCommandAction);
-
             StartListenShortcutsCommand = new Command(IoC.Get<GlobalShortcutService>().Start);
             StopListenShortcutsCommand = new Command(IoC.Get<GlobalShortcutService>().Stop);
 
             StartDownloadsWatchingCommand = new Command(IoC.Get<IDownloadsWatcher>().Start);
             StopDownloadsWatchingCommand = new Command(IoC.Get<IDownloadsWatcher>().Stop);
 
-            ExitCommand = new Command(ExitCommandAction);
-            HideCommand = new Command(HideCommandAction);
-
             PropertyChanged += OnPropertyChanged;
-        }
-
-        public bool IsVisible
-        {
-            get { return isVisible; }
-            set
-            {
-                if (value == isVisible) return;
-
-                isVisible = value;
-                NotifyPropertyChanged();
-            }
         }
 
         [SettingsProperty]
@@ -123,7 +105,7 @@ namespace MMK.Notify.ViewModels
 
         public ICommand OpenHashTagFoldersWindowCommand { get; private set; }
 
-        private void OpenHashTagFoldersWindowCommandAction()
+        public void OpenHashTagFoldersWindow()
         {
             if (hashTagFoldersWindow == null)
             {
@@ -138,18 +120,9 @@ namespace MMK.Notify.ViewModels
 
         public ICommand ExitCommand { get; private set; }
 
-        private void ExitCommandAction()
+        public void Exit()
         {
-            IsVisible = false;
             Application.Current.Shutdown();
-        }
-
-
-        public ICommand HideCommand { get; private set; }
-
-        private void HideCommandAction()
-        {
-            IsVisible = false;
         }
     }
 }
