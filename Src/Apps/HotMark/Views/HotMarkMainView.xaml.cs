@@ -21,7 +21,7 @@ namespace MMK.HotMark.Views
             SizeChanged += OnSizeChanged;
             MouseDown += OnMouseDown;
 
-            Closing += (s, e) => viewModel.UnloadData();
+            Closed += (s, e) => viewModel.UnloadData();
 
             isCloseStoryboardStarted = false;
             isCloseStoryboardCompletted = false;

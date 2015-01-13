@@ -16,15 +16,14 @@ namespace MMK.HotMark.ViewModels
 {
     public class HotMarkViewModel : ViewModel
     {
-        private string fileItemView;
         private readonly FileHashTagCollection files;
-        private HashTagModelChangeNotify hashTagModelChangeNotify;
-
-        private PlayerViewModel playerViewModel;
         private readonly PianoKeyBoardViewModel pianoKeyBoardViewModel;
-
-        private bool isPianoKeyboardLayout;
         private bool canDirectEditHashTags;
+        private string fileItemView;
+        private HashTagModelChangeNotify hashTagModelChangeNotify;
+        private bool isHashTagModelChangeNotify;
+        private bool isPianoKeyboardLayout;
+        private PlayerViewModel playerViewModel;
 
         #region Ctors
 
@@ -36,12 +35,14 @@ namespace MMK.HotMark.ViewModels
             pianoKeyBoardViewModel = new PianoKeyBoardViewModel();
         }
 
-        public HotMarkViewModel(IEnumerable<string> paths) : this()
+        public HotMarkViewModel(IEnumerable<string> paths)
+            : this()
         {
             paths.ForEach(files.Add);
         }
 
         #endregion
+
 
         public string FileItemView
         {
@@ -71,7 +72,6 @@ namespace MMK.HotMark.ViewModels
                 NotifyPropertyChanged();
             }
         }
-
 
         public bool IsPianoKeyboardLayout
         {
@@ -146,11 +146,24 @@ namespace MMK.HotMark.ViewModels
             }
         }
 
+        // ReSharper disable once MemberCanBeMadeStatic.Local
+        private void Shutdown()
+        {
+#if DEBUG
+            throw new Exception("Supposed any file path as cl argument");
+#else
+            CloseView();
+#endif
+        }
+
         private void PlayerViewModelOnFileOpened(object sender, EventArgs eventArgs)
         {
-            PlayerViewModel.Position = PlayerViewModel.PositionMax*0.4;
             PlayerViewModel.Volume = 0.3;
+
+            if (HashTags.Any(h => h.HashTag is KeyHashTag)) return;
+            
             PlayerViewModel.Play();
+            PlayerViewModel.Position = PlayerViewModel.PositionMax*0.4;
         }
 
         private void LoadHashTagModels()
@@ -165,7 +178,6 @@ namespace MMK.HotMark.ViewModels
                 HashTags.Add(new HashTagViewModel(hashTag.TagValue));
         }
 
-
         private void PianoKeyBoardViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName != "RecognizedKey")
@@ -175,6 +187,29 @@ namespace MMK.HotMark.ViewModels
                 HashTags.Add();
 
             HashTags.Selected.HashTagValue = pianoKeyBoardViewModel.RecognizedKey.ToString();
+        }
+
+        protected override void OnUnloadData()
+        {
+            if (!isHashTagModelChangeNotify)
+                return;
+
+            NotifyChange();
+        }
+
+        private void NotifyChange()
+        {
+            if (playerViewModel != null)
+                playerViewModel.UnloadData();
+
+            hashTagModelChangeNotify.NotifyChange(GetNotEmptyHashTags());
+        }
+
+        private IEnumerable<HashTag> GetNotEmptyHashTags()
+        {
+            return HashTags
+                .Select(item => item.HashTag)
+                .Where(hashTag => !hashTag.IsEmpty());
         }
 
         #endregion
@@ -215,20 +250,9 @@ namespace MMK.HotMark.ViewModels
 
         public void Close()
         {
-            if (PlayerViewModel != null)
-                PlayerViewModel.Pause();
-
-            hashTagModelChangeNotify.NotifyChange(GetNotEmptyHashTags());
+            isHashTagModelChangeNotify = true;
             CloseView();
         }
-
-        private IEnumerable<HashTag> GetNotEmptyHashTags()
-        {
-            return HashTags
-                .Select(item => item.HashTag)
-                .Where(hashTag => !hashTag.IsEmpty());
-        }
-
 
         public ICommand CloseViewCommand { get; private set; }
 
@@ -243,14 +267,5 @@ namespace MMK.HotMark.ViewModels
         }
 
         #endregion
-
-        private void Shutdown()
-        {
-#if DEBUG
-            throw new Exception("Supposed any file path as cl argument");
-#else
-            CloseView();
-#endif
-        }
     }
 }
