@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Windows;
 using System.Windows.Input;
+using MMK.ApplicationServiceModel;
 using MMK.SwiftSearch.Properties;
 using MMK.SwiftSearch.SearchHandlers;
-using MMK.SwiftSearch.Views;
 using MMK.Utils.Extensions;
 using MMK.Wpf.Providers;
 using MMK.Wpf.Providers.Key;
@@ -17,11 +14,6 @@ namespace MMK.SwiftSearch.ViewModels
 {
     public class SwiftSearchViewModel : ViewModel
     {
-        private string searchHandlerName;
-        private string search;
-        private string searchHandlerIconText;
-
-        private readonly MusicalKeyGlobalShortcutProvider shortcutProvider;
         private readonly Dictionary<string, string> searchHandlerNameIcon = new Dictionary<string, string>
         {
             {"", "\uf002"},
@@ -29,6 +21,12 @@ namespace MMK.SwiftSearch.ViewModels
             {"vk", "\uf189"},
             {"zn", "\uf019"}
         };
+
+        private readonly MusicalKeyGlobalShortcutProvider shortcutProvider;
+
+        private string search;
+        private string searchHandlerIconText;
+        private string searchHandlerName;
 
         public SwiftSearchViewModel() : this(String.Empty)
         {
@@ -41,7 +39,6 @@ namespace MMK.SwiftSearch.ViewModels
             shortcutProvider = new MusicalKeyGlobalShortcutProvider();
             shortcutProvider.HotKeyPressed += AddSearchParalel;
         }
-
 
         public string SearchHandlerIconText
         {
@@ -65,16 +62,9 @@ namespace MMK.SwiftSearch.ViewModels
                 search = value;
 
                 NotifyPropertyChanged();
-                if(this.IsCalledInside(2))
+                if (this.IsCalledInside(2))
                     OnSearchSelfChanged();
             }
-        }
-
-        private void OnSearchSelfChanged()
-        {
-            var handler = SearchSelfChanged;
-            if (handler != null)
-                handler(this, EventArgs.Empty);
         }
 
         public string SearchToggle
@@ -95,22 +85,22 @@ namespace MMK.SwiftSearch.ViewModels
             get { return String.Format("{0} {1}", SearchToggle, Search).Trim(); }
         }
 
+        private void AddSearchParalel(Key key)
+        {
+            var keyStr = string.Format("<#{0}|#{1}>", key, CircleOfFifths.GetParalel(key));
+            AddSearch(keyStr);
+        }
 
         protected override void OnLoadData()
         {
-            (shortcutProvider as IGlobalShortcutProvider).SetWindow(GetView());
+            IoC.Get<GlobalShortcutProviderCollection>().Add(shortcutProvider);
             shortcutProvider.StartListen();
         }
 
         protected override void OnUnloadData()
         {
             shortcutProvider.StopListen();
-        }
-
-        private void AddSearchParalel(Key key)
-        {
-            var keyStr = string.Format("<#{0}|#{1}>", key, CircleOfFifths.GetParalel(key));
-            AddSearch(keyStr);
+            IoC.Get<GlobalShortcutProviderCollection>().Remove(shortcutProvider);
         }
 
 
@@ -118,26 +108,16 @@ namespace MMK.SwiftSearch.ViewModels
 
         public void ToggleSearch()
         {
-            if (String.IsNullOrWhiteSpace(SearchToggle))
-            {
-                SearchToggle = Search;
-                Search = String.Empty;
-            }
-            else
-            {
-                Search += " " + SearchToggle;
-                SearchToggle = String.Empty;
-            }
+            SearchToggle = Search;
+            Search = String.Empty;
         }
-
 
         public ICommand AddSearchCommand { get; private set; }
 
         public void AddSearch(string word)
         {
-            Search = String.Format("{0} {1}", Search, word);
+            Search = String.Format("{0} {1} ", Search, word.Trim()).TrimStart();
         }
-
 
         public ICommand SetSearchHandlerCommand { get; private set; }
 
@@ -151,36 +131,21 @@ namespace MMK.SwiftSearch.ViewModels
             searchHandlerName = name;
         }
 
-
         public ICommand ApplySearchCommand { get; private set; }
 
         public void ApplySearch()
         {
             var searchHandler = SearchHandlerFactory.Create(searchHandlerName, FullSearch);
             searchHandler.Search();
-            CloseView();
-        }
-
-        public ICommand CancelCommand { get; private set; }
-
-        public void Cancel()
-        {
-            CloseView();
         }
 
         public event EventHandler SearchSelfChanged;
 
-        private static void CloseView()
+        private void OnSearchSelfChanged()
         {
-            var window = GetView();
-            window.Close();
-        }
-
-        private static Window GetView()
-        {
-            Contract.Ensures(Contract.Result<Window>() != null);
-            Contract.EndContractBlock();
-            return Application.Current.Windows.OfType<SwiftSearchView>().FirstOrDefault();
+            var handler = SearchSelfChanged;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
         }
     }
 }
