@@ -90,6 +90,10 @@ namespace MMK.Wpf.Providers
 
         void IGlobalShortcutProvider.SetWindow(Window ownerWindow)
         {
+            if (ownerWindow == null)
+                throw new ArgumentNullException("ownerWindow");
+            Contract.EndContractBlock();
+
             window = ownerWindow;
 
             var wasListening = IsListening;

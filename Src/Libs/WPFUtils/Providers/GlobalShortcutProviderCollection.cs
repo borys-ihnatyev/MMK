@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Windows;
 
@@ -8,7 +9,7 @@ namespace MMK.Wpf.Providers
 {
     public class GlobalShortcutProviderCollection : IGlobalShortcutProvider, ICollection<IGlobalShortcutProvider>
     {
-        private Window ownerWindow;
+        private Window window;
 
         private readonly HashSet<IGlobalShortcutProvider> shortcutProviders;
 
@@ -16,10 +17,10 @@ namespace MMK.Wpf.Providers
         {
         }
 
-        public GlobalShortcutProviderCollection(Window ownerWindow)
+        public GlobalShortcutProviderCollection(Window window)
         {
             shortcutProviders = new HashSet<IGlobalShortcutProvider>();
-            this.ownerWindow = ownerWindow;
+            this.window = window;
         }
 
 
@@ -44,13 +45,13 @@ namespace MMK.Wpf.Providers
 
         public void Add(IGlobalShortcutProvider shortcutProvider)
         {
-            shortcutProvider.SetWindow(ownerWindow);
+            shortcutProvider.SetWindow(window);
             shortcutProviders.Add(shortcutProvider);
         }
 
         public IGlobalShortcutProvider Add(KeyModifyers modifyer, int keyCode, Action pressed)
         {
-            var shortcutProvider = new GlobalShortcutProvider(ownerWindow, modifyer, keyCode);
+            var shortcutProvider = new GlobalShortcutProvider(window, modifyer, keyCode);
             shortcutProvider.Pressed += pressed;
             Add(shortcutProvider);
             return shortcutProvider;
@@ -83,8 +84,14 @@ namespace MMK.Wpf.Providers
             return GetEnumerator();
         }
 
-        void IGlobalShortcutProvider.SetWindow(Window newWindow)
+        void IGlobalShortcutProvider.SetWindow(Window ownerWindow)
         {
+            if (ownerWindow == null)
+                throw new ArgumentNullException("ownerWindow");
+            Contract.EndContractBlock();
+
+            window = ownerWindow;
+
             var startListen = false;
             
             if (IsAnyListening)
@@ -93,12 +100,10 @@ namespace MMK.Wpf.Providers
                 startListen = true;
             }
 
-            shortcutProviders.ForEach(p => p.SetWindow(newWindow));
+            shortcutProviders.ForEach(p => p.SetWindow(window));
 
             if(startListen)
                 StartListen();
-
-            ownerWindow = newWindow;
         }
 
         bool IGlobalShortcutProvider.IsListening 
