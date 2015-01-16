@@ -10,6 +10,7 @@ using MMK.Notify.Observer.Tasking.Observing;
 using MMK.Notify.Properties;
 using MMK.Notify.Services;
 using MMK.Processing.AutoFolder;
+using MMK.Wpf.Providers;
 using Ninject;
 
 namespace MMK.Notify
@@ -97,13 +98,19 @@ namespace MMK.Notify
             ServiceLocator.Bind<NotificationService>().ToSelf().InSingletonScope();
             ServiceLocator.Bind<TaskProgressService>().ToSelf().InSingletonScope();
 
+            ServiceLocator.Bind<GlobalShortcutProviderCollection>().ToSelf().InSingletonScope();
             ServiceLocator.Bind<GlobalShortcutService>().ToSelf().InSingletonScope();
             ServiceLocator.Bind<TrayMenuService>().ToSelf().InSingletonScope();
 
             ServiceLocator.Get<TrayMenuService>().Initialize();
             ServiceLocator.Get<TaskProgressService>().Initialize();
 
-            Current.MainWindow = ServiceLocator.Get<TrayMenuService>().TrayMenuView;
+
+            var trayWindow = ServiceLocator.Get<TrayMenuService>().TrayMenuView;
+            Current.MainWindow = trayWindow;
+            
+            var shortcutProviders = (IGlobalShortcutProvider)ServiceLocator.Get<GlobalShortcutProviderCollection>();
+            shortcutProviders.SetWindow(trayWindow);
         }
 
         private static void StartServices()
