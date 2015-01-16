@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics.Contracts;
-using System.IO;
+﻿using System.Diagnostics.Contracts;
 using System.Threading;
 using System.Windows;
 using MMK.ApplicationServiceModel.Locator;
@@ -104,6 +102,8 @@ namespace MMK.Notify
 
             ServiceLocator.Get<TrayMenuService>().Initialize();
             ServiceLocator.Get<TaskProgressService>().Initialize();
+
+            Current.MainWindow = ServiceLocator.Get<TrayMenuService>().TrayMenuView;
         }
 
         private static void StartServices()
