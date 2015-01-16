@@ -14,34 +14,34 @@ namespace MMK.Wpf.Providers.Key
         {
             this.hwnd = hwnd;
             shortcuts = new LinkedList<MusicalKeyGlobalShortcut>();
-            CreateGlobalHotKeys();
+            CreateGlobalShortcuts();
         }
 
-        private void CreateGlobalHotKeys()
+        private void CreateGlobalShortcuts()
         {
             CircleOfFifths.AllKeys
                 .Select(key => new MusicalKeyGlobalShortcut(key, hwnd))
-                .ForEach(globakHotkey => shortcuts.AddLast(globakHotkey));
+                .ForEach(shortcut => shortcuts.AddLast(shortcut));
         }
 
-        public void RegisterGlobalHotkeys()
+        public void Register()
         {
-            foreach (var globalHotkey in shortcuts)
+            foreach (var shortcut in shortcuts)
             {
-                if (globalHotkey.Register()) continue;
+                if (shortcut.Register()) continue;
 
-                var errorMsg = string.Format("Not registered global shortcut : id {0}. Error Code : {1}", globalHotkey.GetHashCode(), GetLastError());
+                var errorMsg = string.Format("Not registered global shortcut : id {0}. Error Code : {1}", shortcut.GetHashCode(), GetLastError());
                 OnError(new UnhandledExceptionEventArgs(new Exception(errorMsg), false));
             }
         }
 
-        public void UnregisterGlobalHotkeys()
+        public void Unregister()
         {
-            foreach (var globalHotkey in shortcuts)
+            foreach (var shortcut in shortcuts)
             {
-                if (globalHotkey.Unregister()) continue;
+                if (shortcut.Unregister()) continue;
 
-                var errorMsg = string.Format("Not unregistered global shortcut : id {0}. Error Code : {1}", globalHotkey.GetHashCode(), GetLastError());
+                var errorMsg = string.Format("Not unregistered global shortcut : id {0}. Error Code : {1}", shortcut.GetHashCode(), GetLastError());
                 OnError(new UnhandledExceptionEventArgs(new Exception(errorMsg), false));
             }
         }

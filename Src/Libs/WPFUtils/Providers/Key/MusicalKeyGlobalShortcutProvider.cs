@@ -8,7 +8,7 @@ namespace MMK.Wpf.Providers.Key
     public class MusicalKeyGlobalShortcutProvider : IGlobalShortcutProvider
     {
         private HwndSource wndSource;
-        private GlobalKeyShortcutRegister glKeyShortcutReg;
+        private MuscalKeyGlobalShortcutRegister shortcutRegister;
 
         public MusicalKeyGlobalShortcutProvider(Window window)
         {
@@ -32,8 +32,8 @@ namespace MMK.Wpf.Providers.Key
             if (!IsWndSourceSetted)
                 throw new InvalidOperationException("wndSource not setted");
 
-            glKeyShortcutReg = new GlobalKeyShortcutRegister(wndSource.Handle);
-            glKeyShortcutReg.RegisterGlobalHotkeys();
+            shortcutRegister = new MuscalKeyGlobalShortcutRegister(wndSource.Handle);
+            shortcutRegister.Register();
             wndSource.AddHook(WndProc);
             IsListening = true;
         }
@@ -43,7 +43,7 @@ namespace MMK.Wpf.Providers.Key
             if (!IsListening) return;
 
             wndSource.RemoveHook(WndProc);
-            glKeyShortcutReg.UnregisterGlobalHotkeys();
+            shortcutRegister.Unregister();
             IsListening = false;
         }
 
@@ -51,7 +51,7 @@ namespace MMK.Wpf.Providers.Key
         {
             if (msg == GlobalShortcut.WM_HOTKEY)
             {
-                var key = GlobalKeyShortcut.DecodeKey(wParam.ToInt32());
+                var key = MusicalKeyGlobalShortcut.DecodeKey(wParam.ToInt32());
                 OnHotKeyPressed(key);
                 handled = true;
             }
@@ -74,16 +74,6 @@ namespace MMK.Wpf.Providers.Key
             Debug.Assert(wndSource != null, "wndSource != null");
             if (IsListening)
                 throw new InvalidOperationException("Cant change wndSource while is listening shortcuts");
-        }
-
-        void IGlobalShortcutProvider.StartListen()
-        {
-            StartListen();
-        }
-
-        void IGlobalShortcutProvider.StopListen()
-        {
-            StopListen();
         }
     }
 }

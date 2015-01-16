@@ -33,13 +33,13 @@ namespace MMK.Notify.Model.Launchers
         {
             if (isSetStartShortcut) return;
 
-            isSetStartShortcut = Add(modifyers, (int) key, Start);
+            isSetStartShortcut = Add(modifyers, (int) key, Start) != null;
         }
 
         public void SetStartFromClipboardShortcut(KeyModifyers modifyers, Keys key)
         {
             if (isSetStartFromClipboardShortcut) return;
-            isSetStartFromClipboardShortcut = Add(modifyers, (int) key, StartFromClipboard);
+            isSetStartFromClipboardShortcut = Add(modifyers, (int) key, StartFromClipboard) != null;
         }
 
         private void Start()

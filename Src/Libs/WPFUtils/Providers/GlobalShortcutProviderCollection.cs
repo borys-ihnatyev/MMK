@@ -10,7 +10,7 @@ namespace MMK.Wpf.Providers
     {
         private Window ownerWindow;
 
-        private readonly HashSet<IGlobalShortcutProvider> hotkeyProviders;
+        private readonly HashSet<IGlobalShortcutProvider> shortcutProviders;
 
         public GlobalShortcutProviderCollection() : this(null)
         {
@@ -18,75 +18,82 @@ namespace MMK.Wpf.Providers
 
         public GlobalShortcutProviderCollection(Window ownerWindow)
         {
-            hotkeyProviders = new HashSet<IGlobalShortcutProvider>();
+            shortcutProviders = new HashSet<IGlobalShortcutProvider>();
             this.ownerWindow = ownerWindow;
         }
 
+
+        public int Count { get { return shortcutProviders.Count; } }
+
+        public bool IsAnyListening
+        {
+            get { return shortcutProviders.Any(p => p.IsListening); }
+        }
+
+
         public void StartListen()
         {
-            if(IsListening) return;
-            hotkeyProviders.ForEach(p => p.StartListen());            
+            shortcutProviders.ForEach(p => p.StartListen());
         }
 
         public void StopListen()
         {
-            if(!IsListening) return;
-            hotkeyProviders.ForEach(p => p.StopListen());
+            shortcutProviders.ForEach(p => p.StopListen());
         }
 
-        public bool Add(IGlobalShortcutProvider provider)
+
+        public void Add(IGlobalShortcutProvider shortcutProvider)
         {
-            provider.SetWindow(ownerWindow);
-            return hotkeyProviders.Add(provider);
+            shortcutProvider.SetWindow(ownerWindow);
+            shortcutProviders.Add(shortcutProvider);
+        }
+
+        public IGlobalShortcutProvider Add(KeyModifyers modifyer, int keyCode, Action pressed)
+        {
+            var shortcutProvider = new GlobalShortcutProvider(ownerWindow, modifyer, keyCode);
+            shortcutProvider.Pressed += pressed;
+            Add(shortcutProvider);
+            return shortcutProvider;
+        }
+
+        public bool Contains(IGlobalShortcutProvider shortcutProvider)
+        {
+            return shortcutProviders.Contains(shortcutProvider);
+        }
+
+        public bool Remove(IGlobalShortcutProvider shortcutProvider)
+        {
+            return shortcutProviders.Remove(shortcutProvider);
         }
 
         public void Clear()
         {
-            throw new NotImplementedException();
-        }
-
-        public bool Contains(IGlobalShortcutProvider item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void CopyTo(IGlobalShortcutProvider[] array, int arrayIndex)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Remove(IGlobalShortcutProvider item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int Count { get; private set; }
-        public bool IsReadOnly { get; private set; }
-
-        public bool Add(KeyModifyers modifyer, int keyCode, Action pressed)
-        {
-            var provider = new GlobalShortcutProvider(ownerWindow, modifyer, keyCode);
-            provider.Pressed += pressed;
-            return Add(provider);
+            shortcutProviders.Clear();
         }
 
 
-        public bool IsListening
+        public IEnumerator<IGlobalShortcutProvider> GetEnumerator()
         {
-            get { return hotkeyProviders.Any(p => p.IsListening); }
+            return shortcutProviders.GetEnumerator();
+        }
+
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         void IGlobalShortcutProvider.SetWindow(Window newWindow)
         {
             var startListen = false;
             
-            if (IsListening)
+            if (IsAnyListening)
             {
                 StopListen();
                 startListen = true;
             }
 
-            hotkeyProviders.ForEach(p => p.SetWindow(newWindow));
+            shortcutProviders.ForEach(p => p.SetWindow(newWindow));
 
             if(startListen)
                 StartListen();
@@ -94,29 +101,19 @@ namespace MMK.Wpf.Providers
             ownerWindow = newWindow;
         }
 
-        void IGlobalShortcutProvider.StartListen()
+        bool IGlobalShortcutProvider.IsListening 
         {
-            StartListen();
+            get { return IsAnyListening; }
         }
 
-        void IGlobalShortcutProvider.StopListen()
+        bool ICollection<IGlobalShortcutProvider>.IsReadOnly
         {
-            StopListen();
+            get { return false; }
         }
 
-        public IEnumerator<IGlobalShortcutProvider> GetEnumerator()
+        void ICollection<IGlobalShortcutProvider>.CopyTo(IGlobalShortcutProvider[] array, int arrayIndex)
         {
-            return hotkeyProviders.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        void ICollection<IGlobalShortcutProvider>.Add(IGlobalShortcutProvider item)
-        {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
     }
 }
