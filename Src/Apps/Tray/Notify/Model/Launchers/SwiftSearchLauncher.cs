@@ -44,18 +44,23 @@ namespace MMK.Notify.Model.Launchers
 
         private void Start()
         {
+            Start(String.Empty);
+        }
+
+        private void Start(string search)
+        {
             IoC.Get<GlobalShortcutService>().Stop();
-            viewModel.Search = String.Empty;
+            viewModel.Search = search;
             launcher.Launch();
             launcher.Window.Closed += (s, e) => IoC.Get<GlobalShortcutService>().Start();
         }
 
         private void StartFromClipboard()
         {
-            viewModel.Search = String.Empty;
+            var search = String.Empty;
             if (Clipboard.ContainsText())
-                viewModel.Search = Clipboard.GetText();
-            Start();
+                search = Clipboard.GetText();
+            Start(search);
         }
     }
 }
