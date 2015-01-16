@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using MMK.ApplicationServiceModel;
 using MMK.Notify.Properties;
 using MMK.Notify.ViewModels;
 using MMK.Notify.Views;
-using Application = System.Windows.Application;
 
 namespace MMK.Notify.Services
 {
@@ -47,7 +45,7 @@ namespace MMK.Notify.Services
 
         private void InitializeTrayWindow()
         {
-            trayMenuView = new TrayMenuView { DataContext = trayMenuViewModel };
+            trayMenuView = new TrayMenuView {DataContext = trayMenuViewModel};
 
             trayMenuView.Loaded += (s, a) => shortcutService.Initialize();
             trayMenuView.Loaded += (s, a) => trayMenuViewModel.LoadData();
@@ -95,6 +93,5 @@ namespace MMK.Notify.Services
             trayMenuView.Close();
             trayIcon.Dispose();
         }
-
     }
 }

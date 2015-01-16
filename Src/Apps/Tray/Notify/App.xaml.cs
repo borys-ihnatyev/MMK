@@ -108,8 +108,8 @@ namespace MMK.Notify
 
             var trayWindow = ServiceLocator.Get<TrayMenuService>().TrayMenuView;
             Current.MainWindow = trayWindow;
-            
-            var shortcutProviders = (IGlobalShortcutProvider)ServiceLocator.Get<GlobalShortcutProviderCollection>();
+
+            var shortcutProviders = (IGlobalShortcutProvider) ServiceLocator.Get<GlobalShortcutProviderCollection>();
             shortcutProviders.SetWindow(trayWindow);
         }
 

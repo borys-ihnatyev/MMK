@@ -21,9 +21,10 @@ namespace MMK.Notify.Model.Launchers
 
         public SwiftSearchLauncher() : this(null)
         {
+
         }
 
-        public SwiftSearchLauncher(Window ownerWindow) : base(ownerWindow)
+        public SwiftSearchLauncher(Window window) : base(window)
         {
             viewModel = new SwiftSearchViewModel();
             launcher = new WindowLauncher<SwiftSearchView>(() => new SwiftSearchView(viewModel));

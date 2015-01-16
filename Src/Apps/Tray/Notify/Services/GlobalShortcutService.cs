@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using MMK.ApplicationServiceModel;
 using MMK.Notify.Model.Launchers;
-using MMK.Notify.Observer.Remoting;
+using MMK.Notify.Observer;
 using MMK.Notify.Observer.Tasking.Common;
 using MMK.Processing.AutoFolder;
 using MMK.Wpf.Providers;
@@ -11,11 +11,14 @@ namespace MMK.Notify.Services
 {
     public class GlobalShortcutService : Service
     {
-        private readonly GlobalShortcutProviderCollection shortcutProviders;
-        private readonly NotifyObserver observer;
+        private readonly INotifyObserver observer;
         private readonly HashTagFolderCollection folderCollection;
+        private readonly GlobalShortcutProviderCollection shortcutProviders;
 
-        public GlobalShortcutService(NotifyObserver observer, HashTagFolderCollection folderCollection, GlobalShortcutProviderCollection shortcutProviders)
+        public GlobalShortcutService(
+            INotifyObserver observer,
+            HashTagFolderCollection folderCollection,
+            GlobalShortcutProviderCollection shortcutProviders)
         {
             this.shortcutProviders = shortcutProviders;
             this.observer = observer;
@@ -24,16 +27,18 @@ namespace MMK.Notify.Services
 
         protected override void OnInitialize()
         {
+            var trayWindow = IoC.Get<TrayMenuService>().TrayMenuView;
+            (shortcutProviders as IGlobalShortcutProvider).SetWindow(trayWindow);
+
             shortcutProviders.Add(new HotMarkLauncher(KeyModifyers.Ctrl, (int) Keys.T));
             shortcutProviders.Add(KeyModifyers.Ctrl | KeyModifyers.Shift, (int) Keys.T, AddNormalizeHotKeyTasks);
             shortcutProviders.Add(KeyModifyers.Ctrl | KeyModifyers.Shift, (int) Keys.M, AddMoveFileToCollectionTasks);
 
             var swiftSearchLauncher = new SwiftSearchLauncher();
+            shortcutProviders.Add(swiftSearchLauncher);
 
             swiftSearchLauncher.SetStartShortcut(KeyModifyers.Ctrl, Keys.Space);
             swiftSearchLauncher.SetStartFromClipboardShortcut(KeyModifyers.Ctrl | KeyModifyers.Shift, Keys.V);
-
-            shortcutProviders.Add(swiftSearchLauncher);
         }
 
         private void AddNormalizeHotKeyTasks()
