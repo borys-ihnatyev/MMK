@@ -5,17 +5,17 @@ using System.Windows.Interop;
 
 namespace MMK.Wpf.Providers.Key
 {
-    public class GlobalKeyShortcutProvider : IGlobalShortcutProvider
+    public class MusicalKeyGlobalShortcutProvider : IGlobalShortcutProvider
     {
         private HwndSource wndSource;
         private GlobalKeyShortcutRegister glKeyShortcutReg;
 
-        public GlobalKeyShortcutProvider(Window window)
+        public MusicalKeyGlobalShortcutProvider(Window window)
         {
             wndSource = PresentationSource.FromVisual(window) as HwndSource;
         }
 
-        public GlobalKeyShortcutProvider()
+        public MusicalKeyGlobalShortcutProvider()
         {
 
         }

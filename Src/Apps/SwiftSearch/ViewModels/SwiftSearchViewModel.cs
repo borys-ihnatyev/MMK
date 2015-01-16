@@ -21,7 +21,7 @@ namespace MMK.SwiftSearch.ViewModels
         private string search;
         private string searchHandlerIconText;
 
-        private readonly GlobalKeyShortcutProvider keyShortcutProvider;
+        private readonly MusicalKeyGlobalShortcutProvider shortcutProvider;
         private readonly Dictionary<string, string> searchHandlerNameIcon = new Dictionary<string, string>
         {
             {"", "\uf002"},
@@ -38,8 +38,8 @@ namespace MMK.SwiftSearch.ViewModels
         {
             Search = search.RemoveNewLines().Trim();
             SetSearchHandler();
-            keyShortcutProvider = new GlobalKeyShortcutProvider();
-            keyShortcutProvider.HotKeyPressed += AddSearchParalelKeys;
+            shortcutProvider = new MusicalKeyGlobalShortcutProvider();
+            shortcutProvider.HotKeyPressed += AddSearchParalel;
         }
 
 
@@ -98,16 +98,16 @@ namespace MMK.SwiftSearch.ViewModels
 
         protected override void OnLoadData()
         {
-            (keyShortcutProvider as IGlobalShortcutProvider).SetWindow(GetView());
-            keyShortcutProvider.StartListen();
+            (shortcutProvider as IGlobalShortcutProvider).SetWindow(GetView());
+            shortcutProvider.StartListen();
         }
 
         protected override void OnUnloadData()
         {
-            keyShortcutProvider.StopListen();
+            shortcutProvider.StopListen();
         }
 
-        private void AddSearchParalelKeys(Key key)
+        private void AddSearchParalel(Key key)
         {
             var keyStr = string.Format("<#{0}|#{1}>", key, CircleOfFifths.GetParalel(key));
             AddSearch(keyStr);

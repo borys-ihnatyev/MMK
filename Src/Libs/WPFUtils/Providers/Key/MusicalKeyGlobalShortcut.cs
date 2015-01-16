@@ -4,14 +4,14 @@ using MMK.Marking;
 
 namespace MMK.Wpf.Providers.Key
 {
-    class GlobalKeyShortcut : GlobalShortcut
+    class MusicalKeyGlobalShortcut : GlobalShortcut
     {
-        public GlobalKeyShortcut(MMK.Key key)
+        public MusicalKeyGlobalShortcut(MMK.Key key)
             : this(key, IntPtr.Zero)
         {
         }
 
-        public GlobalKeyShortcut(MMK.Key key, IntPtr hwnd)
+        public MusicalKeyGlobalShortcut(MMK.Key key, IntPtr hwnd)
             : base(ModifyersFrom(key), KeyCodeFrom(key), hwnd)
         {
             Key = key;
@@ -36,18 +36,18 @@ namespace MMK.Wpf.Providers.Key
 
         public override int GetHashCode()
         {
-            return (KeyCode << 4) | (int)Modifyers;
+            return (KeyCode << 4) | (int) Modifyers;
         }
 
         public static MMK.Key DecodeKey(int id)
         {
-            string keyStr = string.Empty;
+            var keyStr = string.Empty;
             keyStr += (char) (id >> 4);
 
-            if ((id & (int)KeyModifyers.Alt) == (int)KeyModifyers.Alt)
+            if ((id & (int) KeyModifyers.Alt) == (int) KeyModifyers.Alt)
                 keyStr += '#';
 
-            if ((id & (int)KeyModifyers.Ctrl) == (int)KeyModifyers.Ctrl)
+            if ((id & (int) KeyModifyers.Ctrl) == (int) KeyModifyers.Ctrl)
                 keyStr += 'm';
 
             return KeyHashTag.Parser.First("#" + keyStr).HashTag.Key;

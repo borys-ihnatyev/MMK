@@ -5,43 +5,43 @@ using System.Runtime.InteropServices;
 
 namespace MMK.Wpf.Providers.Key
 {
-    class GlobalKeyShortcutRegister
+    class MuscalKeyGlobalShortcutRegister
     {
         private readonly IntPtr hwnd;
-        private readonly LinkedList<GlobalKeyShortcut> globalHotKeys;
+        private readonly LinkedList<MusicalKeyGlobalShortcut> shortcuts;
 
-        public GlobalKeyShortcutRegister(IntPtr hwnd)
+        public MuscalKeyGlobalShortcutRegister(IntPtr hwnd)
         {
             this.hwnd = hwnd;
-            globalHotKeys = new LinkedList<GlobalKeyShortcut>();
+            shortcuts = new LinkedList<MusicalKeyGlobalShortcut>();
             CreateGlobalHotKeys();
         }
 
         private void CreateGlobalHotKeys()
         {
             CircleOfFifths.AllKeys
-                .Select(key => new GlobalKeyShortcut(key, hwnd))
-                .ForEach(globakHotkey => globalHotKeys.AddLast(globakHotkey));
+                .Select(key => new MusicalKeyGlobalShortcut(key, hwnd))
+                .ForEach(globakHotkey => shortcuts.AddLast(globakHotkey));
         }
 
         public void RegisterGlobalHotkeys()
         {
-            foreach (var globalHotkey in globalHotKeys)
+            foreach (var globalHotkey in shortcuts)
             {
                 if (globalHotkey.Register()) continue;
 
-                var errorMsg = string.Format("Not registered global hotkey : id {0}. Error Code : {1}", globalHotkey.GetHashCode(), GetLastError());
+                var errorMsg = string.Format("Not registered global shortcut : id {0}. Error Code : {1}", globalHotkey.GetHashCode(), GetLastError());
                 OnError(new UnhandledExceptionEventArgs(new Exception(errorMsg), false));
             }
         }
 
         public void UnregisterGlobalHotkeys()
         {
-            foreach (var globalHotkey in globalHotKeys)
+            foreach (var globalHotkey in shortcuts)
             {
                 if (globalHotkey.Unregister()) continue;
 
-                var errorMsg = string.Format("Not unregistered global hotkey : id {0}. Error Code : {1}", globalHotkey.GetHashCode(), GetLastError());
+                var errorMsg = string.Format("Not unregistered global shortcut : id {0}. Error Code : {1}", globalHotkey.GetHashCode(), GetLastError());
                 OnError(new UnhandledExceptionEventArgs(new Exception(errorMsg), false));
             }
         }
