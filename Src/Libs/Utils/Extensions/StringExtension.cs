@@ -66,5 +66,11 @@ namespace System
 
             return index;
         }
+
+        public static string RemoveNewLines(this string value)
+        {
+            return value.Replace("\r", "")
+                .Replace("\n", " ");
+        }
     }
 }
