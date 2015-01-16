@@ -116,13 +116,5 @@ namespace MMK.Notify.ViewModels
             else
                 hashTagFoldersWindow.Focus();
         }
-
-
-        public ICommand ExitCommand { get; private set; }
-
-        public void Exit()
-        {
-            Application.Current.Shutdown();
-        }
     }
 }

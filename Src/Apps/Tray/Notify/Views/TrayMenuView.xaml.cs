@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Forms;
+using System.Windows.Input;
 using System.Windows.Media.Animation;
 using MMK.Wpf.Windows;
 
@@ -8,15 +8,19 @@ namespace MMK.Notify.Views
 {
     public partial class TrayMenuView
     {
-        private readonly Storyboard showStoryboard;
         private readonly Storyboard hideStoryboard;
+        private readonly Storyboard showStoryboard;
 
         public TrayMenuView()
         {
             InitializeComponent();
-            Loaded += OnLoaded;
+            
             showStoryboard = FindResource("ShowStoryboard") as Storyboard;
+            showStoryboard.Completed += (s, e) => Activate();
             hideStoryboard = FindResource("HideStoryboard") as Storyboard;
+            
+            Loaded += OnLoaded;
+            Deactivated += (s, e) => Hide();
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -58,12 +62,20 @@ namespace MMK.Notify.Views
 
         public new void Show()
         {
+            hideStoryboard.Stop();
             showStoryboard.Begin(this);
         }
 
         public new void Hide()
         {
+            showStoryboard.Stop();
             hideStoryboard.Begin(this);
+        }
+
+        private void CloseCommandAction(object sender, ExecutedRoutedEventArgs e)
+        {
+            hideStoryboard.Completed += (s,a) => Application.Current.Shutdown();
+            Hide();
         }
     }
 }

@@ -6,6 +6,7 @@ using MMK.ApplicationServiceModel;
 using MMK.Notify.Properties;
 using MMK.Notify.ViewModels;
 using MMK.Notify.Views;
+using Application = System.Windows.Application;
 
 namespace MMK.Notify.Services
 {
@@ -35,30 +36,6 @@ namespace MMK.Notify.Services
             get { return trayMenuView; }
         }
 
-        public void Dispose()
-        {
-            taskProgressService.StateChanged -= TaskProgressStateChanged;
-
-            trayMenuView.Close();
-            trayIcon.Dispose();
-        }
-
-        public override void Start()
-        {
-            if (!IsInitialized)
-                throw new Exception("Service was not Initialized");
-
-            trayIcon.Visible = true;
-            trayMenuView.Show();
-            trayMenuView.Activate();
-        }
-
-        public override void Stop()
-        {
-            trayMenuView.Hide();
-            trayIcon.Visible = false;
-        }
-
         #region Init
 
         protected override void OnInitialize()
@@ -70,13 +47,11 @@ namespace MMK.Notify.Services
 
         private void InitializeTrayWindow()
         {
-            trayMenuView = new TrayMenuView {DataContext = trayMenuViewModel};
+            trayMenuView = new TrayMenuView { DataContext = trayMenuViewModel };
 
             trayMenuView.Loaded += (s, a) => shortcutService.Initialize();
             trayMenuView.Loaded += (s, a) => trayMenuViewModel.LoadData();
             trayMenuView.Closed += (s, a) => trayMenuViewModel.UnloadData();
-
-            trayMenuView.Deactivated += OnTrayMenuViewDeactivated;
 
             trayMenuView.Show();
         }
@@ -86,29 +61,9 @@ namespace MMK.Notify.Services
             trayIcon.MouseClick += OnTrayIconMouseClick;
         }
 
-        private readonly AutoResetEvent trayIconMouseClickEvent = new AutoResetEvent(false);
-
         private void OnTrayIconMouseClick(object sender, MouseEventArgs e)
         {
-            trayIconMouseClickEvent.Set();
-
-            if (trayMenuView.Visibility == Visibility.Hidden || trayMenuView.Visibility == Visibility.Collapsed)
-            {
-                trayMenuView.Show();
-                trayMenuView.Activate();
-            }
-            else
-            {
-                trayMenuView.Hide();
-            }
-        }
-
-        private void OnTrayMenuViewDeactivated(object sender, EventArgs eventArgs)
-        {
-            if(trayIconMouseClickEvent.WaitOne(TimeSpan.FromSeconds(0.5)))
-                return;
-
-            trayMenuView.Hide();
+            trayMenuView.Show();
         }
 
         private void TaskProgressStateChanged(object sender, ChangedEventArgs<bool> e)
@@ -117,5 +72,29 @@ namespace MMK.Notify.Services
         }
 
         #endregion
+
+        public override void Start()
+        {
+            if (!IsInitialized)
+                throw new Exception("Service was not Initialized");
+
+            trayIcon.Visible = true;
+            trayMenuView.Show();
+        }
+
+        public override void Stop()
+        {
+            trayMenuView.Hide();
+            trayIcon.Visible = false;
+        }
+
+        public void Dispose()
+        {
+            taskProgressService.StateChanged -= TaskProgressStateChanged;
+
+            trayMenuView.Close();
+            trayIcon.Dispose();
+        }
+
     }
 }
