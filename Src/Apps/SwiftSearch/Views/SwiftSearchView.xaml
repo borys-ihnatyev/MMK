@@ -5,6 +5,7 @@
                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                 xmlns:viewModels="clr-namespace:MMK.SwiftSearch.ViewModels"
+                xmlns:system="clr-namespace:System;assembly=mscorlib"
                 mc:Ignorable="d"
                 Title="SearchWindow"
                 Width="400"
@@ -14,6 +15,17 @@
                 WindowStyle="None"
                 SizeToContent="WidthAndHeight"
                 AllowsTransparency="True" d:DataContext="{d:DesignInstance viewModels:SwiftSearchViewModel}">
+    <wpf:TrayWindow.Resources>
+    
+        <system:Boolean x:Key="True">
+            True
+        </system:Boolean>
+
+        <system:Boolean x:Key="False">
+            False
+        </system:Boolean>
+    
+    </wpf:TrayWindow.Resources>
     <Window.Triggers>
         <EventTrigger RoutedEvent="FrameworkElement.Loaded">
             <BeginStoryboard>
@@ -28,17 +40,21 @@
         </EventTrigger>
     </Window.Triggers>
     
+    <Window.CommandBindings>
+        <CommandBinding Command="Close" Executed="OnCloseCommandExecuted"/>
+    </Window.CommandBindings>
+    
     <Window.InputBindings>
         <KeyBinding Key="R" Modifiers="Control" Command="{Binding ToggleSearchCommand}"/>
-        <KeyBinding Key="Enter" Command="{Binding ApplySearchCommand}"/>
-        <KeyBinding Key="Escape" Command="{Binding CancelCommand}"/>
-        <KeyBinding Key="Space" Modifiers="Control" Command="{Binding CancelCommand}"/>
+        <KeyBinding Key="Enter" Command="Close" CommandParameter="{StaticResource True}"/>
+        
+        <KeyBinding Key="Escape" Command="Close" CommandParameter="{StaticResource False}"/>        
+        <KeyBinding Key="Space" Modifiers="Control" Command="Close" CommandParameter="{StaticResource False}"/>
         
         <KeyBinding Key="E" Modifiers="Alt" Command="{Binding SetSearchHandlerCommand}" CommandParameter=""/>
         <KeyBinding Key="G" Modifiers="Alt" Command="{Binding SetSearchHandlerCommand}" CommandParameter="g"/>
         <KeyBinding Key="V" Modifiers="Alt" Command="{Binding SetSearchHandlerCommand}" CommandParameter="vk"/>
         <KeyBinding Key="Z" Modifiers="Alt" Command="{Binding SetSearchHandlerCommand}" CommandParameter="zn"/>
-
 
         <KeyBinding Key="R" Modifiers="Control+Shift" Command="{Binding AddSearchCommand}" CommandParameter="&lt;#dance|#pop|#spec|#house&gt;"/>
         <KeyBinding Key="H" Modifiers="Control+Shift" Command="{Binding AddSearchCommand}" CommandParameter="#house"/>
@@ -48,7 +64,6 @@
         <KeyBinding Key="U" Modifiers="Control+Shift" Command="{Binding AddSearchCommand}" CommandParameter="#urban"/>
         <KeyBinding Key="E" Modifiers="Control+Shift" Command="{Binding AddSearchCommand}" CommandParameter="#electronic"/>
         <KeyBinding Key="L" Modifiers="Control+Shift" Command="{Binding AddSearchCommand}" CommandParameter="#slow"/>
-        
     </Window.InputBindings>
     
     <Border>
