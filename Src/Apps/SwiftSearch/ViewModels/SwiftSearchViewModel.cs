@@ -36,7 +36,7 @@ namespace MMK.SwiftSearch.ViewModels
 
         public SwiftSearchViewModel(string search)
         {
-            Search = SanitizeText(search);
+            Search = search.RemoveNewLines().Trim();
             SetSearchHandler();
             keyShortcutProvider = new GlobalKeyShortcutProvider();
             keyShortcutProvider.HotKeyPressed += AddSearchParalelKeys;
@@ -59,6 +59,8 @@ namespace MMK.SwiftSearch.ViewModels
             get { return search; }
             set
             {
+                value = value.RemoveNewLines();
+
                 if (value == search) return;
                 search = value;
 
@@ -80,7 +82,7 @@ namespace MMK.SwiftSearch.ViewModels
             get { return Settings.Default.SearchToggle; }
             set
             {
-                value = SanitizeText(value);
+                value = value.RemoveNewLines().Trim();
                 if (String.Equals(value, Settings.Default.SearchToggle, StringComparison.Ordinal))
                     return;
                 Settings.Default.SearchToggle = value;
@@ -179,13 +181,6 @@ namespace MMK.SwiftSearch.ViewModels
             Contract.Ensures(Contract.Result<Window>() != null);
             Contract.EndContractBlock();
             return Application.Current.Windows.OfType<SwiftSearchView>().FirstOrDefault();
-        }
-
-        private static string SanitizeText(string value)
-        {
-            return value.Replace("\r", "")
-                .Replace("\n", " ")
-                .Trim();
         }
     }
 }
