@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Threading;
 using System.Windows;
@@ -23,7 +24,12 @@ namespace MMK.Notify
         [ServiceLocator]
         public static ServiceLocator ServiceLocator
         {
-            get { return (serviceLocator ?? (serviceLocator = new ServiceLocator())); }
+            get
+            {
+                Contract.Ensures(Contract.Result<ServiceLocator>() != null);
+                Contract.EndContractBlock();
+                return (serviceLocator ?? (serviceLocator = new ServiceLocator()));
+            }
         }
 
 #if !DEBUG
@@ -74,6 +80,8 @@ namespace MMK.Notify
 
         private static void InitializeServices()
         {
+            Contract.Assume(ServiceLocator != null);
+
             ServiceLocator.Bind<TaskObserver>().ToSelf().InSingletonScope();
 
             ServiceLocator.Bind<INotifyObserver>()
@@ -100,6 +108,8 @@ namespace MMK.Notify
 
         private static void StartServices()
         {
+            Contract.Assume(ServiceLocator != null);
+
             ServiceLocator.Get<TaskObserver>().Start();
             ServiceLocator.Get<NotifyObserver>().Start();
             ServiceLocator.Get<TrayMenuService>().Start();
@@ -107,6 +117,8 @@ namespace MMK.Notify
 
         protected override void OnExit(ExitEventArgs e)
         {
+            Contract.Assume(ServiceLocator != null);
+
             ServiceLocator.Get<TrayMenuService>().Stop();
             ServiceLocator.Get<TaskProgressService>().Stop();
             ServiceLocator.Get<NotifyObserver>().Stop();
