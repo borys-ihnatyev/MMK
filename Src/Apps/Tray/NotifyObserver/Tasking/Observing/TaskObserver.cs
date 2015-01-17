@@ -47,6 +47,7 @@ namespace MMK.Notify.Observer.Tasking.Observing
             }
             catch (Task.Cancel)
             {
+                OnNotifyEvent(TaskCanceled, task);
             }
         }
 
@@ -176,7 +177,6 @@ namespace MMK.Notify.Observer.Tasking.Observing
                 taskRunEvent.Set();
         }
 
-
         #endregion
 
         public void Dispose()
@@ -192,6 +192,7 @@ namespace MMK.Notify.Observer.Tasking.Observing
         public event EventHandler<EventArgs> QueueEmpty;
 
         public event EventHandler<NotifyEventArgs> TaskDone;
+        public event EventHandler<NotifyEventArgs> TaskCanceled;
         public event EventHandler<NotifyEventArgs> TaskObserved;
         public event EventHandler<NotifyEventArgs> TaskFailed;
 
@@ -222,7 +223,6 @@ namespace MMK.Notify.Observer.Tasking.Observing
             if (handler != null)
                 handler(this, new NotifyEventArgs(this, message));
         }
-
         #endregion
     }
 }
