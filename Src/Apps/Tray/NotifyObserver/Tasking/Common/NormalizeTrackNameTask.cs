@@ -12,6 +12,10 @@ namespace MMK.Notify.Observer.Tasking.Common
     {
         public static IEnumerable<Task> Many(IEnumerable<string> paths)
         {
+            if(paths == null)
+                throw new ArgumentNullException("paths");
+            Contract.EndContractBlock();
+
             return paths.Select(p => new NormalizeTrackNameTask(p));
         }  
 

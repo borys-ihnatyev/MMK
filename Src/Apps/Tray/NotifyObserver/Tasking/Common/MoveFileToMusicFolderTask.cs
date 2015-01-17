@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -11,6 +12,17 @@ namespace MMK.Notify.Observer.Tasking.Common
     [Serializable]
     public sealed class MoveFileToMusicFolderTask : Mp3FileChangeTask
     {
+        public static IEnumerable<Task> Many(IEnumerable<string> paths, HashTagFolderCollection folderCollection)
+        {
+            if(paths == null)
+                throw new ArgumentNullException("paths");
+            if(folderCollection == null)
+                throw new ArgumentNullException("folderCollection");
+            Contract.EndContractBlock();
+
+            return paths.Select(p => new MoveFileToMusicFolderTask(p, folderCollection));
+        }  
+
         private readonly HashTagFolderCollection folderCollection;
 
         private MusicFolder.ResultInfo resultInfo;
@@ -87,10 +99,5 @@ namespace MMK.Notify.Observer.Tasking.Common
         }
 
         #endregion
-
-        public static IEnumerable<Task> Many(IEnumerable<string> paths, HashTagFolderCollection folderCollection)
-        {
-            return paths.Select(p => new MoveFileToMusicFolderTask(p, folderCollection));
-        }  
     }
 }

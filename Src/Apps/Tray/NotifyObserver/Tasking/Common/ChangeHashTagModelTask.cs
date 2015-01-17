@@ -17,6 +17,10 @@ namespace MMK.Notify.Observer.Tasking.Common
 
         public static IEnumerable<Task> Many(IEnumerable<string> paths, HashTagModel add, HashTagModel remove)
         {
+            if (paths == null)
+                throw new ArgumentNullException("paths");
+            Contract.EndContractBlock();
+
             return paths.Select(p => new ChangeHashTagModelTask(p, add, remove));
         }  
 

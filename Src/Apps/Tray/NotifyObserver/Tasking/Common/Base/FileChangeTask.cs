@@ -10,8 +10,8 @@ namespace MMK.Notify.Observer.Tasking.Common.Base
     {
         protected FileChangeTask(string oldPath)
         {
-            if (oldPath == null)
-                throw new ArgumentNullException();
+            if (String.IsNullOrWhiteSpace(oldPath))
+                throw new ArgumentNullException("oldPath");
             Contract.EndContractBlock();
 
             OldFile = new FileInfo(oldPath);
