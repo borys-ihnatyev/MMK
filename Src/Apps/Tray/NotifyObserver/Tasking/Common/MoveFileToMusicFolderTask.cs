@@ -34,7 +34,7 @@ namespace MMK.Notify.Observer.Tasking.Common
                 NewFile = new FileInfo(resultInfo.NewFilePath);
 
                 if(OldFile.FullName.Equals(NewFile.FullName,StringComparison.OrdinalIgnoreCase))
-                    throw new Cancel();
+                    throw new Cancel("Old and new file full names are equals.");
             }
             catch (HashTagFolderCollection.NoMatchPatternException)
             {

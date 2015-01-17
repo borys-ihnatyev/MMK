@@ -1,4 +1,6 @@
-﻿using System.Diagnostics.Contracts;
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.IO;
 using System.Threading;
 using System.Windows;
 using MMK.ApplicationServiceModel.Locator;

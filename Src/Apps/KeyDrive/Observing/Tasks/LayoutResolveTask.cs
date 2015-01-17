@@ -38,9 +38,9 @@ namespace MMK.KeyDrive.Observing.Tasks
                 var hashTagModel = HashTagModel.Parser.All(holder.NameWithoutExtension);
                 targetDirectories = layout[hashTagModel];
             }
-            catch (Holder.Exception)
+            catch (Holder.Exception ex)
             {
-                throw new Cancel();
+                throw new Cancel("Cancel while initialize", ex);
             }
         }
 
@@ -63,8 +63,8 @@ namespace MMK.KeyDrive.Observing.Tasks
             var dir = new DirectoryHolder(targetDirectories[0].FullName);
             var newFile = new FileInfo(Path.Combine(dir.Info.FullName, holder.FileInfo.Name));
 
-            if (newFile.FullName == holder.FileInfo.FullName)
-                throw new Cancel();
+            if (newFile.FullName.Equals(holder.FileInfo.FullName, StringComparison.Ordinal))
+                throw new Cancel("Target file is already in layout holder");
 
             if (newFile.Exists)
             {

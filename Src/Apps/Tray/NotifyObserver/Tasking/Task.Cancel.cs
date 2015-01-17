@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MMK.Notify.Observer.Tasking
 {
@@ -12,6 +7,17 @@ namespace MMK.Notify.Observer.Tasking
         [Serializable]
         public class Cancel : Exception
         {
+            public Cancel()
+            {
+            }
+
+            public Cancel(string message) : base(message)
+            {
+            }
+
+            public Cancel(string message, Exception innerException) : base(message, innerException)
+            {
+            }
         }
     }
 }

@@ -111,7 +111,6 @@ namespace MMK.Notify.Observer.Tasking
 
             internal void MarkRerun()
             {
-                UnmarkRerun();
                 additionalDescription = "\n Retry once.";
                 Type = NotifyType.Warning;
             }

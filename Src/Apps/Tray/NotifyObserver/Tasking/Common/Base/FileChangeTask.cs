@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization;
 
 namespace MMK.Notify.Observer.Tasking.Common.Base
@@ -12,10 +10,10 @@ namespace MMK.Notify.Observer.Tasking.Common.Base
     {
         protected FileChangeTask(string oldPath)
         {
-            if(oldPath == null)
+            if (oldPath == null)
                 throw new ArgumentNullException();
             Contract.EndContractBlock();
-            
+
             OldFile = new FileInfo(oldPath);
         }
 
@@ -40,9 +38,9 @@ namespace MMK.Notify.Observer.Tasking.Common.Base
             {
                 OnFileChange();
             }
-            catch (FileNotFoundException)
+            catch (FileNotFoundException ex)
             {
-                throw new Cancel();
+                throw new Cancel("Cancel while TryFileChange", ex);
             }
             catch (IOException ex)
             {
@@ -56,7 +54,7 @@ namespace MMK.Notify.Observer.Tasking.Common.Base
             Contract.EndContractBlock();
 
             if (OldFile.FullName.Equals(NewFile.FullName, StringComparison.Ordinal))
-                throw new Cancel();
+                throw new Cancel("Names are equal");
 
             OldFile.MoveTo(NewFile);
         }
@@ -78,7 +76,7 @@ namespace MMK.Notify.Observer.Tasking.Common.Base
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
-            info.AddValue(OldPathVar,OldFile.FullName);
+            info.AddValue(OldPathVar, OldFile.FullName);
         }
 
         #endregion

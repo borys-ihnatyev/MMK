@@ -47,7 +47,7 @@ namespace MMK.Notify.Observer.Tasking.Common
             OldHashTagModel = NameModel.HashTagModel;
             
             if(NewHashTagModel.SetEquals(OldHashTagModel))
-                throw new Cancel();
+                throw new Cancel("Hash tag model not changed");
 
             NameModel.HashTagModel = NewHashTagModel;
 
