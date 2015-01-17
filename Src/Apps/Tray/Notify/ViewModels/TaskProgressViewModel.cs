@@ -55,7 +55,7 @@ namespace MMK.Notify.ViewModels
 
                 isProgress = value;
 
-                IsVisible = IsProgress;
+                IsVisible = IsProgress && QueuedCount > 1;
 
                 NotifyPropertyChanged();
             }
@@ -101,26 +101,27 @@ namespace MMK.Notify.ViewModels
         protected override void OnLoadData()
         {
             var observer = IoC.Get<TaskObserver>();
-            observer.TaskQueued += OnTaskQueued;
-            observer.QueueEmpty += OnQueueEmpty;
+            
             observer.TaskObserved += OnTaskObserved;
             observer.TaskFailed += OnTaskFailed;
+            observer.TaskCanceled += OnTaskCanceled;
+
+            observer.TaskQueued += OnTaskQueued;
+            observer.QueueEmpty += OnQueueEmpty;
         }
 
         protected override void OnUnloadData()
         {
             var observer = IoC.Get<TaskObserver>();
-            observer.TaskQueued -= OnTaskQueued;
-            observer.QueueEmpty -= OnQueueEmpty;
+            
             observer.TaskObserved -= OnTaskObserved;
             observer.TaskFailed -= OnTaskFailed;
+            observer.TaskCanceled -= OnTaskCanceled;
+            
+            observer.TaskQueued -= OnTaskQueued;
+            observer.QueueEmpty -= OnQueueEmpty;
         }
 
-
-        public void OnTaskQueued(object sender, TaskObserver.TaskQueuedEventArgs e)
-        {
-            QueuedCount += e.TaskCount;
-        }
 
         public void OnTaskObserved(object sender, TaskObserver.NotifyEventArgs e)
         {
@@ -136,6 +137,17 @@ namespace MMK.Notify.ViewModels
                 return;
 
             Notification.Push(e.Message);
+        }
+
+        private void OnTaskCanceled(object sender, TaskObserver.NotifyEventArgs e)
+        {
+            --QueuedCount;
+        }
+
+
+        public void OnTaskQueued(object sender, TaskObserver.TaskQueuedEventArgs e)
+        {
+            QueuedCount += e.TaskCount;
         }
 
         public void OnQueueEmpty(object sender, EventArgs e)
@@ -154,18 +166,9 @@ namespace MMK.Notify.ViewModels
             Notification.Push(message);
         }
 
-        private void Reset()
-        {
-            ObservedCount = 0;
-            QueuedCount = 0;
-            failedCount = 0;
-            IsVisible = false;
-            currentInfo = null;
-        }
-
         private INotifyable BuildNotifyMessage()
         {
-            Contract.Ensures(Contract.Result<INotifyable>()!= null);
+            Contract.Ensures(Contract.Result<INotifyable>() != null);
             Contract.EndContractBlock();
 
             if (QueuedCount == 1)
@@ -193,8 +196,17 @@ namespace MMK.Notify.ViewModels
                 Type = NotifyType.Warning,
                 CommonDescription = "Some tasks failed.",
                 DetailedDescription =
-                    String.Format("Done {0}/{1};\nFailed {2}",ObservedCount - failedCount,  QueuedCount, failedCount)
+                    String.Format("Done {0}/{1};\nFailed {2}", ObservedCount - failedCount, QueuedCount, failedCount)
             };
+        }
+
+        private void Reset()
+        {
+            ObservedCount = 0;
+            QueuedCount = 0;
+            failedCount = 0;
+            IsVisible = false;
+            currentInfo = null;
         }
     }
 }
