@@ -7,8 +7,10 @@
                 xmlns:trayMenu="clr-namespace:MMK.Notify.Views.TrayMenu"
                 xmlns:viewModels="clr-namespace:MMK.Notify.ViewModels"
                 mc:Ignorable="d"
-                SizeToContent="Height"
-                Width="286"
+                SizeToContent="WidthAndHeight"
+                MinWidth="286"
+                Topmost="True"
+                Style="{StaticResource WindowBlackGlanceStyle}"
                 d:DataContext="{d:DesignInstance viewModels:TrayMenuViewModel}">
 
     <Window.Resources>
@@ -22,7 +24,7 @@
         <Storyboard x:Key="HideStoryboard">
             <DoubleAnimation Storyboard.TargetProperty="Opacity" Duration="0:0:0.2" To="0" />
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
-                <DiscreteObjectKeyFrame KeyTime="0:0:2" Value="{x:Static Visibility.Hidden}" />
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.2" Value="{x:Static Visibility.Hidden}" />
             </ObjectAnimationUsingKeyFrames>
         </Storyboard>
 
@@ -34,18 +36,6 @@
             <DoubleAnimation Storyboard.TargetProperty="Opacity" Duration="0:0:0.2" To="1" />
         </Storyboard>
     </Window.Resources>
-
-    <Window.Style>
-        <Style TargetType="{x:Type Window}">
-            <Style.Setters>
-                <Setter Property="WindowStyle" Value="None" />
-                <Setter Property="AllowsTransparency" Value="True" />
-                <Setter Property="Topmost" Value="True" />
-                <Setter Property="Foreground" Value="White" />
-                <Setter Property="Background" Value="{StaticResource WindowBlackGlanceBrush}" />
-            </Style.Setters>
-        </Style>
-    </Window.Style>
     
     <Window.CommandBindings>
         <CommandBinding Command="Close" Executed="CloseCommandAction"/>
