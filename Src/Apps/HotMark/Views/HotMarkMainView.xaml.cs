@@ -1,14 +1,21 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics.Contracts;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 using MMK.HotMark.ViewModels;
 
 namespace MMK.HotMark.Views
 {
     public partial class HotMarkMainView
     {
+        private readonly Action applyChangesAction; 
+
+        private readonly Storyboard showStoryboard;
+        private readonly Storyboard hideStoryboard;
+
         public HotMarkMainView(HotMarkViewModel viewModel)
         {
             InitializeComponent();
@@ -16,27 +23,26 @@ namespace MMK.HotMark.Views
             DataContext = viewModel;
             (viewModel.HashTags as INotifyPropertyChanged).PropertyChanged += OnHashTagsPropertyChanged;
             Loaded += (s, e) => viewModel.LoadData();
-            Loaded += OnLoaded;
-
-            SizeChanged += OnSizeChanged;
-            MouseDown += OnMouseDown;
-
             Closed += (s, e) => viewModel.UnloadData();
 
-            isCloseStoryboardStarted = false;
-            isCloseStoryboardCompletted = false;
+            applyChangesAction = viewModel.NotifyChange;
+
+            showStoryboard = FindResource("ShowStoryboard") as Storyboard;
+            Contract.Assume(showStoryboard != null);
+            showStoryboard.Completed += (s, e) => Activate();
+            hideStoryboard = FindResource("HideStoryboard") as Storyboard;
+
+            Loaded += OnLoaded;
+            SizeChanged += OnSizeChanged;
+            MouseDown += OnMouseDown;
         }
+
+        #region Event handlers
 
         private void OnHashTagsPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Selected")
                 HashTagEditBoxFocus();
-        }
-
-        private void HashTagEditBoxFocus()
-        {
-            FocusManager.SetFocusedElement(this, HashTagEditBox);
-            HashTagEditBox.TextChanged += HashTagEditBoxPutCarretAtEndOnce;
         }
 
         private void HashTagEditBoxPutCarretAtEndOnce(object sender, TextChangedEventArgs textChangedEventArgs)
@@ -45,21 +51,24 @@ namespace MMK.HotMark.Views
             HashTagEditBox.TextChanged -= HashTagEditBoxPutCarretAtEndOnce;
         }
 
-        #region Animation Flags
-
-        private bool isCloseStoryboardStarted;
-
-        private bool isCloseStoryboardCompletted;
-
-        #endregion
-
-        #region Event Handlers
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            Focus();
-            Activate();
             HashTagEditBoxFocus();
+        }
+
+        private void HashTagEditBoxFocus()
+        {
+            FocusManager.SetFocusedElement(this, HashTagEditBox);
+            HashTagEditBox.TextChanged += HashTagEditBoxPutCarretAtEndOnce;
+        }
+ 
+
+        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (!e.WidthChanged)
+                return;
+            Left = SystemParameters.WorkArea.Left + (SystemParameters.WorkArea.Width - e.NewSize.Width)/2;
         }
 
         private void OnMouseDown(object sender, MouseButtonEventArgs e)
@@ -71,51 +80,30 @@ namespace MMK.HotMark.Views
             }
         }
 
-        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+        #endregion
+
+        public new void Show()
         {
-            if (!e.WidthChanged)
-                return;
-            Left = SystemParameters.WorkArea.Left + (SystemParameters.WorkArea.Width - e.NewSize.Width)/2;
+            hideStoryboard.Stop();
+            showStoryboard.Begin(this);
         }
 
-        private void OnCloseStoryboardCompleted(object sender, EventArgs e)
+        public new void Hide()
         {
-            isCloseStoryboardCompletted = true;
-            Close();
+            showStoryboard.Stop();
+            hideStoryboard.Begin(this);
         }
 
-        protected override void OnClosing(CancelEventArgs e)
+        private void OnCloseCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            if (!isCloseStoryboardStarted)
+            var applyChanges = (bool)e.Parameter;
+            hideStoryboard.Completed += (s, a) =>
             {
-                isCloseStoryboardStarted = true;
-                RaiseEvent(new RoutedEventArgs(UserCloseEvent));
-                e.Cancel = true;
-            }
-            else if (!isCloseStoryboardCompletted)
-                e.Cancel = true;
-
-            base.OnClosing(e);
+                Close();
+                if (applyChanges)
+                    applyChangesAction();
+            };
+            Hide();
         }
-
-        #endregion
-
-        #region Events
-
-        public static readonly RoutedEvent UserCloseEvent =
-            EventManager.RegisterRoutedEvent(
-                "UserClose",
-                RoutingStrategy.Direct,
-                typeof (RoutedEventHandler),
-                typeof (HotMarkMainView)
-                );
-
-        public event RoutedEventHandler UserClose
-        {
-            add { AddHandler(UserCloseEvent, value); }
-            remove { RemoveHandler(UserCloseEvent, value); }
-        }
-
-        #endregion
     }
 }

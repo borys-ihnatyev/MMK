@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows;
 using System.Windows.Input;
 using MMK.HotMark.Model;
 using MMK.HotMark.Model.Files;
 using MMK.HotMark.ViewModels.PianoKeyBoard;
-using MMK.HotMark.Views;
 using MMK.Marking;
 using MMK.Wpf.ViewModel;
 
@@ -42,7 +40,6 @@ namespace MMK.HotMark.ViewModels
         }
 
         #endregion
-
 
         public string FileItemView
         {
@@ -126,34 +123,24 @@ namespace MMK.HotMark.ViewModels
             var commandLineArgs = Environment.GetCommandLineArgs();
 
             if (commandLineArgs.Length <= 1 && files.Count == 0)
-                Shutdown();
+                throw new Exception("Supposed any file path as cl argument");
 
             for (var i = 1; i < commandLineArgs.Length; i++)
                 files.Add(commandLineArgs[i]);
 
-            if (files.Count == 0)
-                Shutdown();
-
-            if (files.Count == 1)
+            switch (files.Count)
             {
-                PlayerViewModel = new PlayerViewModel(files.First().Path);
-                PlayerViewModel.FileOpened += PlayerViewModelOnFileOpened;
+                case 0:
+                    throw new Exception("Supposed any file path as cl argument");
+                case 1:
+                    PlayerViewModel = new PlayerViewModel(files.First().Path);
+                    PlayerViewModel.FileOpened += PlayerViewModelOnFileOpened;
+                    break;
+                default:
+                    FileItemView = string.Format("< {0} files >", files.Count);
+                    PlayerViewModel = null;
+                    break;
             }
-            else
-            {
-                FileItemView = string.Format("< {0} files >", files.Count);
-                PlayerViewModel = null;
-            }
-        }
-
-        // ReSharper disable once MemberCanBeMadeStatic.Local
-        private void Shutdown()
-        {
-#if DEBUG
-            throw new Exception("Supposed any file path as cl argument");
-#else
-            CloseView();
-#endif
         }
 
         private void PlayerViewModelOnFileOpened(object sender, EventArgs eventArgs)
@@ -161,7 +148,7 @@ namespace MMK.HotMark.ViewModels
             PlayerViewModel.Volume = 0.3;
 
             if (HashTags.Any(h => h.HashTag is KeyHashTag)) return;
-            
+
             PlayerViewModel.Play();
             PlayerViewModel.Position = PlayerViewModel.PositionMax*0.4;
         }
@@ -189,21 +176,6 @@ namespace MMK.HotMark.ViewModels
             HashTags.Selected.HashTagValue = pianoKeyBoardViewModel.RecognizedKey.ToString();
         }
 
-        protected override void OnUnloadData()
-        {
-            if (!isHashTagModelChangeNotify)
-                return;
-
-            NotifyChange();
-        }
-
-        private void NotifyChange()
-        {
-            if (playerViewModel != null)
-                playerViewModel.UnloadData();
-
-            hashTagModelChangeNotify.NotifyChange(GetNotEmptyHashTags());
-        }
 
         private IEnumerable<HashTag> GetNotEmptyHashTags()
         {
@@ -245,25 +217,12 @@ namespace MMK.HotMark.ViewModels
             pianoKeyBoardViewModel.KeyUpCommand.Execute(e);
         }
 
-
-        public ICommand CloseCommand { get; private set; }
-
-        public void Close()
+        public void NotifyChange()
         {
-            isHashTagModelChangeNotify = true;
-            CloseView();
-        }
+            if (IsDataLoaded)
+                throw new InvalidOperationException("Can't notify change while data is not loaded");
 
-        public ICommand CloseViewCommand { get; private set; }
-
-        public void CloseView()
-        {
-            var view = Application.Current.Windows
-                .OfType<HotMarkMainView>()
-                .FirstOrDefault(v => v.DataContext == this);
-
-            if (view != null)
-                view.Close();
+            hashTagModelChangeNotify.NotifyChange(GetNotEmptyHashTags());
         }
 
         #endregion

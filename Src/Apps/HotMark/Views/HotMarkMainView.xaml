@@ -1,23 +1,22 @@
-﻿<wpf:TrayWindow
-    x:Class="MMK.HotMark.Views.HotMarkMainView"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-    xmlns:wpf="clr-namespace:MMK.Wpf;assembly=MMK.Wpf"
-    xmlns:views="clr-namespace:MMK.HotMark.Views"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    AllowsTransparency="True"
-    WindowStartupLocation="CenterScreen"
-    Focusable="True"
-    SizeToContent="WidthAndHeight"
-    MinWidth="400"
-    Topmost="True"
-    WindowStyle="None"
-    FontFamily="Consolas"
-    Foreground="White"
-    d:DataContext="{d:DesignData Source=../DesignData/HotMarkViewModel.xaml}">
+﻿<wpf:TrayWindow x:Class="MMK.HotMark.Views.HotMarkMainView"
+                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                xmlns:wpf="clr-namespace:MMK.Wpf;assembly=MMK.Wpf"
+                xmlns:views="clr-namespace:MMK.HotMark.Views"
+                xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                xmlns:system="clr-namespace:System;assembly=mscorlib"
+                mc:Ignorable="d"
+                AllowsTransparency="True"
+                WindowStartupLocation="CenterScreen"
+                SizeToContent="WidthAndHeight"
+                MinWidth="400"
+                Topmost="True"
+                WindowStyle="None"
+                FontFamily="Consolas"
+                Foreground="White"
+                d:DataContext="{d:DesignData Source=../DesignData/HotMarkViewModel.xaml}">
 
     <Window.Background>
         <SolidColorBrush x:Name="BackgroundBrush" Opacity="0.9" Color="#111" />
@@ -28,34 +27,29 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../Style/Style.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <wpf:KeyBrushConverter x:Key="KeyColorConverter" DefaultBrush="White"/>
+            
+            <system:Boolean x:Key="True">True</system:Boolean>
+            <system:Boolean x:Key="False">False</system:Boolean>
+            
+            <wpf:KeyBrushConverter x:Key="KeyColorConverter" DefaultBrush="White" />
+
+            <Storyboard x:Key="HideStoryboard">
+                <DoubleAnimation Storyboard.TargetProperty="Opacity" Duration="0:0:0.2" To="0" />
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
+                    <DiscreteObjectKeyFrame KeyTime="0:0:0.2" Value="{x:Static Visibility.Hidden}" />
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+
+            <Storyboard x:Key="ShowStoryboard">
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
+                    <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Visible}" />
+                </ObjectAnimationUsingKeyFrames>
+
+                <DoubleAnimation Storyboard.TargetProperty="Opacity" Duration="0:0:0.2" To="1" />
+            </Storyboard>
+
         </ResourceDictionary>
     </Window.Resources>
-
-    <Window.Triggers>
-        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-            <BeginStoryboard>
-                <Storyboard x:Name="LoadStoryboard">
-                    <DoubleAnimation
-                        Storyboard.TargetProperty="Opacity"
-                        From="0"
-                        To="1"
-                        Duration="0:0:0.27" />
-                </Storyboard>
-            </BeginStoryboard>
-        </EventTrigger>
-
-        <EventTrigger RoutedEvent="views:HotMarkMainView.UserClose">
-            <BeginStoryboard>
-                <Storyboard x:Name="CloseStoryboard" Completed="OnCloseStoryboardCompleted">
-                    <DoubleAnimation
-                        Storyboard.TargetProperty="Opacity"
-                        To="0"
-                        Duration="0:0:0.27" />
-                </Storyboard>
-            </BeginStoryboard>
-        </EventTrigger>
-    </Window.Triggers>
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="KeyDown">
@@ -71,26 +65,30 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
+    <Window.CommandBindings>
+        <CommandBinding Command="Close" Executed="OnCloseCommandExecuted" />
+    </Window.CommandBindings>
+
     <Window.InputBindings>
-        
-        <KeyBinding Key="Escape" Command="{Binding CloseViewCommand}"/>
-        <KeyBinding Key="Enter" Modifiers="Control" Command="{Binding CloseCommand}"/>
 
-        <KeyBinding Key="P" Modifiers="Control" Command="{Binding ChangeLayoutCommand}"/>
+        <KeyBinding Key="Escape" Command="Close" CommandParameter="{StaticResource False}"/>
+        <KeyBinding Key="Enter" Modifiers="Control" Command="Close" CommandParameter="{StaticResource True}" />
 
-        <KeyBinding Key="N" Modifiers="Control+Shift" Command="{Binding HashTags.AddNewCommand}"/>
-        <KeyBinding Key="Right" Modifiers="Control+Alt" Command="{Binding HashTags.SelectNextCommand}"/>
-        <KeyBinding Key="Left" Modifiers="Control+Alt" Command="{Binding HashTags.SelectPreviousCommand}"/>
-        
-        <KeyBinding Key="Right" Modifiers="Alt" Command="{Binding PlayerViewModel.PositionIncreaseCommand}"/>
-        <KeyBinding Key="Left" Modifiers="Alt" Command="{Binding PlayerViewModel.PositionDecreaseCommand}"/>
+        <KeyBinding Key="P" Modifiers="Control" Command="{Binding ChangeLayoutCommand}" />
 
-        <KeyBinding Key="Up" Modifiers="Alt" Command="{Binding PlayerViewModel.VolumeIncreaseCommand}"/>
-        <KeyBinding Key="Down" Modifiers="Alt" Command="{Binding PlayerViewModel.VolumeDecreaseCommand}"/>
+        <KeyBinding Key="N" Modifiers="Control+Shift" Command="{Binding HashTags.AddNewCommand}" />
+        <KeyBinding Key="Right" Modifiers="Control+Alt" Command="{Binding HashTags.SelectNextCommand}" />
+        <KeyBinding Key="Left" Modifiers="Control+Alt" Command="{Binding HashTags.SelectPreviousCommand}" />
+
+        <KeyBinding Key="Right" Modifiers="Alt" Command="{Binding PlayerViewModel.PositionIncreaseCommand}" />
+        <KeyBinding Key="Left" Modifiers="Alt" Command="{Binding PlayerViewModel.PositionDecreaseCommand}" />
+
+        <KeyBinding Key="Up" Modifiers="Alt" Command="{Binding PlayerViewModel.VolumeIncreaseCommand}" />
+        <KeyBinding Key="Down" Modifiers="Alt" Command="{Binding PlayerViewModel.VolumeDecreaseCommand}" />
 
     </Window.InputBindings>
-    
-    <Grid IsHitTestVisible="True" Margin="10">
+
+    <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="26" />
@@ -131,11 +129,11 @@
                     </Style.Triggers>
                 </Style>
             </DockPanel.Style>
-            
+
             <Label Style="{StaticResource HashTagEditRegionStyle}"
                    Foreground="#777"
-                   Content="#"/>
-            
+                   Content="#" />
+
             <TextBox x:Name="HashTagEditBox"
                      Style="{StaticResource HashTagEditTextBoxStyle}"
                      IsEnabled="{Binding CanDirectEditHashTags}"
@@ -206,19 +204,19 @@
                       Background="Transparent"
                       Foreground="White"
                       Height="26">
-                
+
                 <ListView.Resources>
                     <Style TargetType="{x:Type ListViewItem}">
-                        <Setter Property="Focusable" Value="False"/>
+                        <Setter Property="Focusable" Value="False" />
                     </Style>
                 </ListView.Resources>
-                
+
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel />
                     </ItemsPanelTemplate>
                 </ListView.ItemsPanel>
-                
+
                 <ListView.ItemContainerStyle>
                     <Style TargetType="{x:Type Control}">
                         <Setter Property="BorderThickness" Value="0" />
@@ -281,12 +279,12 @@
                              DataContext="{Binding PlayerViewModel}">
             <views:PlayerControl.Style>
                 <Style TargetType="{x:Type views:PlayerControl}">
-                    
-                    <Setter Property="Visibility" Value="Visible"/>
+
+                    <Setter Property="Visibility" Value="Visible" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding}" Value="{x:Null}">
                             <DataTrigger.Setters>
-                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Setter Property="Visibility" Value="Collapsed" />
                             </DataTrigger.Setters>
                         </DataTrigger>
                     </Style.Triggers>
