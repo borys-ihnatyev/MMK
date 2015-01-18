@@ -200,10 +200,10 @@
       <DependentUpon>BalloonTipWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\BooleanToColorErrorConverter.cs" />
-    <Compile Include="Model\Launchers\HotMarkLauncher.cs" />
+    <Compile Include="Model\Launchers\HotMarkLauncherGlobalShortcutProvider.cs" />
     <Compile Include="Model\Launchers\MusicCollectionManagerLauncher.cs" />
     <Compile Include="Services\ChromeDownloadsWatcherService.cs" />
-    <Compile Include="Model\Launchers\SwiftSearchLauncher.cs" />
+    <Compile Include="Model\Launchers\SwiftSearchLauncherGlobalShortcutProvider.cs" />
     <Compile Include="Model\Settings\SettingsPropertyAttribute.cs" />
     <Compile Include="Properties\Settings.cs" />
     <Compile Include="Style\CustomizedWindow\VS2012WindowStyle.cs" />
