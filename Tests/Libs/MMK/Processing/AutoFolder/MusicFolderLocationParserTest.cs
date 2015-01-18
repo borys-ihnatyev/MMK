@@ -1,10 +1,9 @@
 ﻿using System;
 using System.IO;
-using MMK.Processing.AutoFolder;
-using MMK.Tests.Base;
+using MMK.Base;
 using NUnit.Framework;
 
-namespace MMK.Tests.Processing.AutoFolder
+namespace MMK.Processing.AutoFolder
 {
     [TestFixture]
     public class MusicFolderLocationParserTest : FileUsageTestFixture

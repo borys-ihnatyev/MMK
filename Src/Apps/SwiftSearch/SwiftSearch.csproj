@@ -159,13 +159,13 @@
       <Project>{A9193781-F0F5-406C-BC5F-312AE4F516F3}</Project>
       <Name>MMK</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Libs\Presentation\Presentation.csproj">
+      <Project>{51A0C435-391F-44F2-A4B0-3D8623C2BC6B}</Project>
+      <Name>Presentation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Libs\Utils\Utils.csproj">
       <Project>{1a83dd41-36ab-493f-a3c1-2acad7ff152f}</Project>
       <Name>Utils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Libs\WPFUtils\WPFUtils.csproj">
-      <Project>{51a0c435-391f-44f2-a4b0-3d8623c2bc6b}</Project>
-      <Name>WPFUtils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

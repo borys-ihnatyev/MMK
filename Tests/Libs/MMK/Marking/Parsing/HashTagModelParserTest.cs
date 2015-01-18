@@ -1,9 +1,8 @@
 ﻿using System.Linq;
-using MMK.Marking;
 using MMK.Marking.Representation;
 using NUnit.Framework;
 
-namespace MMK.Tests.Marking.Parsing
+namespace MMK.Marking.Parsing
 {
     public class HashTagModelParserTest
     {

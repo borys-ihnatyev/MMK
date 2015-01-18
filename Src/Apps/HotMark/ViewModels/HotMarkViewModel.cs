@@ -8,7 +8,7 @@ using MMK.HotMark.Model;
 using MMK.HotMark.Model.Files;
 using MMK.HotMark.ViewModels.PianoKeyBoard;
 using MMK.Marking;
-using MMK.Wpf.ViewModel;
+using MMK.Presentation.ViewModel;
 
 namespace MMK.HotMark.ViewModels
 {

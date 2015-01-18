@@ -3,10 +3,10 @@ using System.Windows;
 using System.Windows.Forms;
 using MMK.ApplicationServiceModel;
 using MMK.Notify.Services;
+using MMK.Presentation;
+using MMK.Presentation.Providers;
 using MMK.SwiftSearch.ViewModels;
 using MMK.SwiftSearch.Views;
-using MMK.Wpf;
-using MMK.Wpf.Providers;
 using Clipboard = System.Windows.Clipboard;
 
 namespace MMK.Notify.Model.Launchers

@@ -2,8 +2,8 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Input;
-using MMK.Wpf;
-using MMK.Wpf.ViewModel;
+using MMK.Presentation.Tools;
+using MMK.Presentation.ViewModel;
 
 namespace MMK.Notify.ViewModels.HashTagFolders
 {

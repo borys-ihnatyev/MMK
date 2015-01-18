@@ -1,8 +1,8 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
-using MMK.Wpf;
+using MMK.Presentation.Collections;
+using MMK.Presentation.Tools;
 
 namespace MMK.HotMark.ViewModels
 {

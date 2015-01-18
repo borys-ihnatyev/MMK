@@ -1,5 +1,5 @@
 ﻿using MMK.Notify.Observer;
-using MMK.Wpf.ViewModel;
+using MMK.Presentation.ViewModel;
 
 namespace MMK.Notify.ViewModels
 {

@@ -4,7 +4,7 @@ using MMK.ApplicationServiceModel;
 using MMK.Notify.Observer;
 using MMK.Notify.Observer.Tasking.Observing;
 using MMK.Notify.Services;
-using MMK.Wpf.ViewModel;
+using MMK.Presentation.ViewModel;
 
 namespace MMK.Notify.ViewModels
 {

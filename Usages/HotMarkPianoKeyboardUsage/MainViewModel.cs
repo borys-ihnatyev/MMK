@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using MMK.HotMark.ViewModels.PianoKeyBoard;
-using Sanford.Multimedia.Midi;
+﻿using MMK.HotMark.ViewModels.PianoKeyBoard;
+using MMK.Presentation.ViewModel;
 
 namespace MMK.HotMark.PianoKeyboardUsage
 {
-    public class MainViewModel : Wpf.ViewModel.ViewModel
+    public class MainViewModel : ViewModel
     {
         public MainViewModel()
         {
-            PianoKeyBoard = new PianoKeyBoardViewModel();    
+            PianoKeyBoard = new PianoKeyBoardViewModel();
         }
 
 
-        public PianoKeyBoardViewModel PianoKeyBoard
-        {
-            get; private set;
-        }
+        public PianoKeyBoardViewModel PianoKeyBoard { get; private set; }
     }
 }

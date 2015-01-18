@@ -11,8 +11,8 @@ using MMK.Notify.Observer.Remoting;
 using MMK.Notify.Observer.Tasking.Observing;
 using MMK.Notify.Properties;
 using MMK.Notify.Services;
+using MMK.Presentation.Providers;
 using MMK.Processing.AutoFolder;
-using MMK.Wpf.Providers;
 using Ninject;
 
 namespace MMK.Notify

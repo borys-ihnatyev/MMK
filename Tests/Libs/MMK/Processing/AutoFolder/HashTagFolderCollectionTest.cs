@@ -1,10 +1,9 @@
 ﻿using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using MMK.Marking.Representation;
-using MMK.Processing.AutoFolder;
 using NUnit.Framework;
 
-namespace MMK.Tests.Processing.AutoFolder
+namespace MMK.Processing.AutoFolder
 {
     [TestFixture]
     public class HashTagFolderCollectionTest

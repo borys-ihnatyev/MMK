@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
-using MMK.Wpf.Windows;
+using MMK.Presentation.Windows;
 
 namespace MMK.Notify.Views
 {

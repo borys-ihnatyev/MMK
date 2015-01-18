@@ -4,8 +4,8 @@ using MMK.ApplicationServiceModel;
 using MMK.Notify.Model.Launchers;
 using MMK.Notify.Observer;
 using MMK.Notify.Observer.Tasking.Common;
+using MMK.Presentation.Providers;
 using MMK.Processing.AutoFolder;
-using MMK.Wpf.Providers;
 
 namespace MMK.Notify.Services
 {

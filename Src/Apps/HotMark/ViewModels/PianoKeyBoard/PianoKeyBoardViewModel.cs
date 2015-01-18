@@ -5,12 +5,13 @@ using System.Linq;
 using System.Windows.Input;
 using MMK.HotMark.Model.PianoKeyBoard;
 using MMK.HotMark.PianoKeyboardUsage;
-using MMK.Wpf;
+using MMK.Presentation.Tools;
+using MMK.Presentation.ViewModel;
 using Sanford.Multimedia.Midi;
 
 namespace MMK.HotMark.ViewModels.PianoKeyBoard
 {
-    public class PianoKeyBoardViewModel : Wpf.ViewModel.ViewModel
+    public class PianoKeyBoardViewModel : ViewModel
     {
         private readonly int firstOctave;
 

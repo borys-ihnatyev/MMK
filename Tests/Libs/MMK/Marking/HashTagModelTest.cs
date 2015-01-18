@@ -3,7 +3,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using MMK.Marking.Representation;
 using NUnit.Framework;
 
-namespace MMK.Tests.Marking
+namespace MMK.Marking
 {
     [TestFixture]
     public class HashTagModelTest

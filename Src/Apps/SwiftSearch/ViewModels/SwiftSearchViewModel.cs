@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Windows.Input;
 using MMK.ApplicationServiceModel;
+using MMK.Presentation.Providers;
+using MMK.Presentation.Providers.Key;
+using MMK.Presentation.ViewModel;
 using MMK.SwiftSearch.Properties;
 using MMK.SwiftSearch.SearchHandlers;
 using MMK.Utils.Extensions;
-using MMK.Wpf.Providers;
-using MMK.Wpf.Providers.Key;
-using MMK.Wpf.ViewModel;
 
 namespace MMK.SwiftSearch.ViewModels
 {

@@ -6,8 +6,8 @@
     <ProjectGuid>{6173B716-B8CA-439C-8E57-68309510CC0E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MMK.Tests</RootNamespace>
-    <AssemblyName>MMK.Tests</AssemblyName>
+    <RootNamespace>MMK</RootNamespace>
+    <AssemblyName>MMK.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

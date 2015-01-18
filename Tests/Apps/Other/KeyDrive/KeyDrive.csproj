@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MMK.KeyDrive</RootNamespace>
-    <AssemblyName>MMK.KeyDrive.Tests</AssemblyName>
+    <AssemblyName>MMK.KeyDrive.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -86,13 +86,13 @@
       <Project>{A9193781-F0F5-406C-BC5F-312AE4F516F3}</Project>
       <Name>MMK</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Src\Libs\Presentation\Presentation.csproj">
+      <Project>{51A0C435-391F-44F2-A4B0-3D8623C2BC6B}</Project>
+      <Name>Presentation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Src\Libs\Utils\Utils.csproj">
       <Project>{1a83dd41-36ab-493f-a3c1-2acad7ff152f}</Project>
       <Name>Utils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Src\Libs\WPFUtils\WPFUtils.csproj">
-      <Project>{51a0c435-391f-44f2-a4b0-3d8623c2bc6b}</Project>
-      <Name>WPFUtils</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

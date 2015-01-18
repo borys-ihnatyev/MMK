@@ -5,8 +5,8 @@ using MMK.ApplicationServiceModel;
 using MMK.HotMark.ViewModels;
 using MMK.HotMark.Views;
 using MMK.Notify.Services;
-using MMK.Wpf;
-using MMK.Wpf.Providers;
+using MMK.Presentation;
+using MMK.Presentation.Providers;
 
 namespace MMK.Notify.Model.Launchers
 {

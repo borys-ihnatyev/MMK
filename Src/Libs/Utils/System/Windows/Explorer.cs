@@ -5,7 +5,6 @@ using System.Runtime.InteropServices;
 using MMK.Utils;
 using SHDocVw;
 
-// ReSharper disable once CheckNamespace
 namespace System.Windows
 {
     public class Explorer

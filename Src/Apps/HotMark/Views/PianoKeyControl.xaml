@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:interactivity="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:wpf="clr-namespace:MMK.Wpf;assembly=MMK.Wpf"
              xmlns:pianoKeyBoard="clr-namespace:MMK.HotMark.ViewModels.PianoKeyBoard"
+             xmlns:tools="clr-namespace:MMK.Presentation.Tools;assembly=MMK.Presentation"
              mc:Ignorable="d"
              Focusable="False"
              Width="15"
@@ -21,7 +21,7 @@
         </interactivity:EventTrigger>
 
         <interactivity:EventTrigger EventName="MouseEnter">
-            <wpf:InvokeDelegateCommandAction Command="{Binding MouseEnterCommand}"
+            <tools:InvokeDelegateCommandAction Command="{Binding MouseEnterCommand}"
                                              CommandParameter="{Binding InvokeParameter,RelativeSource={RelativeSource Self}}"/>
         </interactivity:EventTrigger>
 

@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Input;
-using MMK.Wpf.Windows;
+using MMK.Presentation.Windows;
 
 namespace MMK.Notify.Views
 {

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Windows.Input;
 using System.Windows.Media;
-using MMK.Wpf;
+using MMK.Presentation.Tools;
+using MMK.Presentation.ViewModel;
 
 namespace MMK.HotMark.ViewModels.PianoKeyBoard
 {
-    public class PianoKeyViewModel : Wpf.ViewModel.ViewModel
+    public class PianoKeyViewModel : ViewModel
     {
         private bool isPressed;
 

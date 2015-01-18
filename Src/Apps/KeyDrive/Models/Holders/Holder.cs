@@ -2,7 +2,7 @@
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Runtime.Serialization;
-using MMK.Wpf.ViewModel;
+using MMK.Presentation.ViewModel;
 
 namespace MMK.KeyDrive.Models.Holders
 {

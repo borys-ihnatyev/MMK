@@ -8,8 +8,8 @@ using MMK.Notify.Model.Settings;
 using MMK.Notify.Properties;
 using MMK.Notify.Services;
 using MMK.Notify.Views;
-using MMK.Wpf;
-using MMK.Wpf.ViewModel;
+using MMK.Presentation.Tools;
+using MMK.Presentation.ViewModel;
 
 namespace MMK.Notify.ViewModels
 {

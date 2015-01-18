@@ -121,9 +121,9 @@
       <Project>{9731941a-8ce4-4610-aedb-e6fc4d173d1b}</Project>
       <Name>HotMark</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Src\Libs\WPFUtils\WPFUtils.csproj">
-      <Project>{51a0c435-391f-44f2-a4b0-3d8623c2bc6b}</Project>
-      <Name>WPFUtils</Name>
+    <ProjectReference Include="..\..\Src\Libs\Presentation\Presentation.csproj">
+      <Project>{51A0C435-391F-44F2-A4B0-3D8623C2BC6B}</Project>
+      <Name>Presentation</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

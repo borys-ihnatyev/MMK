@@ -1,6 +1,8 @@
-﻿using NUnit.Framework;
+﻿using MMK.Presentation.Tools;
+using MMK.Presentation.ViewModel.Mockups;
+using NUnit.Framework;
 
-namespace MMK.Wpf.ViewModel
+namespace MMK.Presentation.ViewModel
 {
     [TestFixture]
     public class ViewModelTest

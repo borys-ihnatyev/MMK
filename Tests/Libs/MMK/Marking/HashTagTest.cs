@@ -1,9 +1,8 @@
 ﻿using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using MMK.Marking;
 using NUnit.Framework;
 
-namespace MMK.Tests.Marking
+namespace MMK.Marking
 {
     [TestFixture]
     public class HashTagTest

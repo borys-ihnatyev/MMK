@@ -5,7 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using MMK.HotMark.Model.Files;
-using MMK.Wpf.ViewModel;
+using MMK.Presentation.ViewModel;
 using IOFile = System.IO.File;
 
 

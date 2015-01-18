@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media.Animation;
 using MMK.Notify.ViewModels;
-using MMK.Wpf.Windows;
+using MMK.Presentation.Windows;
 using Application = System.Windows.Application;
 using Timer = System.Timers.Timer;
 

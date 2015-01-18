@@ -1,5 +1,5 @@
 ﻿using MMK.Marking;
-using MMK.Wpf.ViewModel;
+using MMK.Presentation.ViewModel;
 
 namespace MMK.HotMark.ViewModels
 {
