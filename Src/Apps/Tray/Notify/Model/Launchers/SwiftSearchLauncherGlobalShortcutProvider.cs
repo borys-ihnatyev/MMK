@@ -5,6 +5,7 @@ using MMK.ApplicationServiceModel;
 using MMK.Notify.Services;
 using MMK.Presentation;
 using MMK.Presentation.Windows.Input;
+using MMK.Presentation.Windows.Interop;
 using MMK.SwiftSearch.ViewModels;
 using MMK.SwiftSearch.Views;
 
@@ -18,11 +19,7 @@ namespace MMK.Notify.Model.Launchers
         private bool isSetStartShortcut;
         private bool isSetStartFromClipboardShortcut;
 
-        public SwiftSearchLauncherGlobalShortcutProvider() : this(null)
-        {
-        }
-
-        public SwiftSearchLauncherGlobalShortcutProvider(Window window) : base(window)
+        public SwiftSearchLauncherGlobalShortcutProvider() : base(IoC.Get<IHwndSource>())
         {
             viewModel = new SwiftSearchViewModel();
             launcher = new WindowLauncher<SwiftSearchView>(() => new SwiftSearchView(viewModel));

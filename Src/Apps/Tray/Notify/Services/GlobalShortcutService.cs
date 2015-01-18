@@ -10,7 +10,6 @@ using IKey = System.Windows.Input.Key;
 
 namespace MMK.Notify.Services
 {
-
     public class GlobalShortcutService : Service
     {
         private readonly INotifyObserver observer;
@@ -29,15 +28,10 @@ namespace MMK.Notify.Services
 
         protected override void OnInitialize()
         {
-            var trayWindow = IoC.Get<TrayMenuService>().TrayMenuView;
-            (shortcutProviders as IGlobalShortcutProvider).SetWindow(trayWindow);
-
-            shortcutProviders.Add(new HotMarkLauncherGlobalShortcutProvider(ModifierKeys.Control,
-                System.Windows.Input.Key.T));
-            shortcutProviders.Add(ModifierKeys.Control | ModifierKeys.Shift, IKey.T,
-                AddNormalizeHotKeyTasks);
-            shortcutProviders.Add(ModifierKeys.Control | ModifierKeys.Shift, IKey.M,
-                AddMoveFileToCollectionTasks);
+            var hotMarkLauncher = new HotMarkLauncherGlobalShortcutProvider(ModifierKeys.Control, IKey.T);
+            shortcutProviders.Add(hotMarkLauncher);
+            shortcutProviders.Add(ModifierKeys.Control | ModifierKeys.Shift, IKey.T, AddNormalizeHotKeyTasks);
+            shortcutProviders.Add(ModifierKeys.Control | ModifierKeys.Shift, IKey.M, AddMoveFileToCollectionTasks);
 
             var swiftSearchLauncher = new SwiftSearchLauncherGlobalShortcutProvider();
             shortcutProviders.Add(swiftSearchLauncher);

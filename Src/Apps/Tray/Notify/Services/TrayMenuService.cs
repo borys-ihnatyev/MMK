@@ -10,13 +10,12 @@ namespace MMK.Notify.Services
 {
     public class TrayMenuService : Service, IDisposable
     {
-        private readonly GlobalShortcutService shortcutService;
         private readonly TaskProgressService taskProgressService;
         private readonly NotifyIcon trayIcon;
         private readonly TrayMenuViewModel trayMenuViewModel;
         private TrayMenuView trayMenuView;
 
-        public TrayMenuService(GlobalShortcutService shortcutService, TaskProgressService taskProgressService)
+        public TrayMenuService(TaskProgressService taskProgressService)
         {
             trayIcon = new NotifyIcon
             {
@@ -25,7 +24,6 @@ namespace MMK.Notify.Services
             };
 
             trayMenuViewModel = new TrayMenuViewModel();
-            this.shortcutService = shortcutService;
             this.taskProgressService = taskProgressService;
         }
 
@@ -47,7 +45,6 @@ namespace MMK.Notify.Services
         {
             trayMenuView = new TrayMenuView {DataContext = trayMenuViewModel};
 
-            trayMenuView.Loaded += (s, a) => shortcutService.Initialize();
             trayMenuView.Loaded += (s, a) => trayMenuViewModel.LoadData();
             trayMenuView.Closed += (s, a) => trayMenuViewModel.UnloadData();
 

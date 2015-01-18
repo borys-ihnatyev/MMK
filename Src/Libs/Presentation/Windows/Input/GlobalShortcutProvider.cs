@@ -2,37 +2,25 @@
 using System.Diagnostics.Contracts;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Interop;
+using MMK.Presentation.Windows.Interop;
 
 namespace MMK.Presentation.Windows.Input
 {
     public class GlobalShortcutProvider : IGlobalShortcutProvider
     {
-        private Window window;
-        private GlobalShortcut shortcut;
+        private readonly IHwndSource hwndSource;
+        private readonly GlobalShortcut shortcut;
 
         public event Action Pressed;
 
-        public GlobalShortcutProvider(Window window, ModifierKeys modifier, System.Windows.Input.Key key)
+        public GlobalShortcutProvider(IHwndSource hwndSource, ModifierKeys modifier, System.Windows.Input.Key key)
         {
-            this.window = window;
-            shortcut = new GlobalShortcut(modifier, key, WndSource.Handle);
-        }
+            if(hwndSource == null)
+                throw new ArgumentNullException("hwndSource");
+            Contract.EndContractBlock();
 
-        protected GlobalShortcutProvider(ModifierKeys modifier, System.Windows.Input.Key key)
-        {
-            shortcut = new GlobalShortcut(modifier, key);
-        }
-
-        private HwndSource WndSource
-        {
-            get
-            {
-                Contract.Ensures(Contract.Result<HwndSource>() != null);
-                Contract.EndContractBlock();
-
-                return PresentationSource.FromVisual(window) as HwndSource;
-            }
+            this.hwndSource = hwndSource;
+            shortcut = new GlobalShortcut(modifier, key, hwndSource.Handle);
         }
 
         public bool IsListening { get; private set; }
@@ -43,20 +31,12 @@ namespace MMK.Presentation.Windows.Input
                 Pressed();
         }
 
-        private bool IsWndSourceSetted
-        {
-            get { return WndSource != null; }
-        }
-
         public void StartListen()
         {
             if (IsListening) return;
 
-            if (!IsWndSourceSetted)
-                throw new InvalidOperationException("wndSource not setted");
-
             shortcut.Register();
-            WndSource.AddHook(WndProc);
+            hwndSource.AddHook(WndProc);
             IsListening = true;
         }
 
@@ -64,7 +44,7 @@ namespace MMK.Presentation.Windows.Input
         {
             if (!IsListening) return;
 
-            WndSource.RemoveHook(WndProc);
+            hwndSource.RemoveHook(WndProc);
             shortcut.Unregister();
             IsListening = false;
         }
@@ -87,33 +67,6 @@ namespace MMK.Presentation.Windows.Input
         public override int GetHashCode()
         {
             return shortcut.GetHashCode();
-        }
-
-        void IGlobalShortcutProvider.SetWindow(Window ownerWindow)
-        {
-            if (ownerWindow == null)
-                throw new ArgumentNullException("ownerWindow");
-            Contract.EndContractBlock();
-
-            window = ownerWindow;
-
-            var wasListening = IsListening;
-
-            if (IsListening) StopListen();
-
-            shortcut = new GlobalShortcut(shortcut, WndSource.Handle);
-
-            if (wasListening) StartListen();
-        }
-
-        void IGlobalShortcutProvider.StartListen()
-        {
-            StartListen();
-        }
-
-        void IGlobalShortcutProvider.StopListen()
-        {
-            StopListen();
         }
     }
 }

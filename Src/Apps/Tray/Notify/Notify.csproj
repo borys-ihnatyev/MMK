@@ -190,6 +190,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\GlobalShortcutService.cs" />
+    <Compile Include="Services\HwndSourceService.cs" />
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\TaskProgressService.cs" />
     <Compile Include="Services\TrayMenuService.cs" />

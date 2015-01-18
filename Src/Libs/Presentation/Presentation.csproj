@@ -149,6 +149,7 @@
     <Compile Include="ViewModel\CommandNamingConventionException.cs" />
     <Compile Include="ViewModel\ViewModelLoader.cs" />
     <Compile Include="Tools\DependencyObjectFocusExtension.cs" />
+    <Compile Include="Windows\Interop\IHwndSource.cs" />
     <Compile Include="Windows\TaskBar.Native.cs" />
     <Compile Include="Windows\TaskBar.Abe.cs" />
     <Compile Include="Windows\TaskBar.Abm.cs" />

@@ -12,6 +12,7 @@ using MMK.Notify.Observer.Tasking.Observing;
 using MMK.Notify.Properties;
 using MMK.Notify.Services;
 using MMK.Presentation.Windows.Input;
+using MMK.Presentation.Windows.Interop;
 using MMK.Processing.AutoFolder;
 using Ninject;
 
@@ -83,6 +84,9 @@ namespace MMK.Notify
         {
             Contract.Assume(ServiceLocator != null);
 
+            ServiceLocator.Bind<HwndSourceService>().ToSelf().InSingletonScope();
+            ServiceLocator.Bind<IHwndSource>().ToMethod( c => ServiceLocator.Get<HwndSourceService>()).InSingletonScope();
+
             ServiceLocator.Bind<TaskObserver>().ToSelf().InSingletonScope();
 
             ServiceLocator.Bind<INotifyObserver>()
@@ -104,24 +108,24 @@ namespace MMK.Notify
             ServiceLocator.Bind<GlobalShortcutService>().ToSelf().InSingletonScope();
             ServiceLocator.Bind<TrayMenuService>().ToSelf().InSingletonScope();
 
-            ServiceLocator.Get<TrayMenuService>().Initialize();
+            var hwndSourceService = ServiceLocator.Get<HwndSourceService>();
+            hwndSourceService.Initialized += (s, e) =>
+            {
+                ServiceLocator.Get<GlobalShortcutService>().Initialize();
+                ServiceLocator.Get<TrayMenuService>().Initialize();
+                ServiceLocator.Get<TrayMenuService>().Start();
+            };
+
             ServiceLocator.Get<TaskProgressService>().Initialize();
-
-
-            var trayWindow = ServiceLocator.Get<TrayMenuService>().TrayMenuView;
-            Current.MainWindow = trayWindow;
-
-            var shortcutProviders = (IGlobalShortcutProvider) ServiceLocator.Get<GlobalShortcutProviderCollection>();
-            shortcutProviders.SetWindow(trayWindow);
         }
 
         private static void StartServices()
         {
             Contract.Assume(ServiceLocator != null);
 
+            ServiceLocator.Get<HwndSourceService>().Start();
             ServiceLocator.Get<TaskObserver>().Start();
             ServiceLocator.Get<NotifyObserver>().Start();
-            ServiceLocator.Get<TrayMenuService>().Start();
         }
 
         protected override void OnExit(ExitEventArgs e)
@@ -132,6 +136,8 @@ namespace MMK.Notify
             ServiceLocator.Get<TaskProgressService>().Stop();
             ServiceLocator.Get<NotifyObserver>().Stop();
             ServiceLocator.Get<TaskObserver>().Cancell();
+            ServiceLocator.Get<HwndSourceService>().Stop();
+
             base.OnExit(e);
         }
     }

@@ -6,6 +6,7 @@ using MMK.ApplicationServiceModel;
 using MMK.Presentation.ViewModel;
 using MMK.Presentation.Windows.Input;
 using MMK.Presentation.Windows.Input.Special;
+using MMK.Presentation.Windows.Interop;
 using MMK.SwiftSearch.Properties;
 using MMK.SwiftSearch.SearchHandlers;
 
@@ -35,7 +36,7 @@ namespace MMK.SwiftSearch.ViewModels
         {
             Search = search.RemoveNewLines().Trim();
             SetSearchHandler();
-            shortcutProvider = new MusicalKeyGlobalShortcutProvider();
+            shortcutProvider = IoC.Get<MusicalKeyGlobalShortcutProvider>();
             shortcutProvider.Pressed += AddSearchParalel;
         }
 
@@ -134,6 +135,9 @@ namespace MMK.SwiftSearch.ViewModels
 
         public void ApplySearch()
         {
+            if(String.IsNullOrWhiteSpace(FullSearch))
+                return;
+
             var searchHandler = SearchHandlerFactory.Create(searchHandlerName, FullSearch);
             searchHandler.Search();
         }

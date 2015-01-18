@@ -1,39 +1,32 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using System.Windows;
-using System.Windows.Interop;
+using MMK.Presentation.Windows.Interop;
 
 namespace MMK.Presentation.Windows.Input.Special
 {
     public class MusicalKeyGlobalShortcutProvider : IGlobalShortcutProvider
     {
-        private HwndSource wndSource;
-        private MuscalKeyGlobalShortcutRegister shortcutRegister;
+        private readonly IHwndSource hwndSource;
+        private readonly MuscalKeyGlobalShortcutRegister shortcutRegister;
 
-        public MusicalKeyGlobalShortcutProvider(Window window)
+        public MusicalKeyGlobalShortcutProvider(IHwndSource hwndSource)
         {
-            wndSource = PresentationSource.FromVisual(window) as HwndSource;
+            if (hwndSource == null)
+                throw new ArgumentNullException("hwndSource");
+            Contract.EndContractBlock();
+
+            this.hwndSource = hwndSource;
+            shortcutRegister = new MuscalKeyGlobalShortcutRegister(hwndSource.Handle);
         }
 
-        public MusicalKeyGlobalShortcutProvider()
-        {
-        }
-
-        private bool IsWndSourceSetted
-        {
-            get { return wndSource != null; }
-        }
 
         public void StartListen()
         {
             if (IsListening) return;
 
-            if (!IsWndSourceSetted)
-                throw new InvalidOperationException("wndSource not setted");
-
-            shortcutRegister = new MuscalKeyGlobalShortcutRegister(wndSource.Handle);
             shortcutRegister.Register();
-            wndSource.AddHook(WndProc);
+            hwndSource.AddHook(WndProc);
             IsListening = true;
         }
 
@@ -41,7 +34,7 @@ namespace MMK.Presentation.Windows.Input.Special
         {
             if (!IsListening) return;
 
-            wndSource.RemoveHook(WndProc);
+            hwndSource.RemoveHook(WndProc);
             shortcutRegister.Unregister();
             IsListening = false;
         }
@@ -66,13 +59,5 @@ namespace MMK.Presentation.Windows.Input.Special
         public event Action<Key> Pressed;
 
         public bool IsListening { get; private set; }
-
-        void IGlobalShortcutProvider.SetWindow(Window window)
-        {
-            wndSource = PresentationSource.FromVisual(window) as HwndSource;
-            Debug.Assert(wndSource != null, "wndSource != null");
-            if (IsListening)
-                throw new InvalidOperationException("Cant change wndSource while is listening shortcuts");
-        }
     }
 }

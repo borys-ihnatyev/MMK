@@ -6,9 +6,9 @@ using System.Windows.Interop;
 
 namespace MMK.Presentation
 {
-    public abstract class TrayWindow : Window
+    public class TrayWindow : Window
     {
-        protected TrayWindow()
+        public TrayWindow()
         {
             ShowInTaskbar = false;
             ShowActivated = false;

@@ -3,30 +3,32 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Windows;
 using System.Windows.Input;
+using MMK.Presentation.Windows.Interop;
 
 namespace MMK.Presentation.Windows.Input
 {
-
     public class GlobalShortcutProviderCollection : IGlobalShortcutProvider, ICollection<IGlobalShortcutProvider>
     {
-        private Window window;
+        private readonly IHwndSource hwndSource;
 
         private readonly HashSet<IGlobalShortcutProvider> shortcutProviders;
 
-        public GlobalShortcutProviderCollection() : this(null)
+        public GlobalShortcutProviderCollection(IHwndSource hwndSource)
         {
-        }
+            if(hwndSource == null)
+                throw new ArgumentNullException("hwndSource");
+            Contract.EndContractBlock();
 
-        public GlobalShortcutProviderCollection(Window window)
-        {
+            this.hwndSource = hwndSource;
             shortcutProviders = new HashSet<IGlobalShortcutProvider>();
-            this.window = window;
         }
 
 
-        public int Count { get { return shortcutProviders.Count; } }
+        public int Count
+        {
+            get { return shortcutProviders.Count; }
+        }
 
         public bool IsAnyListening
         {
@@ -47,13 +49,12 @@ namespace MMK.Presentation.Windows.Input
 
         public void Add(IGlobalShortcutProvider shortcutProvider)
         {
-            shortcutProvider.SetWindow(window);
             shortcutProviders.Add(shortcutProvider);
         }
 
-        public IGlobalShortcutProvider Add(ModifierKeys modifier, System.Windows.Input.Key key , Action pressed)
+        public IGlobalShortcutProvider Add(ModifierKeys modifier, System.Windows.Input.Key key, Action pressed)
         {
-            var shortcutProvider = new GlobalShortcutProvider(window, modifier, key);
+            var shortcutProvider = new GlobalShortcutProvider(hwndSource, modifier, key);
             shortcutProvider.Pressed += pressed;
             Add(shortcutProvider);
             return shortcutProvider;
@@ -74,7 +75,6 @@ namespace MMK.Presentation.Windows.Input
             shortcutProviders.Clear();
         }
 
-
         public IEnumerator<IGlobalShortcutProvider> GetEnumerator()
         {
             return shortcutProviders.GetEnumerator();
@@ -86,29 +86,7 @@ namespace MMK.Presentation.Windows.Input
             return GetEnumerator();
         }
 
-        void IGlobalShortcutProvider.SetWindow(Window ownerWindow)
-        {
-            if (ownerWindow == null)
-                throw new ArgumentNullException("ownerWindow");
-            Contract.EndContractBlock();
-
-            window = ownerWindow;
-
-            var startListen = false;
-            
-            if (IsAnyListening)
-            {
-                StopListen();
-                startListen = true;
-            }
-
-            shortcutProviders.ForEach(p => p.SetWindow(window));
-
-            if(startListen)
-                StartListen();
-        }
-
-        bool IGlobalShortcutProvider.IsListening 
+        bool IGlobalShortcutProvider.IsListening
         {
             get { return IsAnyListening; }
         }

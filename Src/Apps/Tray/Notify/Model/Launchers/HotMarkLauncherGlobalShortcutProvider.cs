@@ -8,6 +8,7 @@ using MMK.HotMark.Views;
 using MMK.Notify.Services;
 using MMK.Presentation;
 using MMK.Presentation.Windows.Input;
+using MMK.Presentation.Windows.Interop;
 
 namespace MMK.Notify.Model.Launchers
 {
@@ -15,7 +16,8 @@ namespace MMK.Notify.Model.Launchers
     {
         private readonly HotMarkWindowLauncher launcher;
 
-        public HotMarkLauncherGlobalShortcutProvider(ModifierKeys modifier, System.Windows.Input.Key key) : base(modifier, key)
+        public HotMarkLauncherGlobalShortcutProvider(ModifierKeys modifier, System.Windows.Input.Key key) 
+            : base(IoC.Get<IHwndSource>(), modifier, key)   
         {
             launcher = new HotMarkWindowLauncher();
             Pressed += OnPressed;
