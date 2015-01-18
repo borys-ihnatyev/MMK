@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using MMK.HotMark.Model.PianoKeyBoard;
-using MMK.HotMark.PianoKeyboardUsage;
 using MMK.Presentation.Tools;
 using MMK.Presentation.ViewModel;
 using Sanford.Multimedia.Midi;
