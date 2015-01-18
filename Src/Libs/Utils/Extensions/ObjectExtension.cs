@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 
-namespace MMK.Utils.Extensions
+// ReSharper disable once CheckNamespace
+namespace System
 {
     public static class ObjectExtension
     {

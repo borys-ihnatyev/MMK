@@ -8,7 +8,6 @@ using MMK.Presentation.Providers.Key;
 using MMK.Presentation.ViewModel;
 using MMK.SwiftSearch.Properties;
 using MMK.SwiftSearch.SearchHandlers;
-using MMK.Utils.Extensions;
 
 namespace MMK.SwiftSearch.ViewModels
 {
