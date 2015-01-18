@@ -161,7 +161,6 @@
     <Compile Include="AppLauncher.cs" />
     <Compile Include="System\Collections\Generic\CircleLinkedList.cs" />
     <Compile Include="System\Collections\Generic\CircleLinkedList.Node.cs" />
-    <Compile Include="System\Windows.Forms\DialogPicker.cs" />
     <Compile Include="System\EventArgs.cs" />
     <Compile Include="System\Windows\Explorer.cs" />
     <Compile Include="Extensions\IEnumerableExtension.cs" />

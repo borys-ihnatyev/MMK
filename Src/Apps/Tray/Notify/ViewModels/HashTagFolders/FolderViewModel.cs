@@ -1,6 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.IO;
-using System.Windows.Forms;
 using System.Windows.Input;
 using MMK.Wpf;
 using MMK.Wpf.ViewModel;
@@ -73,9 +73,7 @@ namespace MMK.Notify.ViewModels.HashTagFolders
 
         private void PickFolderCommandAction()
         {
-            var pickedPath = DialogPicker.PickFolder(Path);
-            if (pickedPath != null)
-                Path = pickedPath;
+            throw new NotImplementedException();
         }
     }
 }
