@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace MMK.Presentation.Providers.Key
+namespace MMK.Presentation.Windows.Input.Special
 {
     public class MusicalKeyGlobalShortcutProvider : IGlobalShortcutProvider
     {
@@ -17,7 +17,6 @@ namespace MMK.Presentation.Providers.Key
 
         public MusicalKeyGlobalShortcutProvider()
         {
-
         }
 
         private bool IsWndSourceSetted
@@ -49,22 +48,22 @@ namespace MMK.Presentation.Providers.Key
 
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
-            if (msg == GlobalShortcut.WM_HOTKEY)
+            if (msg == GlobalShortcut.WmHotkey)
             {
                 var key = MusicalKeyGlobalShortcut.DecodeKey(wParam.ToInt32());
-                OnHotKeyPressed(key);
+                OnPressed(key);
                 handled = true;
             }
             return IntPtr.Zero;
         }
 
-        private void OnHotKeyPressed(MMK.Key key)
+        private void OnPressed(Key key)
         {
-            if (HotKeyPressed != null)
-                HotKeyPressed(key);
+            if (Pressed != null)
+                Pressed(key);
         }
 
-        public event Action<MMK.Key> HotKeyPressed;
+        public event Action<Key> Pressed;
 
         public bool IsListening { get; private set; }
 

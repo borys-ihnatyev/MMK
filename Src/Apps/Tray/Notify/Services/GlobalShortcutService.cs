@@ -1,14 +1,16 @@
 ﻿using System.Windows;
-using System.Windows.Forms;
+using System.Windows.Input;
 using MMK.ApplicationServiceModel;
 using MMK.Notify.Model.Launchers;
 using MMK.Notify.Observer;
 using MMK.Notify.Observer.Tasking.Common;
-using MMK.Presentation.Providers;
+using MMK.Presentation.Windows.Input;
 using MMK.Processing.AutoFolder;
+using IKey = System.Windows.Input.Key;
 
 namespace MMK.Notify.Services
 {
+
     public class GlobalShortcutService : Service
     {
         private readonly INotifyObserver observer;
@@ -30,15 +32,18 @@ namespace MMK.Notify.Services
             var trayWindow = IoC.Get<TrayMenuService>().TrayMenuView;
             (shortcutProviders as IGlobalShortcutProvider).SetWindow(trayWindow);
 
-            shortcutProviders.Add(new HotMarkLauncherGlobalShortcutProvider(KeyModifyers.Ctrl, (int) Keys.T));
-            shortcutProviders.Add(KeyModifyers.Ctrl | KeyModifyers.Shift, (int) Keys.T, AddNormalizeHotKeyTasks);
-            shortcutProviders.Add(KeyModifyers.Ctrl | KeyModifyers.Shift, (int) Keys.M, AddMoveFileToCollectionTasks);
+            shortcutProviders.Add(new HotMarkLauncherGlobalShortcutProvider(ModifierKeys.Control,
+                System.Windows.Input.Key.T));
+            shortcutProviders.Add(ModifierKeys.Control | ModifierKeys.Shift, IKey.T,
+                AddNormalizeHotKeyTasks);
+            shortcutProviders.Add(ModifierKeys.Control | ModifierKeys.Shift, IKey.M,
+                AddMoveFileToCollectionTasks);
 
             var swiftSearchLauncher = new SwiftSearchLauncherGlobalShortcutProvider();
             shortcutProviders.Add(swiftSearchLauncher);
 
-            swiftSearchLauncher.SetStartShortcut(KeyModifyers.Ctrl, Keys.Space);
-            swiftSearchLauncher.SetStartFromClipboardShortcut(KeyModifyers.Ctrl | KeyModifyers.Shift, Keys.V);
+            swiftSearchLauncher.SetStartShortcut(ModifierKeys.Control, IKey.Space);
+            swiftSearchLauncher.SetStartFromClipboardShortcut(ModifierKeys.Control | ModifierKeys.Shift, IKey.V);
         }
 
         private void AddNormalizeHotKeyTasks()

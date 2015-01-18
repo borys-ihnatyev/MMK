@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 
-namespace MMK.Presentation.Providers
+namespace MMK.Presentation.Windows.Input
 {
+
     public class GlobalShortcutProviderCollection : IGlobalShortcutProvider, ICollection<IGlobalShortcutProvider>
     {
         private Window window;
@@ -49,9 +51,9 @@ namespace MMK.Presentation.Providers
             shortcutProviders.Add(shortcutProvider);
         }
 
-        public IGlobalShortcutProvider Add(KeyModifyers modifyer, int keyCode, Action pressed)
+        public IGlobalShortcutProvider Add(ModifierKeys modifier, System.Windows.Input.Key key , Action pressed)
         {
-            var shortcutProvider = new GlobalShortcutProvider(window, modifyer, keyCode);
+            var shortcutProvider = new GlobalShortcutProvider(window, modifier, key);
             shortcutProvider.Pressed += pressed;
             Add(shortcutProvider);
             return shortcutProvider;

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Windows.Input;
 using MMK.ApplicationServiceModel;
-using MMK.Presentation.Providers;
-using MMK.Presentation.Providers.Key;
 using MMK.Presentation.ViewModel;
+using MMK.Presentation.Windows.Input;
+using MMK.Presentation.Windows.Input.Special;
 using MMK.SwiftSearch.Properties;
 using MMK.SwiftSearch.SearchHandlers;
 
@@ -36,7 +36,7 @@ namespace MMK.SwiftSearch.ViewModels
             Search = search.RemoveNewLines().Trim();
             SetSearchHandler();
             shortcutProvider = new MusicalKeyGlobalShortcutProvider();
-            shortcutProvider.HotKeyPressed += AddSearchParalel;
+            shortcutProvider.Pressed += AddSearchParalel;
         }
 
         public string SearchHandlerIconText

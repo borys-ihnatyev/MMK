@@ -11,7 +11,7 @@ using MMK.Notify.Observer.Remoting;
 using MMK.Notify.Observer.Tasking.Observing;
 using MMK.Notify.Properties;
 using MMK.Notify.Services;
-using MMK.Presentation.Providers;
+using MMK.Presentation.Windows.Input;
 using MMK.Processing.AutoFolder;
 using Ninject;
 

@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Forms;
+using System.Windows.Input;
 using MMK.ApplicationServiceModel;
 using MMK.Notify.Services;
 using MMK.Presentation;
-using MMK.Presentation.Providers;
+using MMK.Presentation.Windows.Input;
 using MMK.SwiftSearch.ViewModels;
 using MMK.SwiftSearch.Views;
-using Clipboard = System.Windows.Clipboard;
 
 namespace MMK.Notify.Model.Launchers
 {
@@ -21,7 +20,6 @@ namespace MMK.Notify.Model.Launchers
 
         public SwiftSearchLauncherGlobalShortcutProvider() : this(null)
         {
-
         }
 
         public SwiftSearchLauncherGlobalShortcutProvider(Window window) : base(window)
@@ -30,17 +28,17 @@ namespace MMK.Notify.Model.Launchers
             launcher = new WindowLauncher<SwiftSearchView>(() => new SwiftSearchView(viewModel));
         }
 
-        public void SetStartShortcut(KeyModifyers modifyers, Keys key)
+        public void SetStartShortcut(ModifierKeys modifiers, System.Windows.Input.Key key)
         {
             if (isSetStartShortcut) return;
 
-            isSetStartShortcut = Add(modifyers, (int) key, Start) != null;
+            isSetStartShortcut = Add(modifiers, key, Start) != null;
         }
 
-        public void SetStartFromClipboardShortcut(KeyModifyers modifyers, Keys key)
+        public void SetStartFromClipboardShortcut(ModifierKeys modifiers, System.Windows.Input.Key key)
         {
             if (isSetStartFromClipboardShortcut) return;
-            isSetStartFromClipboardShortcut = Add(modifyers, (int) key, StartFromClipboard) != null;
+            isSetStartFromClipboardShortcut = Add(modifiers, key, StartFromClipboard) != null;
         }
 
         private void Start()

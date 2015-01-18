@@ -136,12 +136,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Providers\GlobalShortcutProvider.cs" />
-    <Compile Include="Providers\GlobalShortcutProviderCollection.cs" />
-    <Compile Include="Providers\IGlobalShortcutProvider.cs" />
-    <Compile Include="Providers\Key\MusicalKeyGlobalShortcut.cs" />
-    <Compile Include="Providers\Key\MusicalKeyGlobalShortcutProvider.cs" />
-    <Compile Include="Providers\Key\MuscalKeyGlobalShortcutRegister.cs" />
+    <Compile Include="Windows\Input\GlobalShortcutProvider.cs" />
+    <Compile Include="Windows\Input\GlobalShortcutProviderCollection.cs" />
+    <Compile Include="Windows\Input\IGlobalShortcutProvider.cs" />
+    <Compile Include="Windows\Input\Special\MusicalKeyGlobalShortcut.cs" />
+    <Compile Include="Windows\Input\Special\MusicalKeyGlobalShortcutProvider.cs" />
+    <Compile Include="Windows\Input\Special\MuscalKeyGlobalShortcutRegister.cs" />
     <Compile Include="Windows\FrameworkElementExtension.cs" />
     <Compile Include="ViewModel\CommandLoader.cs" />
     <Compile Include="ViewModel\CommandResolveException.cs" />

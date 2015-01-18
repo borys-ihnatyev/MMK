@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 using MMK.ApplicationServiceModel;
 using MMK.HotMark.ViewModels;
 using MMK.HotMark.Views;
 using MMK.Notify.Services;
 using MMK.Presentation;
-using MMK.Presentation.Providers;
+using MMK.Presentation.Windows.Input;
 
 namespace MMK.Notify.Model.Launchers
 {
@@ -14,7 +15,7 @@ namespace MMK.Notify.Model.Launchers
     {
         private readonly HotMarkWindowLauncher launcher;
 
-        public HotMarkLauncherGlobalShortcutProvider(KeyModifyers modifyer, int keyCode) : base(modifyer, keyCode)
+        public HotMarkLauncherGlobalShortcutProvider(ModifierKeys modifier, System.Windows.Input.Key key) : base(modifier, key)
         {
             launcher = new HotMarkWindowLauncher();
             Pressed += OnPressed;

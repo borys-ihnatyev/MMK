@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace MMK.Presentation.Providers
+namespace MMK.Presentation.Windows.Input
 {
     public interface IGlobalShortcutProvider
     {

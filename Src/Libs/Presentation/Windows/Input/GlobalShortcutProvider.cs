@@ -1,26 +1,27 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Interop;
 
-namespace MMK.Presentation.Providers
+namespace MMK.Presentation.Windows.Input
 {
     public class GlobalShortcutProvider : IGlobalShortcutProvider
     {
         private Window window;
         private GlobalShortcut shortcut;
-        
+
         public event Action Pressed;
 
-        public GlobalShortcutProvider(Window window, KeyModifyers modifyer, int keyCode)
+        public GlobalShortcutProvider(Window window, ModifierKeys modifier, System.Windows.Input.Key key)
         {
             this.window = window;
-            shortcut = new GlobalShortcut(modifyer, keyCode, WndSource.Handle);
+            shortcut = new GlobalShortcut(modifier, key, WndSource.Handle);
         }
 
-        protected GlobalShortcutProvider(KeyModifyers modifyer, int keyCode)
+        protected GlobalShortcutProvider(ModifierKeys modifier, System.Windows.Input.Key key)
         {
-            shortcut = new GlobalShortcut(modifyer, keyCode);
+            shortcut = new GlobalShortcut(modifier, key);
         }
 
         private HwndSource WndSource
@@ -80,7 +81,7 @@ namespace MMK.Presentation.Providers
 
         private bool CanHandleMessage(int msg, long id)
         {
-            return msg == GlobalShortcut.WM_HOTKEY && id == shortcut.Id;
+            return msg == GlobalShortcut.WmHotkey && id == shortcut.Id;
         }
 
         public override int GetHashCode()
@@ -97,12 +98,12 @@ namespace MMK.Presentation.Providers
             window = ownerWindow;
 
             var wasListening = IsListening;
-            
+
             if (IsListening) StopListen();
-            
+
             shortcut = new GlobalShortcut(shortcut, WndSource.Handle);
-            
-            if(wasListening) StartListen();
+
+            if (wasListening) StartListen();
         }
 
         void IGlobalShortcutProvider.StartListen()

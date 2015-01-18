@@ -1,53 +1,54 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Input;
 using MMK.Marking;
 
-namespace MMK.Presentation.Providers.Key
+namespace MMK.Presentation.Windows.Input.Special
 {
     class MusicalKeyGlobalShortcut : GlobalShortcut
     {
-        public MusicalKeyGlobalShortcut(MMK.Key key)
+        public MusicalKeyGlobalShortcut(Key key)
             : this(key, IntPtr.Zero)
         {
         }
 
-        public MusicalKeyGlobalShortcut(MMK.Key key, IntPtr hwnd)
+        public MusicalKeyGlobalShortcut(Key key, IntPtr hwnd)
             : base(ModifyersFrom(key), KeyCodeFrom(key), hwnd)
         {
             Key = key;
         }
 
-        public MMK.Key Key { get; private set; }
+        public Key Key { get; private set; }
 
-        private static KeyModifyers ModifyersFrom(MMK.Key key)
+        private static ModifierKeys ModifyersFrom(Key key)
         {
-            var modifyers = key.IsMoll() ? KeyModifyers.Ctrl : KeyModifyers.Shift;
+            var modifyers = key.IsMoll() ? ModifierKeys.Control : ModifierKeys.Shift;
 
             if (key.IsSharpness())
-                modifyers |= KeyModifyers.Alt;
+                modifyers |= ModifierKeys.Alt;
 
             return modifyers;
         }
 
-        private static int KeyCodeFrom(MMK.Key key)
+        private static int KeyCodeFrom(Key key)
         {
             return key.Note.ToString()[0];
         }
 
         public override int GetHashCode()
         {
-            return (KeyCode << 4) | (int) Modifyers;
+            return (KeyCode << 4) | (int) Modifiers;
         }
 
-        public static MMK.Key DecodeKey(int id)
+        public static Key DecodeKey(int id)
         {
             var keyStr = string.Empty;
             keyStr += (char) (id >> 4);
 
-            if ((id & (int) KeyModifyers.Alt) == (int) KeyModifyers.Alt)
+            if ((id & (int) ModifierKeys.Alt) == (int) ModifierKeys.Alt)
                 keyStr += '#';
 
-            if ((id & (int) KeyModifyers.Ctrl) == (int) KeyModifyers.Ctrl)
+            if ((id & (int) ModifierKeys.Control) == (int) ModifierKeys.Control)
                 keyStr += 'm';
 
             return KeyHashTag.Parser.First("#" + keyStr).HashTag.Key;
