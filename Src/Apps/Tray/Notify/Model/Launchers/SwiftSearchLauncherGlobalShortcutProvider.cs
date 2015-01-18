@@ -11,7 +11,7 @@ using Clipboard = System.Windows.Clipboard;
 
 namespace MMK.Notify.Model.Launchers
 {
-    public sealed class SwiftSearchLauncher : GlobalShortcutProviderCollection
+    public sealed class SwiftSearchLauncherGlobalShortcutProvider : GlobalShortcutProviderCollection
     {
         private readonly SwiftSearchViewModel viewModel;
         private readonly WindowLauncher<SwiftSearchView> launcher;
@@ -19,12 +19,12 @@ namespace MMK.Notify.Model.Launchers
         private bool isSetStartShortcut;
         private bool isSetStartFromClipboardShortcut;
 
-        public SwiftSearchLauncher() : this(null)
+        public SwiftSearchLauncherGlobalShortcutProvider() : this(null)
         {
 
         }
 
-        public SwiftSearchLauncher(Window window) : base(window)
+        public SwiftSearchLauncherGlobalShortcutProvider(Window window) : base(window)
         {
             viewModel = new SwiftSearchViewModel();
             launcher = new WindowLauncher<SwiftSearchView>(() => new SwiftSearchView(viewModel));

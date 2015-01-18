@@ -54,7 +54,6 @@ namespace MMK.Wpf
             if(factoryMethod == null)
                 throw new InvalidOperationException("if no factory method passed in ctor, then WindowFactory must be overriden");
 
-
             return factoryMethod();
         }
 

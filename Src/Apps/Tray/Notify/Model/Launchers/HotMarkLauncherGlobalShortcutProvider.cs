@@ -10,11 +10,11 @@ using MMK.Wpf.Providers;
 
 namespace MMK.Notify.Model.Launchers
 {
-    public sealed class HotMarkLauncher : GlobalShortcutProvider
+    public sealed class HotMarkLauncherGlobalShortcutProvider : GlobalShortcutProvider
     {
         private readonly HotMarkWindowLauncher launcher;
 
-        public HotMarkLauncher(KeyModifyers modifyer, int keyCode) : base(modifyer, keyCode)
+        public HotMarkLauncherGlobalShortcutProvider(KeyModifyers modifyer, int keyCode) : base(modifyer, keyCode)
         {
             launcher = new HotMarkWindowLauncher();
             Pressed += OnPressed;

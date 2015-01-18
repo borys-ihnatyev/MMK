@@ -30,11 +30,11 @@ namespace MMK.Notify.Services
             var trayWindow = IoC.Get<TrayMenuService>().TrayMenuView;
             (shortcutProviders as IGlobalShortcutProvider).SetWindow(trayWindow);
 
-            shortcutProviders.Add(new HotMarkLauncher(KeyModifyers.Ctrl, (int) Keys.T));
+            shortcutProviders.Add(new HotMarkLauncherGlobalShortcutProvider(KeyModifyers.Ctrl, (int) Keys.T));
             shortcutProviders.Add(KeyModifyers.Ctrl | KeyModifyers.Shift, (int) Keys.T, AddNormalizeHotKeyTasks);
             shortcutProviders.Add(KeyModifyers.Ctrl | KeyModifyers.Shift, (int) Keys.M, AddMoveFileToCollectionTasks);
 
-            var swiftSearchLauncher = new SwiftSearchLauncher();
+            var swiftSearchLauncher = new SwiftSearchLauncherGlobalShortcutProvider();
             shortcutProviders.Add(swiftSearchLauncher);
 
             swiftSearchLauncher.SetStartShortcut(KeyModifyers.Ctrl, Keys.Space);
