@@ -21,6 +21,18 @@ namespace MMK.ApplicationServiceModel.Locator.Resolving
             this.assembly = assembly;
         }
 
+        public IServiceLocator TryResolveLocator()
+        {
+            try
+            {
+                return ResolveLocator();
+            }
+            catch (ServiceLocatorOwnerNotFoundException)
+            {
+                return null;
+            }
+        }
+
         public IServiceLocator ResolveLocator()
         {
             serviceLocatorOwnerType = GetLocatorOwnerType();
@@ -46,10 +58,10 @@ namespace MMK.ApplicationServiceModel.Locator.Resolving
         private void CheckOwnerIsOne(List<Type> serviceLocatorOwners)
         {
             if (serviceLocatorOwners.Count == 0)
-                throw new ServiceLocatorNotFoundException(
+                throw new ServiceLocatorOwnerNotFoundException(
                     "Class marked with ServiceLocatorOwnerAttribute was not found in assembly " + assembly);
             if (serviceLocatorOwners.Count > 1)
-                throw new ServiceLocatorConflictException();
+                throw new ServiceLocatorOwnerConflictException();
         }
 
         private PropertyInfo GetLocatorPropertyType()
