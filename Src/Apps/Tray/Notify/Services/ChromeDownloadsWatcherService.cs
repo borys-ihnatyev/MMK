@@ -1,26 +1,46 @@
 ﻿using System;
 using System.IO;
+using MMK.ApplicationServiceModel;
 using MMK.Notify.Model.Service;
 using MMK.Utils;
+using Newtonsoft.Json;
 
 namespace MMK.Notify.Services
 {
-    public sealed class ChromeDownloadsWatcherService : IDownloadsWatcher
+    public sealed class ChromeDownloadsWatcherService : InitializableService, IDownloadsWatcher
     {
-        private static readonly string DefaultDownloadsPath;
+        private string downloadsPath;
 
-        private readonly FileSystemWatcher fileWatcher;
+        private FileSystemWatcher fileWatcher;
 
-        static ChromeDownloadsWatcherService()
+        protected override void OnInitialize()
         {
-            DefaultDownloadsPath = Environment
-                .ExpandEnvironmentVariables("%USERPROFILE%") + @"\Downloads\";
+            downloadsPath = GetChromeDownloadsPath();
+            fileWatcher = new FileSystemWatcher(downloadsPath);
+            fileWatcher.Renamed += OnRenamed;
         }
 
-        public ChromeDownloadsWatcherService()
+        private static string GetChromeDownloadsPath()
         {
-            fileWatcher = new FileSystemWatcher(DefaultDownloadsPath);
-            fileWatcher.Renamed += OnRenamed;
+            var settingsDirPath = Environment.ExpandEnvironmentVariables("%USERPROFILE%") +
+                                  @"\AppData\Local\Google\Chrome\User Data\Default";
+
+            if (!Directory.Exists(settingsDirPath))
+                throw new DirectoryNotFoundException("Chrome settings directory not found");
+
+            var preferencesFilePath = Path.Combine(settingsDirPath, "Preferences");
+
+            if (!File.Exists(preferencesFilePath))
+                throw new FileNotFoundException("Chrome settings prefences file not found");
+
+            string settingsJson;
+
+            using (var reader = new StreamReader(preferencesFilePath))
+                settingsJson = reader.ReadToEnd();
+
+            dynamic settings = JsonConvert.DeserializeObject(settingsJson);
+
+            return settings.download.default_directory;
         }
 
         private void OnRenamed(object sender, RenamedEventArgs e)
@@ -31,20 +51,31 @@ namespace MMK.Notify.Services
 
         private void OnFileDownloaded(string filePath)
         {
-            if (FileDownloaded != null)
-                FileDownloaded(filePath);
+            var handler = FileDownloaded;
+            if (handler != null)
+                handler(this, new FileDownloadedEventArgs(filePath));
         }
 
-        public void Start()
+        protected override void OnStart()
         {
             fileWatcher.EnableRaisingEvents = true;
         }
 
-        public void Stop()
+        protected override void OnStop()
         {
             fileWatcher.EnableRaisingEvents = false;
         }
 
-        public event Action<string> FileDownloaded;
+        public event EventHandler<FileDownloadedEventArgs> FileDownloaded;
+    }
+
+    public class FileDownloadedEventArgs : EventArgs
+    {
+        public FileDownloadedEventArgs(string filePath)
+        {
+            FilePath = filePath;
+        }
+
+        public string FilePath { get; private set; }
     }
 }

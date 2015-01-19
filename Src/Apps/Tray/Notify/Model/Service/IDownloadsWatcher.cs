@@ -4,5 +4,6 @@ namespace MMK.Notify.Model.Service
 {
     internal interface IDownloadsWatcher : IService
     {
+        void Initialize();
     }
 }

@@ -46,29 +46,34 @@ namespace MMK.Notify
                 return;
             }
 
-            Initialize();
+            BindServices();
+            InitializeServices();
             StartServices();
         }
 
-        private void Initialize()
+        private static void InitializeServices()
         {
-            InitializeServices();
+            ServiceLocator.Get<IDownloadsWatcher>().Initialize();
+            ServiceLocator.Get<TaskProgressService>().Initialize();
+
+            var hwndSourceService = ServiceLocator.Get<HwndSourceService>();
+            hwndSourceService.Initialized += (s, e) =>
+            {
+                ServiceLocator.Get<GlobalShortcutService>().Initialize();
+                ServiceLocator.Get<TrayMenuService>().Initialize();
+                ServiceLocator.Get<TrayMenuService>().Start();
+            };
+
         }
 
-        private static void InitializeServices()
+        private static void BindServices()
         {
             ServiceLocator.Bind<HwndSourceService>().ToSelf().InSingletonScope();
             ServiceLocator.Bind<IHwndSource>().ToMethod(c => ServiceLocator.Get<HwndSourceService>()).InSingletonScope();
 
             ServiceLocator.Bind<TaskObserver>().ToSelf().InSingletonScope();
-
-            ServiceLocator.Bind<INotifyObserver>()
-                .To<NotifyObserver>()
-                .InSingletonScope();
-
-            ServiceLocator.Bind<IDownloadsWatcher>()
-                .To<ChromeDownloadsWatcherService>()
-                .InSingletonScope();
+            ServiceLocator.Bind<INotifyObserver>().To<NotifyObserver>().InSingletonScope();
+            ServiceLocator.Bind<IDownloadsWatcher>().To<ChromeDownloadsWatcherService>().InSingletonScope();
 
             ServiceLocator.Bind<HashTagFolderCollection>()
                 .ToMethod(c => Settings.Default.FolderCollection)
@@ -80,16 +85,6 @@ namespace MMK.Notify
             ServiceLocator.Bind<GlobalShortcutProviderCollection>().ToSelf().InSingletonScope();
             ServiceLocator.Bind<GlobalShortcutService>().ToSelf().InSingletonScope();
             ServiceLocator.Bind<TrayMenuService>().ToSelf().InSingletonScope();
-
-            var hwndSourceService = ServiceLocator.Get<HwndSourceService>();
-            hwndSourceService.Initialized += (s, e) =>
-            {
-                ServiceLocator.Get<GlobalShortcutService>().Initialize();
-                ServiceLocator.Get<TrayMenuService>().Initialize();
-                ServiceLocator.Get<TrayMenuService>().Start();
-            };
-
-            ServiceLocator.Get<TaskProgressService>().Initialize();
         }
 
         private static void StartServices()
