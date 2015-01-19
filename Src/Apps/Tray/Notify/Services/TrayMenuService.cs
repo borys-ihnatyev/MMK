@@ -8,7 +8,7 @@ using MMK.Notify.Views;
 
 namespace MMK.Notify.Services
 {
-    public class TrayMenuService : Service, IDisposable
+    public class TrayMenuService : InitializableService, IDisposable
     {
         private readonly TaskProgressService taskProgressService;
         private readonly NotifyIcon trayIcon;
@@ -38,7 +38,7 @@ namespace MMK.Notify.Services
         {
             InitializeTrayWindow();
             InitializeTrayIcon();
-            taskProgressService.StateChanged += TaskProgressStateChanged;
+            taskProgressService.StateChanged += OnTaskProgressStateChanged;
         }
 
         private void InitializeTrayWindow()
@@ -61,23 +61,22 @@ namespace MMK.Notify.Services
             trayMenuView.Show();
         }
 
-        private void TaskProgressStateChanged(object sender, ChangedEventArgs<bool> e)
+        private void OnTaskProgressStateChanged(object sender, ChangedEventArgs<bool> e)
         {
             trayIcon.Icon = e.NewValue ? Resources.logo_processing : Resources.logo_normal;
         }
 
         #endregion
 
-        public override void Start()
+        protected override void OnStart()
         {
-            if (!IsInitialized)
-                throw new Exception("Service was not Initialized");
+            CheckInitialized();
 
             trayIcon.Visible = true;
             trayMenuView.Show();
         }
 
-        public override void Stop()
+        protected override void OnStop()
         {
             trayMenuView.Hide();
             trayIcon.Visible = false;
@@ -85,7 +84,7 @@ namespace MMK.Notify.Services
 
         public void Dispose()
         {
-            taskProgressService.StateChanged -= TaskProgressStateChanged;
+            taskProgressService.StateChanged -= OnTaskProgressStateChanged;
 
             trayMenuView.Close();
             trayIcon.Dispose();

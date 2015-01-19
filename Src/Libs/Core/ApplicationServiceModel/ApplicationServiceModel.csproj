@@ -41,7 +41,7 @@
     <Compile Include="Locator\Resolving\ServiceLocatorOwnerConflictException.cs" />
     <Compile Include="Locator\Resolving\ServiceLocatorOwnerNotFoundException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service.cs" />
+    <Compile Include="InitializableService.cs" />
     <Compile Include="Locator\ServiceLocatorAttribute.cs" />
     <Compile Include="Locator\Resolving\ServiceLocatorConflictException.cs" />
     <Compile Include="Locator\Resolving\ServiceLocatorNotFoundException.cs" />

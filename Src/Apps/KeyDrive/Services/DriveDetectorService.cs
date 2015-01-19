@@ -7,7 +7,7 @@ using MMK.Presentation.Windows.Interop;
 
 namespace MMK.KeyDrive.Services
 {
-    public abstract class DriveDetectorService : Service
+    public abstract class DriveDetectorService : IService
     {
         private const int WmDeviceChange = 0x0219;
         private const int DbtDeviceArrival = 0x8000;
@@ -22,15 +22,7 @@ namespace MMK.KeyDrive.Services
             this.hwndSource = hwndSource;
         }
 
-        protected sealed override void OnInitialize()
-        { }
-
-        protected sealed override void OnInitialized()
-        {
-            base.OnInitialized();
-        }
-
-        public sealed override void Start()
+        public void Start()
         {
             if(isHooked)
                 return;
@@ -40,13 +32,11 @@ namespace MMK.KeyDrive.Services
             isHooked = true;
         }
 
-        public sealed override void Stop()
+        public void Stop()
         {
-            if (!isHooked)
+            if(!isHooked)
                 return;
-
             hwndSource.RemoveHook(Hook);
-
             isHooked = false;
         }
 

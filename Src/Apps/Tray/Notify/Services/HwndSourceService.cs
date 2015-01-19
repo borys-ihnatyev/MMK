@@ -8,7 +8,7 @@ using MMK.Presentation.Windows.Interop;
 
 namespace MMK.Notify.Services
 {
-    public class HwndSourceService : Service, IHwndSource
+    public sealed class HwndSourceService : InitializableService, IHwndSource
     {
         private TrayWindow serviceWindow;
         private HwndSource hwndSource;
@@ -21,10 +21,12 @@ namespace MMK.Notify.Services
             hwndSource = PresentationSource.FromVisual(serviceWindow) as HwndSource;
         }
 
-        public override void Start()
+        protected override void OnStart()
         {
-            if(serviceWindow != null)
-                return;
+            Contract.Ensures(serviceWindow != null);
+            Contract.EndContractBlock();
+
+            Contract.Assume(serviceWindow == null);
 
             serviceWindow = new TrayWindow
             {
@@ -38,11 +40,12 @@ namespace MMK.Notify.Services
             serviceWindow.Show();
         }
 
-        public override void Stop()
+        protected override void OnStop()
         {
-            if(serviceWindow == null)
-                return;
+            Contract.Ensures(serviceWindow == null);
+            Contract.EndContractBlock();
 
+            Contract.Assume(serviceWindow != null);
             serviceWindow.Close();
             serviceWindow = null;
         }
@@ -59,12 +62,14 @@ namespace MMK.Notify.Services
         public void AddHook(HwndSourceHook hook)
         {
             CheckInitialized();
+            Contract.Assume(hwndSource != null);
             hwndSource.AddHook(hook);
         }
 
         public void RemoveHook(HwndSourceHook hook)
         {
             CheckInitialized();
+            Contract.Assume(hwndSource != null);
             hwndSource.RemoveHook(hook);
         }
     }

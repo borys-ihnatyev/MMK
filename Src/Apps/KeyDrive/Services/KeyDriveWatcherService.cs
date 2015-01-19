@@ -13,7 +13,7 @@ using MMK.Notify.Observer.Tasking.Common;
 
 namespace MMK.KeyDrive.Services
 {
-    public class KeyDriveWatcherService : Service, IDisposable
+    public class KeyDriveWatcherService : InitializableService, IDisposable
     {
         private bool isDisposed;
         private readonly string watchRoot;
@@ -87,17 +87,15 @@ namespace MMK.KeyDrive.Services
                 );
         }
 
-
-        public override void Start()
+        protected override void OnStart()
         {
             watchers.ForEach(w => w.EnableRaisingEvents = true);
         }
 
-        public override void Stop()
+        protected override void OnStop()   
         {
             watchers.ForEach(w => w.EnableRaisingEvents = false);
         }
-
 
         ~KeyDriveWatcherService()
         {

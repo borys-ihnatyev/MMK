@@ -1,12 +1,11 @@
 ﻿using System;
 using System.IO;
-using MMK.ApplicationServiceModel;
 using MMK.Notify.Model.Service;
 using MMK.Utils;
 
 namespace MMK.Notify.Services
 {
-    public sealed class ChromeDownloadsWatcherService : Service, IDownloadsWatcher
+    public sealed class ChromeDownloadsWatcherService : IDownloadsWatcher
     {
         private static readonly string DefaultDownloadsPath;
 
@@ -36,12 +35,12 @@ namespace MMK.Notify.Services
                 FileDownloaded(filePath);
         }
 
-        public override void Start()
+        public void Start()
         {
             fileWatcher.EnableRaisingEvents = true;
         }
 
-        public override void Stop()
+        public void Stop()
         {
             fileWatcher.EnableRaisingEvents = false;
         }

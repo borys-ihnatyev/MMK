@@ -6,7 +6,7 @@ using MMK.Notify.Views;
 
 namespace MMK.Notify.Services
 {
-    public class TaskProgressService : Service
+    public class TaskProgressService : InitializableService
     {
         private TaskProgressView taskProgressView;
         private readonly TaskProgressViewModel taskProgressViewModel;
@@ -34,7 +34,7 @@ namespace MMK.Notify.Services
                 OnStateChanged();
         }
 
-        public override void Start()
+        protected override void OnStart()
         {
             if (!taskProgressViewModel.IsProgress)
                 return;
@@ -43,7 +43,7 @@ namespace MMK.Notify.Services
             taskProgressView.Activate();
         }
 
-        public override void Stop()
+        protected override void OnStop()
         {
             taskProgressViewModel.IsVisible = false;
         }

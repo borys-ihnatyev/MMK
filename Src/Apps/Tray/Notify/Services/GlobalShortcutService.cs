@@ -10,7 +10,7 @@ using IKey = System.Windows.Input.Key;
 
 namespace MMK.Notify.Services
 {
-    public class GlobalShortcutService : Service
+    public sealed class GlobalShortcutService : InitializableService
     {
         private readonly INotifyObserver observer;
         private readonly HashTagFolderCollection folderCollection;
@@ -52,12 +52,12 @@ namespace MMK.Notify.Services
             observer.Observe(MoveFileToMusicFolderTask.Many(filePaths, folderCollection));
         }
 
-        public override void Start()
+        protected override void OnStart()
         {
             shortcutProviders.StartListen();
         }
 
-        public override void Stop()
+        protected override void OnStop()
         {
             shortcutProviders.StopListen();
         }

@@ -3,8 +3,9 @@ using System.Diagnostics.Contracts;
 
 namespace MMK.ApplicationServiceModel
 {
-    public abstract class Service : IService
+    public abstract class InitializableService : IService
     {
+        public bool IsStarted { get; private set; }
         public bool IsInitialized { get; private set; }
 
         public void Initialize()
@@ -23,16 +24,34 @@ namespace MMK.ApplicationServiceModel
 
         }
 
+        public void Start()
+        {
+            if(IsStarted)
+                return;
+
+            OnStart();
+            IsStarted = true;
+        }
+
         [ContractInvariantMethod]
         protected void CheckInitialized()
         {
             if (!IsInitialized)
-                throw new InvalidOperationException("Service is not initialized");
+                throw new InvalidOperationException("InitializableService is not initialized");
             Contract.EndContractBlock();
         }
 
-        public abstract void Start();
-        public abstract void Stop();
+        protected abstract void OnStart();
+
+        public void Stop()
+        {
+            if(!IsStarted)
+                return;
+            OnStop();
+            IsStarted = false;
+        }
+
+        protected abstract void OnStop();
 
         public event EventHandler Initialized;
 
