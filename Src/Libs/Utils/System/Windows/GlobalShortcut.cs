@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.Contracts;
+﻿using System.ComponentModel;
+using System.Diagnostics.Contracts;
 using System.Runtime.InteropServices;
 using System.Windows.Input;
 
@@ -45,24 +46,53 @@ namespace System.Windows
 
         public bool IsRegistred { get; private set; }
 
-        public bool Register()
+        public bool TryRegister()
         {
-            if (IsRegistred) return IsRegistred;
+            try
+            {
+                Register();
+            }
+            catch (Win32Exception)
+            {
+            }
 
-            IsRegistred = User32.RegisterHotKey(hwnd, Id, Modifiers, KeyCode);
-
-            if (IsRegistred) return IsRegistred;
-
-            User32.UnregisterHotKey(hwnd, Id);
-            IsRegistred = User32.RegisterHotKey(hwnd, Id, Modifiers, KeyCode);
             return IsRegistred;
         }
 
-        public bool Unregister()
+        public bool TryUnregister()
         {
-            if (IsRegistred)
-                IsRegistred = !User32.UnregisterHotKey(hwnd, Id);
+            try
+            {
+                Unregister();
+            }
+            catch (Win32Exception)
+            {
+            }
+
             return !IsRegistred;
+        }
+
+        public void Register()
+        {
+            if(IsRegistred)
+                return;
+            IsRegistred = User32.RegisterHotKey(hwnd, Id, Modifiers, KeyCode);
+
+            if(!IsRegistred)
+               throw new Win32Exception(Kernel32.GetLastError());
+        }
+
+        public void Unregister()
+        {
+            if (!IsRegistred)
+                return;
+
+            var isUnregistered = User32.UnregisterHotKey(hwnd, Id);
+            
+            if(!isUnregistered)
+                throw new Win32Exception(Kernel32.GetLastError());
+            
+            IsRegistred = false;
         }
 
         protected bool Equals(GlobalShortcut other)
@@ -99,6 +129,12 @@ namespace System.Windows
 
             [DllImport("user32.dll")]
             public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
+        }
+
+        private static class Kernel32
+        {
+            [DllImport("Kernel32.dll")]
+            public static extern Int32 GetLastError();
         }
     }
 }

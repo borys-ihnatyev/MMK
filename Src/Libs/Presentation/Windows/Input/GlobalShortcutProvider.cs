@@ -35,7 +35,7 @@ namespace MMK.Presentation.Windows.Input
         {
             if (IsListening) return;
 
-            shortcut.Register();
+            shortcut.TryRegister();
             hwndSource.AddHook(WndProc);
             IsListening = true;
         }
@@ -45,7 +45,7 @@ namespace MMK.Presentation.Windows.Input
             if (!IsListening) return;
 
             hwndSource.RemoveHook(WndProc);
-            shortcut.Unregister();
+            shortcut.TryUnregister();
             IsListening = false;
         }
 
