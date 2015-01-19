@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace System.IO
+namespace MMK.KeyDrive.Models.IO
 {
     public static partial class DriveInfoFactory
     {

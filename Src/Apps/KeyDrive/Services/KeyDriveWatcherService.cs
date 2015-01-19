@@ -3,52 +3,36 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
-using System.Windows;
+using MMK.ApplicationServiceModel;
 using MMK.KeyDrive.Models.Holders;
 using MMK.KeyDrive.Models.Layout;
 using MMK.KeyDrive.Observing.Tasks;
 using MMK.Notify.Observer;
-using MMK.Notify.Observer.Remoting;
 using MMK.Notify.Observer.Tasking;
 using MMK.Notify.Observer.Tasking.Common;
 
-namespace MMK.KeyDrive
+namespace MMK.KeyDrive.Services
 {
-    public class KeyDriveWatcher : IDisposable
+    public class KeyDriveWatcherService : Service, IDisposable
     {
         private bool isDisposed;
         private readonly string watchRoot;
 
+        private readonly INotifyObserver observer;
         private readonly FilesLayoutModel layout;
         private readonly List<FileSystemWatcher> watchers;
 
-        public KeyDriveWatcher(string watchRoot, string layoutRoot)
+        public KeyDriveWatcherService(string watchRoot, string layoutRoot)
         {
+            observer = IoC.Get<INotifyObserver>();
             isDisposed = false;
             this.watchRoot = watchRoot;
 
             layout = new FilesLayoutModel(layoutRoot);
             watchers = new List<FileSystemWatcher>(FileHolder.SupportedTypes.Length);
-            Initialize();
         }
 
-        private static INotifyObserver observer;
-
-        private static INotifyObserver Observer
-        {
-            get
-            {
-                if (observer == null)
-                {
-                    var connector = new NotifyObserverConnector(Application.Current);
-                    connector.Connect();
-                    observer = connector.NotifyObserver;
-                }
-                return observer;
-            }
-        }
-
-        private void Initialize()
+        protected override void OnInitialize()
         {
             foreach (var supportedType in FileHolder.SupportedTypes)
                 watchers.Add(CreateWatcher("*" + supportedType));
@@ -78,7 +62,7 @@ namespace MMK.KeyDrive
         private void Observe(string path)
         {
             var holder = Holder.Build(path);
-            Observer.Observe(CreateHolderTasks(holder));
+            observer.Observe(CreateHolderTasks(holder));
         }
 
         private IEnumerable<Task> CreateHolderTasks(Holder holder)
@@ -88,14 +72,14 @@ namespace MMK.KeyDrive
 
             Contract.Assume(holder is DirectoryHolder);
 
-            return (holder as DirectoryHolder).Files
+            return ((DirectoryHolder) holder).Files
                 .Select(f => new LayoutResolveTask(f.Info.FullName, layout))
                 .ToArray();
         }
 
-        private static void WatcherOnError(object sender, ErrorEventArgs e)
+        private void WatcherOnError(object sender, ErrorEventArgs e)
         {
-            Observer.Observe(new NotifyTask(
+            observer.Observe(new NotifyTask(
                 new NotifyableException(e.GetException())
                 {
                     CommonDescription = "MMK KeyDrive"
@@ -103,17 +87,19 @@ namespace MMK.KeyDrive
                 );
         }
 
-        public void Start()
+
+        public override void Start()
         {
             watchers.ForEach(w => w.EnableRaisingEvents = true);
         }
 
-        public void Stop()
+        public override void Stop()
         {
             watchers.ForEach(w => w.EnableRaisingEvents = false);
         }
 
-        ~KeyDriveWatcher()
+
+        ~KeyDriveWatcherService()
         {
             Dispose();
         }

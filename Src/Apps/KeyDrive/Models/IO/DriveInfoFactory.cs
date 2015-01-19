@@ -1,8 +1,10 @@
-﻿using System.Diagnostics.Contracts;
+﻿using System;
+using System.Diagnostics.Contracts;
 using System.Globalization;
+using System.IO;
 using System.Runtime.InteropServices;
 
-namespace System.IO
+namespace MMK.KeyDrive.Models.IO
 {
     public static partial class DriveInfoFactory
     {

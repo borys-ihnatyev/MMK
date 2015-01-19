@@ -154,8 +154,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="KeyDriveWatcher.cs" />
-    <Compile Include="Models\DriveDetector.cs" />
+    <Compile Include="Services\KeyDriveWatcherService.cs" />
+    <Compile Include="Services\DriveDetectorService.cs" />
     <Compile Include="Models\Holders\Holder.Exception.cs" />
     <Compile Include="Models\Layout\FilesLayoutModel.cs" />
     <Compile Include="Models\Holders\DirectoryHolder.cs" />
@@ -163,9 +163,9 @@
     <Compile Include="Models\Holders\Holder.cs" />
     <Compile Include="Models\Holders\Holder.NotSupportedException.cs" />
     <Compile Include="Models\Holders\Holder.NotFoundException.cs" />
-    <Compile Include="Models\System.IO\DriveInfoFactory.cs" />
-    <Compile Include="Models\System.IO\DriveInfoFactory.DeviceBroadcastVolume.cs" />
-    <Compile Include="Models\System.IO\DriveInfoNameEqualityComparer.cs" />
+    <Compile Include="Models\IO\DriveInfoFactory.cs" />
+    <Compile Include="Models\IO\DriveInfoFactory.DeviceBroadcastVolume.cs" />
+    <Compile Include="Models\IO\DriveInfoNameEqualityComparer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Observing\Tasks\LayoutResolveTask.cs" />
@@ -197,6 +197,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\..\Libs\Core\ApplicationServiceModel\ApplicationServiceModel.csproj">
+      <Project>{B7D69BF7-B8F9-46FF-963C-93ED9C8D5F47}</Project>
+      <Name>ApplicationServiceModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Libs\Core\MMK\MMK.csproj">
       <Project>{A9193781-F0F5-406C-BC5F-312AE4F516F3}</Project>
       <Name>MMK</Name>

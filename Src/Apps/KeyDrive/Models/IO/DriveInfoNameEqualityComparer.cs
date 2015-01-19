@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 
-namespace System.IO
+namespace MMK.KeyDrive.Models.IO
 {
     public class DriveInfoNameEqualityComparer : IEqualityComparer<DriveInfo>
     {
