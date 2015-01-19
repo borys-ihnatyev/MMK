@@ -16,8 +16,8 @@ namespace MMK.HotMark.ViewModels
         public const double VolumeIncreaseStep = 0.05;
         public readonly double PositionIncreaseStep = TimeSpan.FromSeconds(15).TotalMilliseconds;
 
-        private readonly MediaPlayer player;
-        private readonly MediaTimeline timeline;
+        private MediaPlayer player;
+        private MediaTimeline timeline;
 
         private bool isPlaying;
         private double positionMax;
@@ -162,8 +162,13 @@ namespace MMK.HotMark.ViewModels
         protected override void OnUnloadData()
         {
             PlaybackController.Stop();
-
             IsPlaying = false;
+
+            player = null;
+            timeline = null;
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
 
         #endregion
