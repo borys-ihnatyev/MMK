@@ -56,6 +56,8 @@ namespace MMK.Notify
             ServiceLocator.Bind<HwndSourceService>().ToSelf().InSingletonScope();
             ServiceLocator.Bind<IHwndSource>().ToMethod(c => ServiceLocator.Get<HwndSourceService>()).InSingletonScope();
 
+            ServiceLocator.Bind<NotificationService>().ToSelf().InSingletonScope();
+
             ServiceLocator.Bind<TaskObserver>().ToSelf().InSingletonScope();
             ServiceLocator.Bind<INotifyObserver>().To<NotifyObserver>().InSingletonScope();
             ServiceLocator.Bind<IDownloadsWatcher>().To<DownloadsWatcherService>().InSingletonScope();
@@ -64,7 +66,6 @@ namespace MMK.Notify
                 .ToMethod(c => Settings.Default.FolderCollection)
                 .InSingletonScope();
 
-            ServiceLocator.Bind<NotificationService>().ToSelf().InSingletonScope();
             ServiceLocator.Bind<TaskProgressService>().ToSelf().InSingletonScope();
 
             ServiceLocator.Bind<GlobalShortcutProviderCollection>().ToSelf().InSingletonScope();
@@ -74,14 +75,15 @@ namespace MMK.Notify
 
         private static void InitializeServices()
         {
-            ServiceLocator.Get<IDownloadsWatcher>().Initialize();
             ServiceLocator.Get<TaskProgressService>().Initialize();
+            ServiceLocator.Get<IDownloadsWatcher>().Initialize();
 
             var hwndSourceService = ServiceLocator.Get<HwndSourceService>();
             hwndSourceService.Initialized += (s, e) =>
             {
                 ServiceLocator.Get<GlobalShortcutService>().Initialize();
                 ServiceLocator.Get<TrayMenuService>().Initialize();
+
                 ServiceLocator.Get<TrayMenuService>().Start();
             };
         }
@@ -102,7 +104,6 @@ namespace MMK.Notify
             ServiceLocator.Get<NotifyObserver>().Stop();
             ServiceLocator.Get<TaskObserver>().Stop();
             ServiceLocator.Get<HwndSourceService>().Stop();
-
         }
     }
 }
