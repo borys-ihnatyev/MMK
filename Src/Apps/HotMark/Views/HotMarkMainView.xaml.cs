@@ -97,12 +97,11 @@ namespace MMK.HotMark.Views
         private void OnCloseCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             var applyChanges = (bool)e.Parameter;
-            hideStoryboard.Completed += (s, a) =>
-            {
-                Close();
-                if (applyChanges)
-                    applyChangesAction();
-            };
+            
+            if(applyChanges)
+                Closed += (s, a) => applyChangesAction();
+
+            hideStoryboard.Completed += (s, a) => Close();
             Hide();
         }
     }
