@@ -89,9 +89,9 @@
 
                 <trayMenu:ToggleMenuItemControl
                     IsPressed="{Binding IsEnableDownloadsWatch, Mode=TwoWay}"
-                    Title="Downloads watching"
-                    PressCommand="{Binding StartDownloadsWatchingCommand}"
-                    ReleaseCommand="{Binding StopDownloadsWatchingCommand}" />
+                    Title="Downloads watch"
+                    PressCommand="{Binding StartDownloadsWatchCommand}"
+                    ReleaseCommand="{Binding StopDownloadsWatchCommand}" />
 
                 <trayMenu:MenuItemControl
                     Padding="16,0,0,0"

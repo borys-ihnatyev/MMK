@@ -25,8 +25,8 @@ namespace MMK.Notify.ViewModels
             StartListenShortcutsCommand = new Command(IoC.Get<GlobalShortcutService>().Start);
             StopListenShortcutsCommand = new Command(IoC.Get<GlobalShortcutService>().Stop);
 
-            StartDownloadsWatchingCommand = new Command(IoC.Get<IDownloadsWatcher>().Start);
-            StopDownloadsWatchingCommand = new Command(IoC.Get<IDownloadsWatcher>().Stop);
+            StartDownloadsWatchCommand = new Command(IoC.Get<IDownloadsWatcher>().Start);
+            StopDownloadsWatchCommand = new Command(IoC.Get<IDownloadsWatcher>().Stop);
 
             PropertyChanged += OnPropertyChanged;
         }
@@ -68,11 +68,11 @@ namespace MMK.Notify.ViewModels
             IsEnableHotKeys = Settings.Default.IsEnableHotKeys;
             IsEnableDownloadsWatch = Settings.Default.IsEnableDownloadsWatch;
 
-            if (isEnableHotKeys)
+            if (IsEnableHotKeys)
                 StartListenShortcutsCommand.Execute(null);
 
             if (IsEnableDownloadsWatch)
-                StartDownloadsWatchingCommand.Execute(null);
+                StartDownloadsWatchCommand.Execute(null);
         }
 
 
@@ -100,8 +100,8 @@ namespace MMK.Notify.ViewModels
         public ICommand StartListenShortcutsCommand { get; set; }
         public ICommand StopListenShortcutsCommand { get; set; }
 
-        public ICommand StartDownloadsWatchingCommand { get; private set; }
-        public ICommand StopDownloadsWatchingCommand { get; private set; }
+        public ICommand StartDownloadsWatchCommand { get; private set; }
+        public ICommand StopDownloadsWatchCommand { get; private set; }
 
         public ICommand OpenHashTagFoldersWindowCommand { get; private set; }
 
