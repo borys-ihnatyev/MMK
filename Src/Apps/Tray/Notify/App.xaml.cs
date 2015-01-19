@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics.Contracts;
-using System.IO;
+﻿using System.Diagnostics.Contracts;
 using System.Threading;
 using System.Windows;
 using MMK.ApplicationServiceModel.Locator;
@@ -34,34 +32,11 @@ namespace MMK.Notify
             }
         }
 
-#if !DEBUG
         static App()
         {
-            AppDomain.CurrentDomain.UnhandledException += DomainUnhandledException;
+            ServiceLocator.Bind<AppDomainErrorService>().ToSelf().InSingletonScope();
+            ServiceLocator.Get<AppDomainErrorService>().Start();
         }
-
-        private static void DomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            TryLogException(e.ExceptionObject);
-            Current.Shutdown();
-        }
-
-        private static void TryLogException(object error)
-        {
-            if (!(error is Exception))
-                return;
-            LogException((Exception) error);
-        }
-
-        private static void LogException(Exception exception)
-        {
-            using (var log = new StreamWriter(typeof (App).FullName + ".Error.log"))
-            {
-                log.WriteLine(exception.Message);
-                log.WriteLine(exception.StackTrace);
-            }
-        }
-#endif
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -82,10 +57,8 @@ namespace MMK.Notify
 
         private static void InitializeServices()
         {
-            Contract.Assume(ServiceLocator != null);
-
             ServiceLocator.Bind<HwndSourceService>().ToSelf().InSingletonScope();
-            ServiceLocator.Bind<IHwndSource>().ToMethod( c => ServiceLocator.Get<HwndSourceService>()).InSingletonScope();
+            ServiceLocator.Bind<IHwndSource>().ToMethod(c => ServiceLocator.Get<HwndSourceService>()).InSingletonScope();
 
             ServiceLocator.Bind<TaskObserver>().ToSelf().InSingletonScope();
 
@@ -121,8 +94,6 @@ namespace MMK.Notify
 
         private static void StartServices()
         {
-            Contract.Assume(ServiceLocator != null);
-
             ServiceLocator.Get<HwndSourceService>().Start();
             ServiceLocator.Get<TaskObserver>().Start();
             ServiceLocator.Get<NotifyObserver>().Start();
@@ -130,15 +101,14 @@ namespace MMK.Notify
 
         protected override void OnExit(ExitEventArgs e)
         {
-            Contract.Assume(ServiceLocator != null);
+            base.OnExit(e);
 
             ServiceLocator.Get<TrayMenuService>().Stop();
             ServiceLocator.Get<TaskProgressService>().Stop();
             ServiceLocator.Get<NotifyObserver>().Stop();
-            ServiceLocator.Get<TaskObserver>().Cancell();
+            ServiceLocator.Get<TaskObserver>().Stop();
             ServiceLocator.Get<HwndSourceService>().Stop();
 
-            base.OnExit(e);
         }
     }
 }

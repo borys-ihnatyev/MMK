@@ -189,6 +189,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\AppDomainErrorService.cs" />
     <Compile Include="Services\GlobalShortcutService.cs" />
     <Compile Include="Services\HwndSourceService.cs" />
     <Compile Include="Services\NotificationService.cs" />
