@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Threading;
+using MMK.ApplicationServiceModel;
 using Timer = System.Timers.Timer;
 
 namespace MMK.Notify.Observer.Tasking.Observing
 {
-    public sealed partial class TaskObserver : IDisposable
+    public sealed partial class TaskObserver : IService, IDisposable
     {
         public const int FailedTaskRerunPauseSeconds = 5;
 
@@ -132,14 +133,7 @@ namespace MMK.Notify.Observer.Tasking.Observing
                 taskRunEvent.Set();
         }
 
-        public void Pause()
-        {
-            if (!IsRunning) return;
-
-            taskRunEvent.Reset();
-        }
-
-        public void Cancell()
+        public void Stop()
         {
             if (!IsStarted) return;
 
@@ -152,6 +146,13 @@ namespace MMK.Notify.Observer.Tasking.Observing
             thread.Join();
             taskRunEvent.Reset();
             thread = new Thread(TaskObserverProc);
+        }
+
+        public void Pause()
+        {
+            if (!IsRunning) return;
+
+            taskRunEvent.Reset();
         }
 
         #endregion
@@ -181,7 +182,7 @@ namespace MMK.Notify.Observer.Tasking.Observing
 
         public void Dispose()
         {
-            Cancell();
+            Stop();
             taskRunEvent.Dispose();
             taskCancelEvent.Dispose();
         }

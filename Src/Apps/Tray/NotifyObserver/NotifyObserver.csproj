@@ -158,6 +158,10 @@
     <Compile Include="Tasking\Observing\TaskObserver.NotifyEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Libs\Core\ApplicationServiceModel\ApplicationServiceModel.csproj">
+      <Project>{B7D69BF7-B8F9-46FF-963C-93ED9C8D5F47}</Project>
+      <Name>ApplicationServiceModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Libs\Core\MMK\MMK.csproj">
       <Project>{a9193781-f0f5-406c-bc5f-312ae4f516f3}</Project>
       <Name>MMK</Name>
