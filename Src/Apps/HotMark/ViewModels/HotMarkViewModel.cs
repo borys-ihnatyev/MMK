@@ -19,7 +19,6 @@ namespace MMK.HotMark.ViewModels
         private bool canDirectEditHashTags;
         private string fileItemView;
         private HashTagModelChangeNotify hashTagModelChangeNotify;
-        private bool isHashTagModelChangeNotify;
         private bool isPianoKeyboardLayout;
         private PlayerViewModel playerViewModel;
 
@@ -147,7 +146,13 @@ namespace MMK.HotMark.ViewModels
         {
             PlayerViewModel.Volume = 0.3;
 
-            if (HashTags.Any(h => h.HashTag is KeyHashTag)) return;
+            var unchHashTagViewModel = HashTags.FirstOrDefault(h => h.HashTag.TagValue.Equals("unch", StringComparison.OrdinalIgnoreCase));
+            if(unchHashTagViewModel == null)
+                return;
+
+            HashTags.Selected = unchHashTagViewModel;
+
+            IsPianoKeyboardLayout = true;
 
             PlayerViewModel.Play();
             PlayerViewModel.Position = PlayerViewModel.PositionMax*0.4;
@@ -175,7 +180,6 @@ namespace MMK.HotMark.ViewModels
 
             HashTags.Selected.HashTagValue = pianoKeyBoardViewModel.RecognizedKey.ToString();
         }
-
 
         private IEnumerable<HashTag> GetNotEmptyHashTags()
         {
