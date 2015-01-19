@@ -5,7 +5,7 @@ using MMK.Notify.Model.Service;
 using MMK.Utils;
 using Newtonsoft.Json;
 
-namespace MMK.Notify.Services
+namespace MMK.Notify.Services.DownloadWatcher
 {
     public sealed class ChromeDownloadsWatcherService : InitializableService, IDownloadsWatcher
     {
@@ -67,15 +67,5 @@ namespace MMK.Notify.Services
         }
 
         public event EventHandler<FileDownloadedEventArgs> FileDownloaded;
-    }
-
-    public class FileDownloadedEventArgs : EventArgs
-    {
-        public FileDownloadedEventArgs(string filePath)
-        {
-            FilePath = filePath;
-        }
-
-        public string FilePath { get; private set; }
     }
 }

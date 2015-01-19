@@ -51,6 +51,27 @@ namespace MMK.Notify
             StartServices();
         }
 
+        private static void BindServices()
+        {
+            ServiceLocator.Bind<HwndSourceService>().ToSelf().InSingletonScope();
+            ServiceLocator.Bind<IHwndSource>().ToMethod(c => ServiceLocator.Get<HwndSourceService>()).InSingletonScope();
+
+            ServiceLocator.Bind<TaskObserver>().ToSelf().InSingletonScope();
+            ServiceLocator.Bind<INotifyObserver>().To<NotifyObserver>().InSingletonScope();
+            ServiceLocator.Bind<IDownloadsWatcher>().To<DownloadsWatcherService>().InSingletonScope();
+
+            ServiceLocator.Bind<HashTagFolderCollection>()
+                .ToMethod(c => Settings.Default.FolderCollection)
+                .InSingletonScope();
+
+            ServiceLocator.Bind<NotificationService>().ToSelf().InSingletonScope();
+            ServiceLocator.Bind<TaskProgressService>().ToSelf().InSingletonScope();
+
+            ServiceLocator.Bind<GlobalShortcutProviderCollection>().ToSelf().InSingletonScope();
+            ServiceLocator.Bind<GlobalShortcutService>().ToSelf().InSingletonScope();
+            ServiceLocator.Bind<TrayMenuService>().ToSelf().InSingletonScope();
+        }
+
         private static void InitializeServices()
         {
             ServiceLocator.Get<IDownloadsWatcher>().Initialize();
@@ -63,28 +84,6 @@ namespace MMK.Notify
                 ServiceLocator.Get<TrayMenuService>().Initialize();
                 ServiceLocator.Get<TrayMenuService>().Start();
             };
-
-        }
-
-        private static void BindServices()
-        {
-            ServiceLocator.Bind<HwndSourceService>().ToSelf().InSingletonScope();
-            ServiceLocator.Bind<IHwndSource>().ToMethod(c => ServiceLocator.Get<HwndSourceService>()).InSingletonScope();
-
-            ServiceLocator.Bind<TaskObserver>().ToSelf().InSingletonScope();
-            ServiceLocator.Bind<INotifyObserver>().To<NotifyObserver>().InSingletonScope();
-            ServiceLocator.Bind<IDownloadsWatcher>().To<ChromeDownloadsWatcherService>().InSingletonScope();
-
-            ServiceLocator.Bind<HashTagFolderCollection>()
-                .ToMethod(c => Settings.Default.FolderCollection)
-                .InSingletonScope();
-
-            ServiceLocator.Bind<NotificationService>().ToSelf().InSingletonScope();
-            ServiceLocator.Bind<TaskProgressService>().ToSelf().InSingletonScope();
-
-            ServiceLocator.Bind<GlobalShortcutProviderCollection>().ToSelf().InSingletonScope();
-            ServiceLocator.Bind<GlobalShortcutService>().ToSelf().InSingletonScope();
-            ServiceLocator.Bind<TrayMenuService>().ToSelf().InSingletonScope();
         }
 
         private static void StartServices()
