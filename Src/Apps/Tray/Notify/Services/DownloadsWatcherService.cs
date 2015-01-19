@@ -32,7 +32,8 @@ namespace MMK.Notify.Services
 
         private void OnFileDownloaded(object sender, FileDownloadedEventArgs e)
         {
-            observer.Observe(new AddHashTagModelTask(e.FilePath, HashTagModel.Parser.All("#unch")));
+            var task = new AddHashTagModelTask(e.FilePath, HashTagModel.Parser.All("#unch"));
+            observer.Observe(task, TimeSpan.FromSeconds(4));
         }
 
         protected override void OnStart()
