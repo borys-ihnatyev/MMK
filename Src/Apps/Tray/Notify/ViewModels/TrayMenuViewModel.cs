@@ -50,7 +50,6 @@ namespace MMK.Notify.ViewModels
             }
         }
 
-
         protected override void OnLoadData()
         {
             if (IsEnableHotKeys)
