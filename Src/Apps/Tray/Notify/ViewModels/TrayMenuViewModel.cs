@@ -1,10 +1,7 @@
-﻿using System;
-using System.ComponentModel;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
 using MMK.ApplicationServiceModel;
 using MMK.Notify.Model.Service;
-using MMK.Notify.Model.Settings;
 using MMK.Notify.Properties;
 using MMK.Notify.Services;
 using MMK.Notify.Views;
@@ -50,6 +47,12 @@ namespace MMK.Notify.ViewModels
             }
         }
 
+        public ICommand StartListenShortcutsCommand { get; set; }
+        public ICommand StopListenShortcutsCommand { get; set; }
+        public ICommand StartDownloadsWatchCommand { get; private set; }
+        public ICommand StopDownloadsWatchCommand { get; private set; }
+        public ICommand OpenHashTagFoldersWindowCommand { get; private set; }
+
         protected override void OnLoadData()
         {
             if (IsEnableHotKeys)
@@ -58,14 +61,6 @@ namespace MMK.Notify.ViewModels
             if (IsEnableDownloadsWatch)
                 StartDownloadsWatchCommand.Execute(null);
         }
-
-        public ICommand StartListenShortcutsCommand { get; set; }
-        public ICommand StopListenShortcutsCommand { get; set; }
-
-        public ICommand StartDownloadsWatchCommand { get; private set; }
-        public ICommand StopDownloadsWatchCommand { get; private set; }
-
-        public ICommand OpenHashTagFoldersWindowCommand { get; private set; }
 
         public void OpenHashTagFoldersWindow()
         {
