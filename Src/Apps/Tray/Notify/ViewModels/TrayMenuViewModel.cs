@@ -1,10 +1,8 @@
-﻿using System.Windows;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using MMK.ApplicationServiceModel;
 using MMK.Notify.Model.Service;
 using MMK.Notify.Properties;
 using MMK.Notify.Services;
-using MMK.Notify.Views;
 using MMK.Presentation.Tools;
 using MMK.Presentation.ViewModel;
 
@@ -12,8 +10,6 @@ namespace MMK.Notify.ViewModels
 {
     public class TrayMenuViewModel : ViewModel
     {
-        private Window hashTagFoldersWindow;
-
         public TrayMenuViewModel()
         {
             StartListenShortcutsCommand = new Command(IoC.Get<GlobalShortcutService>().Start);
@@ -51,7 +47,6 @@ namespace MMK.Notify.ViewModels
         public ICommand StopListenShortcutsCommand { get; set; }
         public ICommand StartDownloadsWatchCommand { get; private set; }
         public ICommand StopDownloadsWatchCommand { get; private set; }
-        public ICommand OpenHashTagFoldersWindowCommand { get; private set; }
 
         protected override void OnLoadData()
         {
@@ -60,18 +55,6 @@ namespace MMK.Notify.ViewModels
 
             if (IsEnableDownloadsWatch)
                 StartDownloadsWatchCommand.Execute(null);
-        }
-
-        public void OpenHashTagFoldersWindow()
-        {
-            if (hashTagFoldersWindow == null)
-            {
-                hashTagFoldersWindow = new HashTagFoldersWindow();
-                hashTagFoldersWindow.Closed += (sender, args) => hashTagFoldersWindow = null;
-                hashTagFoldersWindow.Show();
-            }
-            else
-                hashTagFoldersWindow.Focus();
         }
     }
 }
