@@ -202,6 +202,7 @@
     <Compile Include="Services\TaskProgressService.cs" />
     <Compile Include="Services\TrayMenuService.cs" />
     <Compile Include="Model\NotifyTypeColorConverter.cs" />
+    <Compile Include="Style\CustomizedWindow\LocalExtensions.cs" />
     <Compile Include="ViewModels\BalloonTipViewModel.cs" />
     <Compile Include="ViewModels\TaskProgressViewModel.cs" />
     <Compile Include="Views\BalloonTipWindow.xaml.cs">
