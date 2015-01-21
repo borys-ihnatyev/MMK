@@ -38,7 +38,7 @@ namespace MMK.ApplicationServiceModel
             return serviceLocator;
         }
 
-        public static TService Get<TService>()
+        public static TService Get<TService>() where TService : class 
         {
             var callingAssembly = Assembly.GetCallingAssembly();
             var serviceLocator = TryGetServiceLocator(callingAssembly) ?? EntryServiceLocator;
