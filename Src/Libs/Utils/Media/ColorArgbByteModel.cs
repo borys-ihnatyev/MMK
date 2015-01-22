@@ -6,10 +6,10 @@ namespace MMK.Utils.Media
     public struct ColorArgbByteModel : IColorArgbModel<byte>
     {
         [FieldOffset(0)] private readonly int argb;
-        [FieldOffset(0)] private byte a;
-        [FieldOffset(1)] private byte r;
-        [FieldOffset(2)] private byte g;
-        [FieldOffset(3)] private byte b;
+        [FieldOffset(3)] private byte a;
+        [FieldOffset(2)] private byte r;
+        [FieldOffset(1)] private byte g;
+        [FieldOffset(0)] private byte b;
 
         public byte A
         {
