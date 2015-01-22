@@ -4,6 +4,7 @@
                 xmlns:wpf="clr-namespace:MMK.Presentation;assembly=MMK.Presentation"
                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                xmlns:ps="clr-namespace:MMK.PresentationStyles;assembly=MMK.PresentationStyles"
                 xmlns:trayMenu="clr-namespace:MMK.Notify.Views.TrayMenu"
                 xmlns:viewModels="clr-namespace:MMK.Notify.ViewModels"
                 mc:Ignorable="d"
