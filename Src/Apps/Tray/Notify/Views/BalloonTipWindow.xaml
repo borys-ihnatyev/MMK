@@ -14,6 +14,7 @@
                 MaxWidth="400"
                 Style="{StaticResource WindowBlackGlanceStyle}"
                 d:DataContext="{d:DesignData Source=../DesignData/BalloonTipViewModel.xaml}">
+  
     <Window.Resources>
         <model:NotifyTypeColorConverter x:Key="NotifyTypeColorConverter" />
     </Window.Resources>

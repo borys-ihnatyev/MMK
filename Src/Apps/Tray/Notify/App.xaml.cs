@@ -54,8 +54,7 @@ namespace MMK.Notify
         private static void BindServices()
         {
             ServiceLocator.Bind<HwndSourceService>().ToSelf().InSingletonScope();
-            ServiceLocator.Bind<IHwndSource>().ToMethod(c => ServiceLocator.Get<HwndSourceService>()).InSingletonScope();
-
+            ServiceLocator.Bind<IHwndSource>().ToMethod(c => c.Kernel.Get<HwndSourceService>()).InSingletonScope();
             ServiceLocator.Bind<NotificationService>().ToSelf().InSingletonScope();
 
             ServiceLocator.Bind<TaskObserver>().ToSelf().InSingletonScope();
