@@ -138,7 +138,6 @@
             <TextBox x:Name="HashTagEditBox"
                      Style="{StaticResource HashTagEditTextBoxStyle}"
                      IsEnabled="{Binding CanDirectEditHashTags}"
-                     tools:DependencyObjectFocusExtension.IsFocused="{Binding CanDirectEditHashTags}"
                      Foreground="{Binding HashTags.Selected.HashTag, Converter={StaticResource KeyColorConverter}}"
                      Text="{Binding HashTags.Selected.HashTagValue, UpdateSourceTrigger=PropertyChanged}" />
         </DockPanel>
