@@ -10,10 +10,7 @@ namespace MMK.Notify.ViewModels
 {
     public class TaskProgressViewModel : ViewModel
     {
-        private static NotificationService Notification
-        {
-            get { return IoC.Get<NotificationService>(); }
-        }
+        private readonly NotificationService notificationService;
 
         private INotifyable currentInfo;
 
@@ -22,6 +19,11 @@ namespace MMK.Notify.ViewModels
         private int observedCount;
         private int queuedCount;
         private int failedCount;
+
+        public TaskProgressViewModel(NotificationService notificationService)
+        {
+            this.notificationService = notificationService;
+        }
 
         public INotifyable CurrentInfo
         {
@@ -136,7 +138,7 @@ namespace MMK.Notify.ViewModels
             if (failedCount == QueuedCount)
                 return;
 
-            Notification.Push(e.Message);
+            notificationService.Push(e.Message);
         }
 
         private void OnTaskCanceled(object sender, TaskObserver.NotifyEventArgs e)
@@ -163,7 +165,7 @@ namespace MMK.Notify.ViewModels
 
             var message = BuildNotifyMessage();
 
-            Notification.Push(message);
+            notificationService.Push(message);
         }
 
         private INotifyable BuildNotifyMessage()

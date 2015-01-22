@@ -15,7 +15,7 @@ namespace MMK.Notify.Services
 
         public TaskProgressService()
         {
-            taskProgressViewModel = new TaskProgressViewModel();
+            taskProgressViewModel = IoC.Get<TaskProgressViewModel>();
         }
 
         protected override void OnInitialize()

@@ -1,5 +1,4 @@
 ﻿using System.Windows.Input;
-using MMK.ApplicationServiceModel;
 using MMK.Notify.Model.Service;
 using MMK.Notify.Properties;
 using MMK.Notify.Services;
@@ -10,13 +9,13 @@ namespace MMK.Notify.ViewModels
 {
     public class TrayMenuViewModel : ViewModel
     {
-        public TrayMenuViewModel()
+        public TrayMenuViewModel(GlobalShortcutService shortcutService, IDownloadsWatcher downloadsWatcher)
         {
-            StartListenShortcutsCommand = new Command(IoC.Get<GlobalShortcutService>().Start);
-            StopListenShortcutsCommand = new Command(IoC.Get<GlobalShortcutService>().Stop);
+            StartListenShortcutsCommand = new Command(shortcutService.Start);
+            StopListenShortcutsCommand = new Command(shortcutService.Stop);
 
-            StartDownloadsWatchCommand = new Command(IoC.Get<IDownloadsWatcher>().Start);
-            StopDownloadsWatchCommand = new Command(IoC.Get<IDownloadsWatcher>().Stop);
+            StartDownloadsWatchCommand = new Command(downloadsWatcher.Start);
+            StopDownloadsWatchCommand = new Command(downloadsWatcher.Stop);
         }
 
         public bool IsEnableHotKeys

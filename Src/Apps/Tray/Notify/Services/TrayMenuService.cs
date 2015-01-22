@@ -23,7 +23,7 @@ namespace MMK.Notify.Services
                 Text = @"MMK Notify"
             };
 
-            trayMenuViewModel = new TrayMenuViewModel();
+            trayMenuViewModel = IoC.Get<TrayMenuViewModel>();
             this.taskProgressService = taskProgressService;
         }
 
