@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using System.IO;
 using MMK.Marking.Representation;
 using MMK.Utils;
@@ -17,49 +18,29 @@ namespace MMK.Processing
             return string.Format(@"KeyColors\{0}.png", key.ToString(KeyNotation.IsMollDur));
         }
 
+        private readonly string filePath;
+
+        private readonly TrackNameModel trackNameModel;
+
         public Id3Tager(string filePath, TrackNameModel trackNameModel)
         {
+            if(filePath == null)
+                throw new ArgumentNullException("filePath");
+            if (!IOFile.Exists(filePath))
+                throw new FileNotFoundException("File Not Found", filePath);
+            if (!FileExtensionParser.IsMp3(filePath))
+                throw new NotMp3FileException();
             if (trackNameModel == null)
                 throw new ArgumentNullException("trackNameModel");
-
-            CheckFileMatch(filePath);
+            Contract.EndContractBlock();
 
             this.filePath = filePath;
             this.trackNameModel = trackNameModel;
         }
 
-        public Id3Tager(string filePath)
-        {
-            CheckFileMatch(filePath);
-
-            FilePath = filePath;
-        }
-
-        private static void CheckFileMatch(string filePath)
-        {
-            if (!IOFile.Exists(filePath))
-                throw new FileNotFoundException("File Not Found", filePath);
-
-            if (!FileExtensionParser.IsMp3(filePath))
-                throw new NotMp3FileException();
-        }
-
-        private string filePath;
-
-        private TrackNameModel trackNameModel;
-
         public string FilePath
         {
             get { return filePath; }
-            set
-            {
-                if (!IOFile.Exists(value))
-                    throw new FileNotFoundException("File not found ", value);
-
-                filePath = value;
-                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filePath);
-                trackNameModel = TrackNameModel.Parser.Parse(fileNameWithoutExtension);
-            }
         }
 
         private void TrySetId3Tag()
