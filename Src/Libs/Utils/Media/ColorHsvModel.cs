@@ -5,10 +5,25 @@ namespace MMK.Utils.Media
 {
     public struct ColorHsvModel
     {
+        private double h;
         public const double HueMax = 1;
-        public const double HueMib = 0;
+        public const double HueMin = 0;
 
-        public double H { get; set; }
+        public double H
+        {
+            get { return h; }
+            set
+            {
+                if (Math.Abs(value) > HueMax)
+                    value = value - ((int)(value/HueMax) * HueMax);
+
+                if (value < HueMin)
+                    value = HueMax + value;
+
+                h = value;
+            }
+        }
+
         public double S { get; set; }
         public double V { get; set; }
 
