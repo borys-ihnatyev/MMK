@@ -95,7 +95,7 @@ namespace MMK.Utils.Media
         [Pure]
         private static Byte ToByteColorPart(double colorPart)
         {
-            return (Byte) (255*colorPart);
+            return (Byte) (Byte.MaxValue*colorPart);
         }
     }
 }
