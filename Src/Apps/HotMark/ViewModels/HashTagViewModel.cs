@@ -1,4 +1,5 @@
-﻿using MMK.Marking;
+﻿using System;
+using MMK.Marking;
 using MMK.Presentation.ViewModel;
 
 namespace MMK.HotMark.ViewModels
@@ -36,7 +37,7 @@ namespace MMK.HotMark.ViewModels
             get { return hashTagValue; }
             set
             {
-                value = value.Replace(" ", "").ToLower();
+                value = value.Trim().ToLower();
                 if (value == hashTagValue) return;
 
                 hashTagValue = value;
@@ -62,7 +63,7 @@ namespace MMK.HotMark.ViewModels
 
         public bool IsEmpty
         {
-            get { return HashTagValue == ""; }
+            get { return String.IsNullOrWhiteSpace(HashTagValue); }
         }
 
         public override string ToString()
