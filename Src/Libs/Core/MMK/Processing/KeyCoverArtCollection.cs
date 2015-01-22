@@ -31,7 +31,7 @@ namespace MMK.Processing
         {
             var imagePath = GetImagePath(key);
             if (!File.Exists(imagePath))
-                CreateImage(key, imagePath);
+                CreateAndSaveImage(key, imagePath);
             return imagePath;
         }
 
@@ -40,14 +40,20 @@ namespace MMK.Processing
             return Path.Combine(coverArtsDir.FullName, String.Format(@"{0}.png", key.ToString(KeyNotation.CamelotWithoutTone)));
         }
 
-        private static void CreateImage(Key key, string imagePath)
+        private static void CreateAndSaveImage(Key key, string imagePath)
+        {
+            var image = CreateImage(key);
+            image.Save(imagePath, ImageFormat.Png);
+        }
+
+        private static Bitmap CreateImage(Key key)
         {
             var image = new Bitmap(500, 500);
             var g = Graphics.FromImage(image);
-            g.FillRectangle(Brushes.Transparent, 0, 0, 500, 500);
+            g.FillRectangle(Brushes.SeaShell, 0, 0, 500, 500);
             var keyBrush = CreateKeyBrush(key);
-            g.FillEllipse(keyBrush, 0, 0, 500, 500);
-            image.Save(imagePath, ImageFormat.Png);
+            g.FillEllipse(keyBrush, 30, 30, 440, 440);
+            return image;
         }
 
         private static Brush CreateKeyBrush(Key key)
