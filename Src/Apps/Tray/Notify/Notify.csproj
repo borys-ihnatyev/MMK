@@ -186,6 +186,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DesignData\TaskProgressViewModel.cs" />
     <Compile Include="Model\ServiceLocator.cs" />
     <Compile Include="Model\Service\FileDownloadedEventArgs.cs" />
     <Compile Include="Model\Service\IDownloadsWatcher.cs" />
@@ -204,6 +205,7 @@
     <Compile Include="Model\NotifyTypeColorConverter.cs" />
     <Compile Include="Style\CustomizedWindow\LocalExtensions.cs" />
     <Compile Include="ViewModels\BalloonTipViewModel.cs" />
+    <Compile Include="ViewModels\ITaskProgressViewModel.cs" />
     <Compile Include="ViewModels\TaskProgressViewModel.cs" />
     <Compile Include="Views\BalloonTipWindow.xaml.cs">
       <DependentUpon>BalloonTipWindow.xaml</DependentUpon>

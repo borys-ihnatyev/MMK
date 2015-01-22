@@ -8,7 +8,7 @@ using MMK.Presentation.ViewModel;
 
 namespace MMK.Notify.ViewModels
 {
-    public class TaskProgressViewModel : ViewModel
+    public class TaskProgressViewModel : ViewModel, ITaskProgressViewModel
     {
         private readonly NotificationService notificationService;
 
@@ -28,8 +28,10 @@ namespace MMK.Notify.ViewModels
         public INotifyable CurrentInfo
         {
             get { return currentInfo; }
-            set
+            private set
             {
+                if (value == currentInfo)
+                    return;
                 currentInfo = value;
                 NotifyPropertyChanged();
             }
@@ -63,26 +65,10 @@ namespace MMK.Notify.ViewModels
             }
         }
 
-        public int ObservedCount
-        {
-            get { return observedCount; }
-            set
-            {
-                if (value < 0)
-                    throw new ArgumentException(@"must be >= 0", "value");
-                Contract.EndContractBlock();
-
-                if (value == observedCount)
-                    return;
-                observedCount = value;
-                NotifyPropertyChanged();
-            }
-        }
-
         public int QueuedCount
         {
             get { return queuedCount; }
-            set
+            private set
             {
                 if (value < 0)
                     throw new ArgumentException(@"must be >= 0", "value");
@@ -99,6 +85,34 @@ namespace MMK.Notify.ViewModels
             }
         }
 
+        public int ObservedCount
+        {
+            get { return observedCount; }
+            private set
+            {
+                if (value < 0)
+                    throw new ArgumentException(@"must be >= 0", "value");
+                Contract.EndContractBlock();
+
+                if (value == observedCount)
+                    return;
+                observedCount = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public int FailedCount
+        {
+            get { return failedCount; }
+            private set
+            {
+                if(value == failedCount)
+                    return;
+
+                failedCount = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         protected override void OnLoadData()
         {
@@ -133,12 +147,7 @@ namespace MMK.Notify.ViewModels
 
         private void OnTaskFailed(object sender, TaskObserver.NotifyEventArgs e)
         {
-            ++failedCount;
-
-            if (failedCount == QueuedCount)
-                return;
-
-            notificationService.Push(e.Message);
+            ++FailedCount;
         }
 
         private void OnTaskCanceled(object sender, TaskObserver.NotifyEventArgs e)
@@ -160,12 +169,17 @@ namespace MMK.Notify.ViewModels
 
         private void Notify()
         {
-            if (QueuedCount == 0)
+            if (!CanNotify)
                 return;
 
             var message = BuildNotifyMessage();
 
             notificationService.Push(message);
+        }
+
+        private bool CanNotify
+        {
+            get { return QueuedCount != 0 && ((ObservedCount != 0) || failedCount != 0); }
         }
 
         private INotifyable BuildNotifyMessage()

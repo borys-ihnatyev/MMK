@@ -1,4 +1,4 @@
-﻿<TaskProgressViewModel xmlns="clr-namespace:MMK.Notify.ViewModels"
+﻿<TaskProgressViewModel xmlns="clr-namespace:MMK.Notify.DesignData"
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:observer="clr-namespace:MMK.Notify.Observer;assembly=MMK.Notify.Observer"
                        ObservedCount="7"
