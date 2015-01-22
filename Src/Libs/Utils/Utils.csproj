@@ -154,6 +154,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\ObjectExtension.cs" />
+    <Compile Include="Media\ColorArgbByteModel.cs" />
+    <Compile Include="Media\ColorArgbDoubleModel.cs" />
+    <Compile Include="Media\ColorHsvModel.cs" />
+    <Compile Include="Media\IColorArgbModel.cs" />
     <Compile Include="System\ChangedEventArgs.cs" />
     <Compile Include="System\IO\FileSystemInfoExtension.cs" />
     <Compile Include="System\IO\PathExtension.cs" />

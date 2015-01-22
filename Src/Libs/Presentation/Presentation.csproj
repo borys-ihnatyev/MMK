@@ -158,7 +158,6 @@
     <Compile Include="Windows\Taskbar.cs" />
     <Compile Include="Windows\Controls\ControlExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Windows\Media\ColorHsv.cs" />
     <Compile Include="Tools\Command.cs" />
     <Compile Include="Tools\InvokeDelegateCommandAction.cs" />
     <Compile Include="Tools\KeyBrushConverter.cs" />
