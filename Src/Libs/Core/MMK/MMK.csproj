@@ -173,7 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Processing\AutoFolder\HashTagFolderCollection.SerializationItem.cs" />
-    <Compile Include="Processing\AutoFolder\HashTagFolderCollection.Pattern.cs" />
+    <Compile Include="Marking\Representation\Special\HashTagModelPattern.cs" />
     <Compile Include="Processing\AutoFolder\MusicFolderLocation.Parser.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -4,7 +4,6 @@ using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using MMK.Marking;
-using MMK.Marking.Representation;
 using IOPath = System.IO.Path;
 
 namespace MMK.Processing.AutoFolder
@@ -58,7 +57,7 @@ namespace MMK.Processing.AutoFolder
         public ResultInfo MoveFile(string filePath, bool saveStructure = false)
         {
             var location = GetNewLocation(filePath, saveStructure);
-            var newFilePath =  location.Move(filePath);
+            var newFilePath = location.Move(filePath);
             return new ResultInfo
             {
                 MusicFolderInnerPath = location.Path,
@@ -72,10 +71,10 @@ namespace MMK.Processing.AutoFolder
             var fileLocation = MusicFolderLocation.TryParse(filePath);
             if (fileLocation == null)
                 return CalcLastLocation();
-            
+
             if (fileLocation.RootPath.Equals(Path, StringComparison.OrdinalIgnoreCase))
                 return fileLocation;
-            
+
             return GetSimilarLocation(fileLocation, saveStructure);
         }
 

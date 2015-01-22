@@ -10,16 +10,16 @@ using MMK.Marking.Representation;
 namespace MMK.Processing.AutoFolder
 {
     [Serializable]
-    public partial class HashTagFolderCollection : IEnumerable<KeyValuePair<HashTagFolderCollection.Pattern, string>>,
+    public partial class HashTagFolderCollection : IEnumerable<KeyValuePair<HashTagModelPattern, string>>,
         ISerializable
     {
-        [NonSerialized] private readonly SortedDictionary<Pattern, string> patternFolderDictionary;
+        [NonSerialized] private readonly SortedDictionary<HashTagModelPattern, string> patternFolderDictionary;
 
         [NonSerialized] private readonly SortedDictionary<string, MusicFolder> pathMusicFolderDictionary;
 
         public HashTagFolderCollection()
         {
-            patternFolderDictionary = new SortedDictionary<Pattern, string>(new Pattern.Comparer());
+            patternFolderDictionary = new SortedDictionary<HashTagModelPattern, string>(new HashTagModelPattern.Comparer());
             pathMusicFolderDictionary = new SortedDictionary<string, MusicFolder>();
         }
 
@@ -44,7 +44,7 @@ namespace MMK.Processing.AutoFolder
                 pathMusicFolderDictionary[path] = musicFolder;
             }
 
-            var pattern = new Pattern(model, priority);
+            var pattern = new HashTagModelPattern(model, priority);
 
             if (patternFolderDictionary.ContainsKey(pattern))
                 throw new PatternAlreadyExistsException();
@@ -71,7 +71,7 @@ namespace MMK.Processing.AutoFolder
         }
 
         [Pure]
-        public IEnumerable<Pattern> GetPatternsForFolder(string path)
+        public IEnumerable<HashTagModelPattern> GetPatternsForFolder(string path)
         {
             return from patternFolder in patternFolderDictionary
                 where patternFolder.Value == path
@@ -104,7 +104,7 @@ namespace MMK.Processing.AutoFolder
         }
 
         [Pure]
-        public IEnumerator<KeyValuePair<Pattern, string>> GetEnumerator()
+        public IEnumerator<KeyValuePair<HashTagModelPattern, string>> GetEnumerator()
         {
             return patternFolderDictionary.GetEnumerator();
         }
