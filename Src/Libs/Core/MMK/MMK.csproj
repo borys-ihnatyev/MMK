@@ -26,7 +26,7 @@
     </DocumentationFile>
     <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
     <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
-    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeThrowOnFailure>False</CodeContractsRuntimeThrowOnFailure>
     <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
     <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
     <CodeContractsRunCodeAnalysis>True</CodeContractsRunCodeAnalysis>
@@ -136,6 +136,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="taglib-sharp">
       <HintPath>..\..\..\..\packages\taglib.2.1.0.0\lib\taglib-sharp.dll</HintPath>
@@ -156,6 +157,7 @@
     <Compile Include="Key.cs" />
     <Compile Include="Marking\HashTag.cs" />
     <Compile Include="Processing\Id3Tager.NotMp3FileException.cs" />
+    <Compile Include="Processing\KeyColorConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Marking\Parsing\HashTag.Entry.cs" />
     <Compile Include="Marking\Parsing\HashTag.Parser.cs" />
