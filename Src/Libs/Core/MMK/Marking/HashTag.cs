@@ -35,17 +35,15 @@ namespace MMK.Marking
 
         public override bool Equals(object obj)
         {
-            var hashTag = obj as HashTag;
-
-            if (hashTag == null) return false;
-            if (this == hashTag) return true;
-
-            return Equals(hashTag);
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals((HashTag) obj);
         }
 
         protected virtual bool Equals(HashTag other)
         {
-            return other != null && string.Equals(tagValue, other.tagValue);
+            return string.Equals(tagValue, other.tagValue);
         }
 
         public override int GetHashCode()

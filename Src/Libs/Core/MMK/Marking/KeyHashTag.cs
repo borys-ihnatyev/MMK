@@ -30,30 +30,32 @@ namespace MMK.Marking
 
         public override bool Equals(object obj)
         {
-            var hashTag = obj as KeyHashTag;
-
-            if (hashTag == null) return false;
-
-            return hashTag == this || Equals(hashTag);
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals((KeyHashTag) obj);
         }
 
         protected override bool Equals(HashTag other)
         {
-            var hashTag = other as KeyHashTag;
-            if (ReferenceEquals(hashTag,null)) return false;
-            return ReferenceEquals(hashTag,this) || Equals(hashTag);
+            if (ReferenceEquals(other,null)) return false;
+            if (ReferenceEquals(other, this)) return true;
+            if (other.GetType() != GetType()) return false;
+            return Equals((KeyHashTag)other);
         }
 
-        private bool Equals(KeyHashTag other)
+        protected bool Equals(KeyHashTag other)
         {
-            return other !=null && Equals(Key, other.Key) && Notation == other.Notation;
+            return Equals(Key, other.Key) && Notation == other.Notation;
         }
 
         public override int GetHashCode()
         {
             unchecked
             {
-                return ((Key != null ? Key.GetHashCode() : 0)*397) ^ (int) Notation;
+                var hashCode = (Key != null ? Key.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ (int) Notation;
+                return hashCode;
             }
         }
 
