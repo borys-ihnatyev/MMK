@@ -341,6 +341,10 @@
       <Project>{A9193781-F0F5-406C-BC5F-312AE4F516F3}</Project>
       <Name>MMK</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Libs\Core\PresentationStyles\PresentationStyles.csproj">
+      <Project>{05f2e7a7-ae33-47ac-8073-b6f56fe3f2dc}</Project>
+      <Name>PresentationStyles</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Libs\Presentation\Presentation.csproj">
       <Project>{51a0c435-391f-44f2-a4b0-3d8623c2bc6b}</Project>
       <Name>Presentation</Name>
