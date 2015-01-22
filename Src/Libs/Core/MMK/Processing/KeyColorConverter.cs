@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using MMK.Utils.Media;
+﻿using MMK.Utils.Media;
 
 namespace MMK.Processing
 {
@@ -7,8 +6,8 @@ namespace MMK.Processing
     {
         private static ColorHsvModel ToHsvColorModel(Key key)
         {
-            var color = new ColorHsvModel { H = 0.0, S = 1.0, V = 1.0 };
-            const double hStep = 1.0 / 12;
+            var color = new ColorHsvModel {H = 0.0, S = 1.0, V = 1.0};
+            const double hStep = 1.0/12;
 
             var keyToneEnumer = CircleOfFifths.MinorKeys.GetEnumerator();
 
