@@ -144,6 +144,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CircleOfFifths.cs" />
+    <Compile Include="KeyNotation.cs" />
+    <Compile Include="Note.cs" />
     <Compile Include="Processing\KeyCoverArtCollection.cs" />
     <Compile Include="Marking\Representation\TrackNameModel.InvalidNameFormatException.cs" />
     <Compile Include="NoteFactory.cs" />
@@ -170,6 +172,7 @@
     <Compile Include="Marking\Parsing\KeyHashTag.Entry.cs" />
     <Compile Include="Marking\Representation\TrackNameModel.cs" />
     <Compile Include="Marking\Representation\Parsing\TrackNameModel.Parser.cs" />
+    <Compile Include="Tone.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Processing\AutoFolder\HashTagFolderCollection.SerializationItem.cs" />
