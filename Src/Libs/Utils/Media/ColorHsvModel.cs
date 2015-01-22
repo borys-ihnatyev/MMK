@@ -5,6 +5,9 @@ namespace MMK.Utils.Media
 {
     public struct ColorHsvModel
     {
+        public const double HueMax = 1;
+        public const double HueMib = 0;
+
         public double H { get; set; }
         public double S { get; set; }
         public double V { get; set; }
