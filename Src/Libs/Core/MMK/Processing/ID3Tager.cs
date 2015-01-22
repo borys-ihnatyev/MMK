@@ -13,10 +13,7 @@ namespace MMK.Processing
 {
     public partial class Id3Tager
     {
-        private static string GetKeyColorImagePath(Key key)
-        {
-            return string.Format(@"KeyColors\{0}.png", key.ToString(KeyNotation.IsMollDur));
-        }
+        private static readonly KeyCoverArtCollection KeyCoverArtCollection = new KeyCoverArtCollection(@"KeyColors");
 
         private readonly string filePath;
 
@@ -109,7 +106,7 @@ namespace MMK.Processing
         {
             tag.Pictures = new IPicture[]
             {
-                new Picture(GetKeyColorImagePath(trackNameModel.MainKey))
+                new Picture(KeyCoverArtCollection.RetriveImagePath(trackNameModel.MainKey))
                 {
                     Type = PictureType.FrontCover
                 }
