@@ -1,4 +1,6 @@
-﻿using MMK.Utils.Media;
+﻿using System;
+using System.Diagnostics.Contracts;
+using MMK.Utils.Media;
 
 namespace MMK.Processing
 {
@@ -23,11 +25,19 @@ namespace MMK.Processing
 
         public static ColorArgbDoubleModel ToArgbDoubleModel(Key key)
         {
+            if (key == null)
+                throw new ArgumentNullException("key");
+            Contract.EndContractBlock();
+
             return ToHsvColorModel(key).ToArgbDoubleModel();
         }
 
         public static ColorArgbByteModel ToArgbByteModel(Key key)
         {
+            if (key == null)
+                throw new ArgumentNullException("key");
+            Contract.EndContractBlock();
+
             return ToHsvColorModel(key).ToArgbByteModel();
         }
     }
