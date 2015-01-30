@@ -17,11 +17,13 @@ namespace MMK.Processing
 
         private readonly string filePath;
 
+        private Tag tag;
+
         private readonly TrackNameModel trackNameModel;
 
         public Id3Tager(string filePath, TrackNameModel trackNameModel)
         {
-            if(filePath == null)
+            if (filePath == null)
                 throw new ArgumentNullException("filePath");
             if (!IOFile.Exists(filePath))
                 throw new FileNotFoundException("File Not Found", filePath);
@@ -51,17 +53,10 @@ namespace MMK.Processing
 
         private void SetId3Tag(File mp3File)
         {
-            var tag = ReadOrCreateId3Tag(mp3File);
-
-            SetTagMainInfo(tag);
-
-            if (trackNameModel.HashTagModel.IsEmpty())
-                return;
-
-            if (trackNameModel.MainKey != null)
-                SetTagMainKey(tag);
-
-            tag.Comment = trackNameModel.HashTagModel.ToString();
+            tag = ReadOrCreateId3Tag(mp3File);
+            SetTagMainInfo();
+            SetTagMainKey();
+            SetTagCoverArt();
         }
 
         private static Tag ReadOrCreateId3Tag(File mp3File)
@@ -78,23 +73,25 @@ namespace MMK.Processing
             return tag;
         }
 
-        private void SetTagMainInfo(Tag tag)
+        private void SetTagMainInfo()
         {
             tag.Title = trackNameModel.FullTitle;
             tag.Performers = new[] {trackNameModel.ArtistsString};
             tag.AlbumArtists = new[] {"VA"};
+            tag.Comment = trackNameModel.HashTagModel.ToString();
         }
 
-        private void SetTagMainKey(Tag tag)
+        private void SetTagMainKey()
         {
-            SetTagCoverArt(tag);
+            if (trackNameModel.MainKey == null)
+                return;
 
             var id3V2Tag = tag as TagLib.Id3v2.Tag;
 
             if (id3V2Tag == null)
                 return;
 
-            var tagKeyFrame = TextInformationFrame.Get(id3V2Tag , "TKEY", true);
+            var tagKeyFrame = TextInformationFrame.Get(id3V2Tag, "TKEY", true);
 
             tagKeyFrame.Text = new[]
             {
@@ -102,7 +99,7 @@ namespace MMK.Processing
             };
         }
 
-        private void SetTagCoverArt(Tag tag)
+        private void SetTagCoverArt()
         {
             tag.Pictures = new IPicture[]
             {

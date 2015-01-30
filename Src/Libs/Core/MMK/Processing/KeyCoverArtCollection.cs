@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -13,6 +14,8 @@ namespace MMK.Processing
         {
             if(String.IsNullOrWhiteSpace(directory))
                 throw new ArgumentException("invalid directory name","directory");
+            Contract.EndContractBlock();
+
             coverArtsDir = new DirectoryInfo(directory);
 
             if (coverArtsDir.Exists) return;
