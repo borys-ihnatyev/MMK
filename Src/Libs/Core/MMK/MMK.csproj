@@ -146,8 +146,9 @@
     <Compile Include="CircleOfFifths.cs" />
     <Compile Include="KeyNotation.cs" />
     <Compile Include="Note.cs" />
-    <Compile Include="Processing\CoverArtFactory.cs" />
-    <Compile Include="Processing\KeyCoverArtFactory.cs" />
+    <Compile Include="Processing\CoverArt.cs" />
+    <Compile Include="Processing\CoverArtResovler.cs" />
+    <Compile Include="Processing\KeyCoverArt.cs" />
     <Compile Include="Marking\Representation\TrackNameModel.InvalidNameFormatException.cs" />
     <Compile Include="NoteFactory.cs" />
     <Compile Include="Marking\Representation\Parsing\HashTagModel.Parser.cs" />
@@ -162,6 +163,7 @@
     <Compile Include="Marking\HashTag.cs" />
     <Compile Include="Processing\Id3Tager.NotMp3FileException.cs" />
     <Compile Include="Processing\KeyColorConverter.cs" />
+    <Compile Include="Processing\MixCoverart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Marking\Parsing\HashTag.Entry.cs" />
     <Compile Include="Marking\Parsing\HashTag.Parser.cs" />

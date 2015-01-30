@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 using System.IO;
+using System.Linq;
 using MMK.Marking.Representation;
 using MMK.Utils;
 using TagLib;
@@ -13,7 +14,7 @@ namespace MMK.Processing
 {
     public partial class Id3Tager
     {
-        private static readonly KeyCoverArtFactory KeyCoverArtFactory = new KeyCoverArtFactory(@"KeyColors");
+        private static readonly CoverArtResovler CoverArtResovler = new CoverArtResovler(@"KeyColors");
 
         private readonly string filePath;
 
@@ -79,6 +80,9 @@ namespace MMK.Processing
             tag.Performers = new[] {trackNameModel.ArtistsString};
             tag.AlbumArtists = new[] {"VA"};
             tag.Comment = trackNameModel.HashTagModel.ToString();
+            //todo refactor hardcoded behavior
+            if (trackNameModel.HashTagModel.Select(h => h.TagValue).Any(t => t.StartsWith("mix")))
+                tag.Album = "mixes";
         }
 
         private void SetTagMainKey()
@@ -101,9 +105,13 @@ namespace MMK.Processing
 
         private void SetTagCoverArt()
         {
+            var imagePath = CoverArtResovler.ResolveImagePath(trackNameModel.HashTagModel);
+            if(imagePath == null)
+                return;
+
             tag.Pictures = new IPicture[]
             {
-                new Picture(KeyCoverArtFactory.RetriveImagePath(trackNameModel.MainKey))
+                new Picture(imagePath)
                 {
                     Type = PictureType.FrontCover
                 }

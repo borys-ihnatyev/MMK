@@ -78,7 +78,7 @@
     <Compile Include="Marking\HashTagTest.cs" />
     <Compile Include="Marking\Parsing\HashTagModelParserTest.cs" />
     <Compile Include="Processing\AutoFolder\MusicFolderLocationParserTest.cs" />
-    <Compile Include="Processing\KeyCoverArtCollectionTest.cs" />
+    <Compile Include="Processing\CoverArtResolverTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuintCircleTests.cs" />
   </ItemGroup>
