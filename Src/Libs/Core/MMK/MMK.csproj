@@ -146,7 +146,8 @@
     <Compile Include="CircleOfFifths.cs" />
     <Compile Include="KeyNotation.cs" />
     <Compile Include="Note.cs" />
-    <Compile Include="Processing\KeyCoverArtCollection.cs" />
+    <Compile Include="Processing\CoverArtFactory.cs" />
+    <Compile Include="Processing\KeyCoverArtFactory.cs" />
     <Compile Include="Marking\Representation\TrackNameModel.InvalidNameFormatException.cs" />
     <Compile Include="NoteFactory.cs" />
     <Compile Include="Marking\Representation\Parsing\HashTagModel.Parser.cs" />
@@ -154,7 +155,7 @@
     <Compile Include="Processing\AutoFolder\HashTagFolderCollection.ISerialization.cs" />
     <Compile Include="Processing\AutoFolder\MusicFolder.cs" />
     <Compile Include="Processing\AutoFolder\MusicFolderLocation.cs" />
-    <Compile Include="Processing\ID3Tager.cs" />
+    <Compile Include="Processing\Id3Tager.cs" />
     <Compile Include="Marking\KeyHashTag.NoteNotFoundException.cs" />
     <Compile Include="Marking\KeyHashTag.ToneNotFoundException.cs" />
     <Compile Include="Key.cs" />

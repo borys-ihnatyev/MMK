@@ -3,25 +3,28 @@ using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
+using MMK.Marking;
+using MMK.Marking.Representation;
 
 namespace MMK.Processing
 {
-    public class KeyCoverArtCollection
+    public class KeyCoverArtFactory : CoverArtFactory
     {
-        private readonly DirectoryInfo coverArtsDir;
-        
-        public KeyCoverArtCollection(string directory)
+        public KeyCoverArtFactory(string directory) : base(directory)
         {
-            if(String.IsNullOrWhiteSpace(directory))
-                throw new ArgumentException("invalid directory name","directory");
-            Contract.EndContractBlock();
+        }
 
-            coverArtsDir = new DirectoryInfo(directory);
+        public override string RetriveImagePath(HashTagModel hashTagModel)
+        {
+            if (hashTagModel == null)
+                throw new ArgumentNullException("hashTagModel");
 
-            if (coverArtsDir.Exists) return;
-            
-            coverArtsDir.Create();
-            coverArtsDir.Refresh();
+            var keyHashTag = hashTagModel.OfType<KeyHashTag>().FirstOrDefault();
+            if (keyHashTag == null)
+                return null;
+
+            return RetriveImagePath(keyHashTag.Key);
         }
 
         /// <summary>
@@ -30,17 +33,23 @@ namespace MMK.Processing
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public string RetriveImagePath(Key key)
+        private string RetriveImagePath(Key key)
         {
+            if (key == null)
+                throw new ArgumentNullException(@"key");
+            Contract.EndContractBlock();
+
             var imagePath = GetImagePath(key);
             if (!File.Exists(imagePath))
                 CreateAndSaveImage(key, imagePath);
+
             return imagePath;
         }
 
         private string GetImagePath(Key key)
         {
-            return Path.Combine(coverArtsDir.FullName, String.Format(@"{0}.png", key.ToString(KeyNotation.CamelotWithoutTone)));
+            return Path.Combine(CoverArtsDir.FullName,
+                String.Format(@"{0}.png", key.ToString(KeyNotation.CamelotWithoutTone)));
         }
 
         private static void CreateAndSaveImage(Key key, string imagePath)

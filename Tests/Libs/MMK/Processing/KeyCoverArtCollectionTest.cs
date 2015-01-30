@@ -6,18 +6,18 @@ namespace MMK.Processing
     [TestFixture]
     public class KeyCoverArtCollectionTest
     {
-        private KeyCoverArtCollection keyCoverArtCollection;
+        private KeyCoverArtFactory keyCoverArtFactory;
 
         [TestFixtureSetUp]
         public void SetUp()
         {
-            keyCoverArtCollection = new KeyCoverArtCollection("__KeyColorsTest");
+            keyCoverArtFactory = new KeyCoverArtFactory("__KeyColorsTest");
         }
 
         [Test, TestCaseSource("GetAllKeys")]
         public void TestCreateImage(Key key)
         {
-            keyCoverArtCollection.RetriveImagePath(key);
+            keyCoverArtFactory.RetriveImagePath(key);
         }
 
         public IEnumerable<Key> GetAllKeys()
