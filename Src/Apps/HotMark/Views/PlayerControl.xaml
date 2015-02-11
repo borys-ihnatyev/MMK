@@ -97,7 +97,7 @@
                 </Setter.Value>
             </Setter>
 
-            <Setter Property="FontFamily" Value="pack://application:,,,/MMK.HotMark;component/fonts/#FontAwesome" />
+            <Setter Property="FontFamily" Value="pack://application:,,,/MMK.PresentationStyles;component/fonts/#FontAwesome" />
             <Setter Property="Foreground" Value="White" />
             <Setter Property="Content" Value="&#xf04b;" />
             <Setter Property="Focusable" Value="False" />

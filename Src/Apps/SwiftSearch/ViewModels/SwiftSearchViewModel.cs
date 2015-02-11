@@ -6,7 +6,6 @@ using MMK.ApplicationServiceModel;
 using MMK.Presentation.ViewModel;
 using MMK.Presentation.Windows.Input;
 using MMK.Presentation.Windows.Input.Special;
-using MMK.Presentation.Windows.Interop;
 using MMK.SwiftSearch.Properties;
 using MMK.SwiftSearch.SearchHandlers;
 

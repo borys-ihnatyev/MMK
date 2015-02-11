@@ -32,7 +32,6 @@ namespace MMK.HotMark.Views
             showStoryboard.Completed += (s, e) => Activate();
             hideStoryboard = FindResource("HideStoryboard") as Storyboard;
 
-            Loaded += OnLoaded;
             SizeChanged += OnSizeChanged;
             MouseDown += OnMouseDown;
         }
@@ -42,25 +41,16 @@ namespace MMK.HotMark.Views
         private void OnHashTagsPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Selected")
-                HashTagEditBoxFocus();
+            {
+                Keyboard.Focus(HashTagEditBox); 
+                HashTagEditBox.TextChanged += HashTagEditBoxPutCarretAtEndOnce;
+            }
         }
 
         private void HashTagEditBoxPutCarretAtEndOnce(object sender, TextChangedEventArgs textChangedEventArgs)
         {
             HashTagEditBox.CaretIndex = Int32.MaxValue;
             HashTagEditBox.TextChanged -= HashTagEditBoxPutCarretAtEndOnce;
-        }
-
-
-        private void OnLoaded(object sender, RoutedEventArgs e)
-        {
-            HashTagEditBoxFocus();
-        }
-
-        private void HashTagEditBoxFocus()
-        {
-            FocusManager.SetFocusedElement(this, HashTagEditBox);
-            HashTagEditBox.TextChanged += HashTagEditBoxPutCarretAtEndOnce;
         }
  
 
@@ -73,11 +63,12 @@ namespace MMK.HotMark.Views
 
         private void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                SizeChanged -= OnSizeChanged;
-                DragMove();
-            }
+            if(ReferenceEquals(sender, this))
+                if (e.ChangedButton == MouseButton.Left)
+                {
+                    SizeChanged -= OnSizeChanged;
+                    DragMove();
+                }
         }
 
         #endregion

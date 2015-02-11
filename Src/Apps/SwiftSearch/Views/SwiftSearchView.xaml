@@ -6,6 +6,7 @@
                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                 xmlns:viewModels="clr-namespace:MMK.SwiftSearch.ViewModels"
                 xmlns:system="clr-namespace:System;assembly=mscorlib"
+                xmlns:sdk="clr-namespace:MMK.PresentationStyles;assembly=MMK.PresentationStyles"
                 mc:Ignorable="d"
                 Title="SearchWindow"
                 Width="400"
@@ -83,7 +84,7 @@
                            Foreground="White"
                            TextAlignment="Center"
                            VerticalAlignment="Center"
-                           FontFamily="pack://application:,,,/MMK.SwiftSearch;component/fonts/#FontAwesome" />
+                           FontFamily="pack://application:,,,/MMK.PresentationStyles;component/fonts/#FontAwesome" />
 
                 <TextBox Text="{Binding Search, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          x:Name="SearchTextBox"

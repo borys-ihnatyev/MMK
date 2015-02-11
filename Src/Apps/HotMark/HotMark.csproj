@@ -192,7 +192,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Resource Include="fonts\fontawesome-webfont.ttf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -211,6 +210,10 @@
     <ProjectReference Include="..\..\Libs\Core\MMK\MMK.csproj">
       <Project>{A9193781-F0F5-406C-BC5F-312AE4F516F3}</Project>
       <Name>MMK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libs\Core\PresentationStyles\PresentationStyles.csproj">
+      <Project>{05f2e7a7-ae33-47ac-8073-b6f56fe3f2dc}</Project>
+      <Name>PresentationStyles</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Libs\Presentation\Presentation.csproj">
       <Project>{51A0C435-391F-44F2-A4B0-3D8623C2BC6B}</Project>

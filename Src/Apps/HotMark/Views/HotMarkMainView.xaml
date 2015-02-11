@@ -8,6 +8,7 @@
                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                 xmlns:system="clr-namespace:System;assembly=mscorlib"
                 xmlns:tools="clr-namespace:MMK.Presentation.Tools;assembly=MMK.Presentation"
+                xmlns:s="clr-namespace:MMK.PresentationStyles;assembly=MMK.PresentationStyles"
                 mc:Ignorable="d"
                 AllowsTransparency="True"
                 WindowStartupLocation="CenterScreen"
@@ -28,10 +29,10 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../Style/Style.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            
+
             <system:Boolean x:Key="True">True</system:Boolean>
             <system:Boolean x:Key="False">False</system:Boolean>
-            
+
             <tools:KeyBrushConverter x:Key="KeyColorConverter" DefaultBrush="White" />
 
             <Storyboard x:Key="HideStoryboard">
@@ -72,7 +73,7 @@
 
     <Window.InputBindings>
 
-        <KeyBinding Key="Escape" Command="Close" CommandParameter="{StaticResource False}"/>
+        <KeyBinding Key="Escape" Command="Close" CommandParameter="{StaticResource False}" />
         <KeyBinding Key="Enter" Modifiers="Control" Command="Close" CommandParameter="{StaticResource True}" />
 
         <KeyBinding Key="P" Modifiers="Control" Command="{Binding ChangeLayoutCommand}" />
@@ -92,15 +93,17 @@
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="26" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <DockPanel Grid.Row="0" x:Name="HashTagEditContainer"
-                   HorizontalAlignment="Center">
+        <DockPanel Grid.Row="0" x:Name="HashTagEditContainer">
             <DockPanel.Style>
                 <Style TargetType="{x:Type DockPanel}">
+                    <Style.Setters>
+                        <Setter Property="HorizontalAlignment" Value="Center" />
+                    </Style.Setters>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsPianoKeyboardLayout}" Value="true">
                             <DataTrigger.Setters>
@@ -133,7 +136,8 @@
 
             <Label Style="{StaticResource HashTagEditRegionStyle}"
                    Foreground="#777"
-                   Content="#" />
+                   FontFamily="pack://application:,,,/MMK.PresentationStyles;component/fonts/#FontAwesome"
+                   Content="&#xf02b;" />
 
             <TextBox x:Name="HashTagEditBox"
                      Style="{StaticResource HashTagEditTextBoxStyle}"
@@ -142,14 +146,15 @@
                      Text="{Binding HashTags.Selected.HashTagValue, UpdateSourceTrigger=PropertyChanged}" />
         </DockPanel>
 
-        <WrapPanel Grid.Row="0" x:Name="PianoKeyBoardEditContainer"
-                   Height="50"
-                   HorizontalAlignment="Center">
+        <WrapPanel Grid.Row="0"
+                   x:Name="PianoKeyBoardEditContainer"
+                   Height="50">
             <WrapPanel.Style>
                 <Style TargetType="{x:Type WrapPanel}">
                     <Style.Setters>
                         <Setter Property="Opacity" Value="0" />
                         <Setter Property="Visibility" Value="Hidden" />
+                        <Setter Property="HorizontalAlignment" Value="Center" />
                     </Style.Setters>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsPianoKeyboardLayout}" Value="true">
@@ -180,12 +185,12 @@
                     </Style.Triggers>
                 </Style>
             </WrapPanel.Style>
+
             <views:PianoKeyBoardControl Height="50"
                                         DataContext="{Binding PianoKeyBoardViewModel}" />
         </WrapPanel>
 
-        <DockPanel Grid.Row="1" HorizontalAlignment="Center">
-
+        <DockPanel Grid.Row="1" HorizontalAlignment="Center" Height="22">
             <TextBlock
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
@@ -193,86 +198,70 @@
                 FontSize="13"
                 Text="{Binding FileItemView}" />
 
-            <ListView ItemsSource="{Binding HashTags}"
-                      SelectedItem="{Binding HashTags.Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      BorderThickness="0"
-                      Padding="0"
-                      VerticalAlignment="Center"
-                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                      KeyboardNavigation.TabNavigation="None"
-                      Background="Transparent"
-                      Foreground="White"
-                      Height="26">
-
-                <ListView.Resources>
-                    <Style TargetType="{x:Type ListViewItem}">
-                        <Setter Property="Focusable" Value="False" />
-                    </Style>
-                </ListView.Resources>
-
-                <ListView.ItemsPanel>
+            <ItemsControl ItemsSource="{Binding HashTags}"
+                          Background="Transparent"
+                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                          ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                          IsTabStop="False">
+                <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel />
                     </ItemsPanelTemplate>
-                </ListView.ItemsPanel>
+                </ItemsControl.ItemsPanel>
 
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="{x:Type Control}">
-                        <Setter Property="BorderThickness" Value="0" />
-                        <Setter Property="VerticalAlignment" Value="Center" />
-                        <Setter Property="HorizontalAlignment" Value="Stretch" />
-                        <Setter Property="Margin" Value="2,-1,3,0" />
-                        <Setter Property="Padding" Value="2" />
-                    </Style>
-                </ListView.ItemContainerStyle>
-                <ListView.ItemTemplate>
+                <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border Style="{StaticResource HashTagContainerStyle}" Height="21">
-                            <Grid Height="Auto">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="auto" />
-                                </Grid.ColumnDefinitions>
+                        <Border Height="22" Margin="0,0,5,0" CornerRadius="11">
+                            <Border.Style>
+                                <Style TargetType="{x:Type Border}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                            <DataTrigger.Setters>
+                                                <Setter Property="Background" Value="#5a47ff" />
+                                            </DataTrigger.Setters>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
 
-                                <Label Foreground="#777"
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseDown">
+                                    <i:InvokeCommandAction
+                                        Command="{Binding DataContext.HashTags.SelectCommand, 
+                                        RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                        CommandParameter="{Binding}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            
+                            <DockPanel VerticalAlignment="Center">
+                                <Label Content="&#xf02b;"
+                                       FontFamily="pack://application:,,,/MMK.PresentationStyles;component/fonts/#FontAwesome"
                                        FontSize="13"
-                                       Content="#" />
+                                       Foreground="{Binding HashTag, Converter={StaticResource KeyColorConverter}}"
+                                       VerticalContentAlignment="Center"
+                                       HorizontalContentAlignment="Center"
+                                       Padding="0"
+                                       Margin="6,0,2,0" />
 
-                                <TextBlock Grid.Column="1"
-                                           Text="{Binding HashTagValue}"
+                                <TextBlock Text="{Binding HashTagValue}"
                                            Foreground="{Binding HashTag, Converter={StaticResource KeyColorConverter}}"
                                            Margin="0"
                                            Padding="2"
-                                           Style="{StaticResource ClearTextBlockStyle}" HorizontalAlignment="Center"
-                                           VerticalAlignment="Center" />
-
-                                <Button Grid.Column="2"
-                                        Command="{Binding DataContext.HashTags.RemoveCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                                        CommandParameter="{Binding}"
-                                        Width="20"
-                                        Margin="0,-1,-1,-1"
-                                        Style="{StaticResource ClearButtonStyle}"
-                                        Background="Transparent"
-                                        HorizontalAlignment="Stretch"
-                                        VerticalContentAlignment="Center"
-                                        HorizontalContentAlignment="Center">
-                                    x
-                                </Button>
-                            </Grid>
+                                           Style="{StaticResource ClearTextBlockStyle}"
+                                           HorizontalAlignment="Center"/>
+                                <Button
+                                    Command="{Binding DataContext.HashTags.RemoveCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                    CommandParameter="{Binding}"
+                                    Style="{StaticResource RemoveButtonStyle}" />
+                            </DockPanel>
                         </Border>
                     </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
 
-            <Button DockPanel.Dock="Left"
-                    Style="{StaticResource ClearButtonStyle}"
-                    Command="{Binding HashTags.AddNewCommand}"
-                    Width="23"
-                    Background="Transparent"
-                    Content="#" Margin="3,1,3,2" />
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
 
+            <Button Command="{Binding HashTags.AddNewCommand}"
+                    Style="{StaticResource TagButtonStyle}"/>
         </DockPanel>
 
         <views:PlayerControl Grid.Row="2"
