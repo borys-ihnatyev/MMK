@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using MMK.Marking.Representation;
 
 namespace MMK.SwiftSearch.Model
 {
@@ -7,6 +8,7 @@ namespace MMK.SwiftSearch.Model
     {
         protected WebSearchHandler(string searchModel)
         {
+            HashTagModel.Parser.All(ref searchModel);
             SearchModel = Uri.EscapeDataString(searchModel.Trim());
         }
 
