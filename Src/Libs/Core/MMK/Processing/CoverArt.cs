@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
 using MMK.Marking.Representation;
 
 namespace MMK.Processing
@@ -32,26 +30,26 @@ namespace MMK.Processing
             HashTagModel = hashTagModel;
         }
 
-        protected void _CheckState()
-        {
-            if(!CanCreate)
-                throw new InvalidOperationException("Can't crate image for target HashTagModel");
-        }
-
         public abstract bool CanCreate { get; }
 
         public abstract string ImageName { get; }
 
         public Image CreateImage()
-        {            
+        {
             _CheckState();
 
             var image = new Bitmap(ImageRect.Width, ImageRect.Height);
             var g = Graphics.FromImage(image);
             g.FillRectangle(Brushes.SeaShell, ImageRect);
             OnDrawImage(g);
-            
-            return image; 
+
+            return image;
+        }
+
+        protected void _CheckState()
+        {
+            if (!CanCreate)
+                throw new InvalidOperationException("Can't crate image for target HashTagModel");
         }
 
         protected abstract void OnDrawImage(Graphics g);
