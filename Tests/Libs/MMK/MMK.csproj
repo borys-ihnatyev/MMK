@@ -72,6 +72,8 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Base\FileUsageTestFixture.cs" />
+    <Compile Include="Marking\Parsing\HashTagParserTest.cs" />
+    <Compile Include="Marking\Parsing\KeyHashTagParserTest.cs" />
     <Compile Include="Processing\AutoFolder\HashTagFolderCollectionTest.cs" />
     <Compile Include="KeyTests.cs" />
     <Compile Include="Marking\HashTagModelTest.cs" />
