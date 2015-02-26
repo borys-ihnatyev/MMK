@@ -9,7 +9,7 @@ namespace MMK.Marking
     {
         public void TestHashTagSerialization()
         {
-            var expectedHashTag = new HashTag("HelloWorld");
+            var expectedHashTag = new HashTag("HelloWorld","test");
             var serializer = new BinaryFormatter();
             using (var stream = new StreamWriter("HelloWorld.xml"))
             {
