@@ -9,10 +9,15 @@ namespace MMK.Marking
         [NonSerialized]
         public static readonly HashTag Unchecked = new HashTag("unch");
 
-        public KeyHashTag(Key key, KeyNotation notation = KeyNotation.Default)
+        public KeyHashTag(Key key, string metaValue, KeyNotation notation = KeyNotation.Default)
+            :base(key.ToString(notation),metaValue)
         {
             Key = key;
             Notation = notation;
+        }
+
+        public KeyHashTag(Key key, KeyNotation notation = KeyNotation.Default) : this(key, string.Empty, notation)
+        {
         }
 
         public Key Key { get; private set; }

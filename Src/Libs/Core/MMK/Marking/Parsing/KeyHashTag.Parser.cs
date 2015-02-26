@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace MMK.Marking
@@ -72,17 +73,18 @@ namespace MMK.Marking
 
             private class EntryParser
             {
-                public EntryParser(string hashTags)
+                public EntryParser(string hashTagString)
                 {
                     startIndex = 0;
-                    this.hashTags = hashTags.ToLower();
+                    this.hashTagString = hashTagString.ToLower();
                 }
 
                 private int startIndex;
 
-                private readonly string hashTags;
+                private readonly string hashTagString;
                 private string hashTagEntry;
                 private string hashTagEntryCut;
+                private string hashTagMetaValue;
 
                 private string noteString;
                 private Note note;
@@ -112,21 +114,29 @@ namespace MMK.Marking
 
                 private void Reset()
                 {
-                    startIndex = hashTags.IndexOf(Hash, startIndex, StringComparison.Ordinal);
+                    startIndex = hashTagString.IndexOf(Hash, startIndex, StringComparison.Ordinal);
                     noteString = string.Empty;
+                    hashTagMetaValue = string.Empty;
                     hashTagEntry = string.Empty;
                     hashTagEntryCut = string.Empty;
                 }
 
                 private bool IsValidStartIndex()
                 {
-                    return (startIndex > -1) && (startIndex < hashTags.Length - 1);
+                    return (startIndex > -1) && (startIndex < hashTagString.Length - 1);
                 }
 
                 private void ExtractHashTagEntryStrings()
                 {
                     ++startIndex;
-                    hashTagEntryCut = hashTagEntry = FirstWord(hashTags.Substring(startIndex));
+                    var word = FirstWord(hashTagString.Substring(startIndex));
+                    var wordParts = word.Split(Meta[0]);
+                    Contract.Assert(wordParts.Length > 0);
+                    hashTagEntryCut = hashTagEntry = wordParts[0];
+                    
+                    if (wordParts.Length == 2)
+                        hashTagMetaValue = wordParts[1];
+
                     noteString = hashTagEntryCut.Substring(0, 1);
                 }
 
@@ -188,7 +198,8 @@ namespace MMK.Marking
 
                 private Entry BuildEntry(Note newNote, Tone newTone)
                 {
-                    return new Entry(new Key(newNote, newTone), startIndex, hashTagEntry.Length);
+                    var hashTag = new KeyHashTag(new Key(newNote, newTone), hashTagMetaValue);
+                    return new Entry(hashTag, startIndex, hashTagEntry.Length);
                 }
 
                 private Entry BuildEntry(Tone newTone)

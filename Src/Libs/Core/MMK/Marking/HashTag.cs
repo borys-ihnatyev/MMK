@@ -5,32 +5,77 @@ using System.Xml.Serialization;
 
 namespace MMK.Marking
 {
-    [XmlInclude(typeof(KeyHashTag))]
+    [XmlInclude(typeof (KeyHashTag))]
     [Serializable]
     public partial class HashTag : IHashTag, ISerializable
     {
-        [NonSerialized]
-        public static readonly string Hash = "#";
+        [NonSerialized] public const string Hash = "#";
+
+        [NonSerialized] public const string Meta = "@";
 
         private readonly string tagValue;
+        private readonly string tagMetaValue;
 
-        public HashTag(string tagValue)
+        public HashTag(string tagValue, string tagMetaValue)
         {
-            this.tagValue = tagValue.Replace(" ", "").ToLower();;
+            this.tagValue = tagValue.Replace(" ", string.Empty).ToLower();
+            this.tagMetaValue = tagMetaValue.Replace(" ", string.Empty).ToLower();
         }
 
-        public HashTag()
-            : this(string.Empty)
-        { }
+        public HashTag(string tagValue) : this(tagValue, string.Empty)
+        {
+        }
+
+        public HashTag() : this(string.Empty, string.Empty)
+        {
+        }
 
         public virtual string TagValue
         {
             get { return tagValue; }
         }
 
+        public string TagMetaValue
+        {
+            get { return tagMetaValue; }
+        }
+
         public bool IsEmpty()
         {
             return TagValue == string.Empty;
+        }
+
+        public override string ToString()
+        {
+            var tag = Hash + TagValue;
+            if (!String.IsNullOrWhiteSpace(TagMetaValue))
+                tag += Meta + TagMetaValue;
+            return tag;
+        }
+
+        #region Serialization
+
+        protected HashTag(SerializationInfo info, StreamingContext context)
+            : this(info.GetString("TagValue"), info.GetString("TagMetaValue"))
+        {
+        }
+
+        public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("TagValue", tagValue);
+            info.AddValue("TagMetaValue", tagMetaValue);
+        }
+
+        #endregion
+
+        public static implicit operator string(HashTag hashTag)
+        {
+            return hashTag.ToString();
+        }
+
+        protected virtual bool Equals(HashTag other)
+        {
+            return string.Equals(tagValue, other.tagValue) && string.Equals(tagMetaValue, other.tagMetaValue);
         }
 
         public override bool Equals(object obj)
@@ -41,49 +86,23 @@ namespace MMK.Marking
             return Equals((HashTag) obj);
         }
 
-        protected virtual bool Equals(HashTag other)
-        {
-            return string.Equals(tagValue, other.tagValue);
-        }
-
         public override int GetHashCode()
         {
-            return (tagValue != null ? tagValue.GetHashCode() : 0);
-        }
-
-        public override string ToString()
-        {
-            return Hash + TagValue;
-        }
-
-        #region Serialization
-
-        protected HashTag(SerializationInfo info, StreamingContext context)
-            : this(info.GetString("TagValue"))
-        { }
-        
-        public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue("TagValue",tagValue);
-        }
-        #endregion
-
-        public static implicit operator string(HashTag hashTag)
-        {
-            return hashTag.ToString();
+            unchecked
+            {
+                return ((tagValue != null ? tagValue.GetHashCode() : 0)*397) ^
+                       (tagMetaValue != null ? tagMetaValue.GetHashCode() : 0);
+            }
         }
 
         [Serializable]
         public class Comparer : IComparer<HashTag>, IComparer<KeyHashTag>, ISerializable
         {
-            [NonSerialized]
-            protected readonly int Higher;
+            [NonSerialized] protected readonly int Higher;
 
-            [NonSerialized]
-            protected readonly int Lower;
+            [NonSerialized] protected readonly int Lower;
 
-            [NonSerialized]
-            protected readonly int Equal;
+            [NonSerialized] protected readonly int Equal;
 
             public Comparer(bool isDesc = false)
             {
@@ -98,13 +117,12 @@ namespace MMK.Marking
                     Higher = 1;
                     Lower = -1;
                     Equal = 0;
-                }    
+                }
             }
 
             protected Comparer(SerializationInfo info, StreamingContext context)
                 : this(info.GetBoolean("IsDesc"))
             {
-
             }
 
             public int Compare(HashTag x, HashTag y)
@@ -122,7 +140,7 @@ namespace MMK.Marking
                 var xKeyHashTag = x as KeyHashTag;
                 var yKeyHashTag = y as KeyHashTag;
 
-                if (xKeyHashTag != null || yKeyHashTag != null) 
+                if (xKeyHashTag != null || yKeyHashTag != null)
                     return Compare(xKeyHashTag, yKeyHashTag);
 
                 var compare = string.Compare(x, y, true);
@@ -145,10 +163,9 @@ namespace MMK.Marking
                 foreach (var key in CircleOfFifths.AllKeys)
                     if (key == x.Key)
                         return Lower;
-                    else
-                        if (key == y.Key)
-                            return Higher;
-                
+                    else if (key == y.Key)
+                        return Higher;
+
                 throw new InvalidOperationException("Must allways return in code above");
             }
 
