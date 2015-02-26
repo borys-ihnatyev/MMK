@@ -19,7 +19,14 @@ namespace MMK.Marking.Parsing
         public void Parsing_WithMergedHashTags()
         {
             const string hashTagModelString = " #amoll  #pop#dance  #gift";
+            var hashTagModel = HashTagModel.Parser.All(hashTagModelString);
+            Assert.AreEqual(3, hashTagModel.Count);
+        }
 
+        [Test]
+        public void Parsing_WithMetaHashTags()
+        {
+            const string hashTagModelString = " #amoll  #pop@dance  #gift";
             var hashTagModel = HashTagModel.Parser.All(hashTagModelString);
             Assert.AreEqual(3, hashTagModel.Count);
         }
