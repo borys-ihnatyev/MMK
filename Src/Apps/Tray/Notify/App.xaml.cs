@@ -9,6 +9,7 @@ using MMK.Notify.Observer.Remoting;
 using MMK.Notify.Observer.Tasking.Observing;
 using MMK.Notify.Properties;
 using MMK.Notify.Services;
+using MMK.Notify.Services.DownloadWatcher;
 using MMK.Presentation.Windows.Input;
 using MMK.Presentation.Windows.Interop;
 using MMK.Processing.AutoFolder;
@@ -59,7 +60,8 @@ namespace MMK.Notify
 
             ServiceLocator.Bind<TaskObserver>().ToSelf().InSingletonScope();
             ServiceLocator.Bind<INotifyObserver>().To<NotifyObserver>().InSingletonScope();
-            ServiceLocator.Bind<IDownloadsWatcher>().To<DownloadsWatcherService>().InSingletonScope();
+            ServiceLocator.Bind<IDownloadsWatcher>().To<ChromeDownloadsWatcherService>().InSingletonScope();
+            ServiceLocator.Bind<DownloadsObserverService>().ToSelf().InSingletonScope();
 
             ServiceLocator.Bind<HashTagFolderCollection>()
                 .ToMethod(c => Settings.Default.FolderCollection)
@@ -82,7 +84,6 @@ namespace MMK.Notify
             {
                 ServiceLocator.Get<GlobalShortcutService>().Initialize();
                 ServiceLocator.Get<TrayMenuService>().Initialize();
-
                 ServiceLocator.Get<TrayMenuService>().Start();
             };
         }
@@ -92,12 +93,14 @@ namespace MMK.Notify
             ServiceLocator.Get<HwndSourceService>().Start();
             ServiceLocator.Get<TaskObserver>().Start();
             ServiceLocator.Get<NotifyObserver>().Start();
+            ServiceLocator.Get<DownloadsObserverService>().Start();
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
             base.OnExit(e);
 
+            ServiceLocator.Get<DownloadsObserverService>().Stop();
             ServiceLocator.Get<TrayMenuService>().Stop();
             ServiceLocator.Get<TaskProgressService>().Stop();
             ServiceLocator.Get<NotifyObserver>().Stop();
