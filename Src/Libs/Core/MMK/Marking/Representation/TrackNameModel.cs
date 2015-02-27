@@ -36,7 +36,7 @@ namespace MMK.Marking.Representation
             get { return mixType; }
             set
             {
-                value = value.Trim(' ', '[', ']', '(', ')');
+                value = EntityTrim(value);                    
                 if (string.IsNullOrWhiteSpace(value))
                     value = IsRemix ? Remix : string.Empty;
                 mixType = value;
@@ -48,7 +48,8 @@ namespace MMK.Marking.Representation
             get { return title; }
             set
             {
-                value = value.Trim(' ', '[', ']', '(', ')');
+                value = EntityTrim(value);
+
                 if (string.IsNullOrWhiteSpace(value))
                     value = Unknown;
                 value = value.ToUpper();
@@ -132,17 +133,17 @@ namespace MMK.Marking.Representation
 
         public bool AddArtist(string artist)
         {
-            return artists.Add(artist.Trim());
+            return artists.Add(EntityTrim(artist));
         }
 
         public int AddArtists(IEnumerable<string> newArtists)
         {
-            return newArtists.Count(artist => artists.Add(artist.Trim()));
+            return newArtists.Select(EntityTrim).Count(artist => artists.Add(artist));
         }
 
         public bool RemoveArtist(string artist)
         {
-            return artists.Remove(artist.Trim());
+            return artists.Remove(EntityTrim(artist));
         }
 
         public void ClearArtists()
@@ -153,12 +154,12 @@ namespace MMK.Marking.Representation
 
         public bool AddRemixArtist(string artist)
         {
-            return remixArtists.Add(artist.Trim());
+            return remixArtists.Add(EntityTrim(artist));
         }
 
         public int AddRemixArtists(IEnumerable<string> newArtists)
         {
-            return newArtists.Count(artist => remixArtists.Add(artist.Trim()));
+            return newArtists.Select(EntityTrim).Count(artist => remixArtists.Add(artist));
         }
 
         public void ClearRemixArtists()
@@ -168,12 +169,17 @@ namespace MMK.Marking.Representation
 
         public bool RemoveRemixArtist(string artist)
         {
-            return remixArtists.Remove(artist.Trim());
+            return remixArtists.Remove(EntityTrim(artist));
         }
 
         public override string ToString()
         {
             return FullName;
+        }
+
+        private static string EntityTrim(string value)
+        {
+            return value == null ? string.Empty : value.Trim(' ', '[', ']', '(', ')');
         }
     }
 }
