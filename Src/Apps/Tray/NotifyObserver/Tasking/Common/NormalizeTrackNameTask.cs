@@ -16,7 +16,7 @@ namespace MMK.Notify.Observer.Tasking.Common
                 throw new ArgumentNullException("paths");
             Contract.EndContractBlock();
 
-            return paths.Select(p => new NormalizeTrackNameTask(p));
+            return paths.Distinct().Select(p => new NormalizeTrackNameTask(p));
         }  
 
         public NormalizeTrackNameTask(string oldPath)
