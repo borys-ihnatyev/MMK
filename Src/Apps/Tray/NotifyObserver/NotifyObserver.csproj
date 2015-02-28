@@ -130,16 +130,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NotifyType.cs" />
-    <Compile Include="Tasking\Common\Base\Mp3FileChangeTask.cs" />
+    <Compile Include="Tasking\Contexts\AudioFileContext.cs" />
+    <Compile Include="Tasking\Contexts\FileContext.cs" />
+    <Compile Include="Tasking\InvalidTaskContextException.cs" />
     <Compile Include="Tasking\Observing\TaskObserver.EventArgs.cs" />
     <Compile Include="Tasking\Observing\TaskObserver.TaskQueuedEventArgs.cs" />
     <Compile Include="Tasking\Task.Cancel.cs" />
     <Compile Include="Tasking\Common\AddHashTagModelTask.cs" />
     <Compile Include="Tasking\Common\ChangeHashTagModelTask.cs" />
-    <Compile Include="Tasking\Common\Base\FileChangeTask.cs" />
-    <Compile Include="Tasking\Common\MoveFileToMusicFolderTask.cs" />
+    <Compile Include="Tasking\Common\Base\FileTask.cs" />
+    <Compile Include="Tasking\Common\FolderCollectionResolveFileTask.cs" />
     <Compile Include="Tasking\Common\NormalizeTrackNameTask.cs" />
-    <Compile Include="Tasking\Common\NotifyTask.cs" />
     <Compile Include="Tasking\Common\RewriteHashTagModelTask.cs" />
     <Compile Include="INotifyable.cs" />
     <Compile Include="INotifyObserverOwner.cs" />
@@ -153,6 +154,8 @@
     <Compile Include="Tasking\Task.cs" />
     <Compile Include="Tasking\Task.ObservedInfo.cs" />
     <Compile Include="Tasking\Observing\TaskObserver.cs" />
+    <Compile Include="Tasking\ITaskContext.cs" />
+    <Compile Include="Tasking\TaskPipe.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Tasking\Observing\TaskObserver.NotifyEventArgs.cs" />

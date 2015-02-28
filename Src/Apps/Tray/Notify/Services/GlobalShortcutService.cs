@@ -49,7 +49,7 @@ namespace MMK.Notify.Services
         private void AddMoveFileToCollectionTasks()
         {
             var filePaths = Explorer.GetForegroundSelectedItemsFileTree(".mp3");
-            observer.Observe(MoveFileToMusicFolderTask.Many(filePaths, folderCollection));
+            observer.Observe(FolderCollectionResolveFileTask.Many(filePaths, folderCollection));
         }
 
         protected override void OnStart()

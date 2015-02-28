@@ -1,11 +1,11 @@
 ﻿using System;
-using System.IO;
 using MMK.ApplicationServiceModel;
 using MMK.Marking.Representation;
 using MMK.Notify.Model.Service;
 using MMK.Notify.Observer;
-using MMK.Notify.Observer.Tasking;
 using MMK.Notify.Observer.Tasking.Common;
+using MMK.Notify.Observer.Tasking.Contexts;
+using MMK.Processing.AutoFolder;
 
 namespace MMK.Notify.Services
 {
@@ -24,19 +24,21 @@ namespace MMK.Notify.Services
 
         private void OnFileDownloaded(object sender, FileDownloadedEventArgs e)
         {
-            observer.Observe(GetTaskForFile(new FileInfo(e.FilePath)), TimeSpan.FromSeconds(4));
+            var deelay = TimeSpan.FromSeconds(4);
+            var pipe = observer.Using(FileContext.Build(e.FilePath));
+
+            if (IsAudioMixFile(e.FilePath))
+                pipe.Pipe(new AddHashTagModelTask(HashTagModel.Parser.All("#mixes")))
+                    .Pipe(new FolderCollectionResolveFileTask(IoC.Get<HashTagFolderCollection>()));
+            else
+                pipe.Pipe(new AddHashTagModelTask(HashTagModel.Parser.All("#unch #new")));
+
+            pipe.Observe(deelay);
         }
 
-        private static Task GetTaskForFile(FileInfo fileInfo)
+        private static bool IsAudioMixFile(string filePath)
         {
-            if (IsAudioMixFile(fileInfo))
-                return new AddHashTagModelTask(fileInfo.FullName, HashTagModel.Parser.All("#mixes"));
-            return new AddHashTagModelTask(fileInfo.FullName, HashTagModel.Parser.All("#unch"));
-        }
-
-        private static bool IsAudioMixFile(FileInfo fileInfo)
-        {
-            using (var file = TagLib.File.Create(fileInfo.FullName))
+            using (var file = TagLib.File.Create(filePath))
                 return file.Properties.Duration >= MixMinimumDuration;
         }
 

@@ -8,24 +8,30 @@ namespace MMK.Notify.Observer.Tasking.Common
 {
     public sealed class RewriteHashTagModelTask : ChangeHashTagModelTask
     {
-        public static IEnumerable<Task> Many(IEnumerable<string> paths, HashTagModel newHashTagModel)
+        public RewriteHashTagModelTask(string filePath, HashTagModel hashTagModel)
+            : base(filePath, hashTagModel, null)
+        {
+        }
+
+        public RewriteHashTagModelTask(HashTagModel hashTagModel)
+            : base(hashTagModel, null)
+        {
+        }
+
+        protected override HashTagModel ChangeHashTagModel(HashTagModel hashTagModel)
+        {
+            return Add;
+        }
+
+        public static IEnumerable<Task> Many(IEnumerable<string> paths, HashTagModel hashTagModel)
         {
             if (paths == null)
                 throw new ArgumentNullException("paths");
-            if(newHashTagModel == null)
-                throw new ArgumentNullException("newHashTagModel");
+            if (hashTagModel == null)
+                throw new ArgumentNullException("hashTagModel");
             Contract.EndContractBlock();
 
-            return paths.Select(p => new RewriteHashTagModelTask(p, newHashTagModel));
-        }  
-
-
-        public RewriteHashTagModelTask(string oldPath, HashTagModel hashTags) : base(oldPath, hashTags, null)
-        { }
-
-        protected override HashTagModel MakeNewHashTagModel()
-        {
-            return AddHashTagModel;
+            return paths.Select(p => new RewriteHashTagModelTask(p, hashTagModel));
         }
     }
 }

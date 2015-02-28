@@ -6,9 +6,22 @@ using MMK.Marking.Representation;
 
 namespace MMK.Notify.Observer.Tasking.Common
 {
-    [Serializable]
     public sealed class AddHashTagModelTask : ChangeHashTagModelTask
     {
+        public AddHashTagModelTask(string filePath, HashTagModel add) : base(filePath, add, null)
+        {
+        }
+
+        public AddHashTagModelTask(HashTagModel add) : base(add, null)
+        {
+        }
+
+        protected override HashTagModel ChangeHashTagModel(HashTagModel hashTagModel)
+        {
+            hashTagModel += Add;
+            return hashTagModel;
+        }
+
         public static IEnumerable<Task> Many(IEnumerable<string> paths, HashTagModel add)
         {
             if (paths == null)
@@ -16,18 +29,7 @@ namespace MMK.Notify.Observer.Tasking.Common
             if (add == null)
                 throw new ArgumentNullException("add");
             Contract.EndContractBlock();
-            return paths.Select(p => new AddHashTagModelTask(p, add));
-        }  
-
-        public AddHashTagModelTask(string oldPath, HashTagModel hashTags) 
-            : base(oldPath, hashTags, null)
-        {
-
-        }
-
-        protected override HashTagModel MakeNewHashTagModel()
-        {
-            return new HashTagModel(AddHashTagModel) + NameModel.HashTagModel;
+            return paths.Distinct().Select(p => new AddHashTagModelTask(p, add));
         }
     }
 }

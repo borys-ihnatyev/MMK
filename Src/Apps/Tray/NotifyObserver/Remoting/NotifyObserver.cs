@@ -15,11 +15,9 @@ namespace MMK.Notify.Observer.Remoting
         private readonly TaskObserver observer;
         private IpcChannel channel;
 
-        /// <summary>
-        ///     Only for remoting usage
-        /// </summary>
         public NotifyObserver() : this(null)
         {
+            //for remoting usage
         }
 
         public NotifyObserver(TaskObserver taskObserver)
@@ -31,7 +29,9 @@ namespace MMK.Notify.Observer.Remoting
             observer = taskObserver;
         }
 
+
         public bool IsStarted { get; private set; }
+
 
         public void Start()
         {
@@ -62,6 +62,17 @@ namespace MMK.Notify.Observer.Remoting
             return IsStarted;
         }
 
+        public void Stop()
+        {
+            if (!IsStarted)
+                return;
+
+            ChannelServices.UnregisterChannel(channel);
+
+            IsStarted = false;
+        }
+
+
         public void Observe(Task task)
         {
             observer.Add(task);
@@ -86,15 +97,12 @@ namespace MMK.Notify.Observer.Remoting
             deelayTimer.Start();
         }
 
-        public void Stop()
+        public TaskPipe Using(ITaskContext context)
         {
-            if (!IsStarted)
-                return;
-
-            ChannelServices.UnregisterChannel(channel);
-
-            IsStarted = false;
+            var pipe = new TaskPipe(context, this);
+            return pipe;
         }
+
 
         void INotifyObserver.Observe(Task task)
         {
@@ -114,6 +122,11 @@ namespace MMK.Notify.Observer.Remoting
         void INotifyObserver.Observe(IEnumerable<Task> tasks, TimeSpan deelay)
         {
             instance.Observe(tasks, deelay);
+        }
+
+        TaskPipe INotifyObserver.Using(ITaskContext context)
+        {
+            return instance.Using(context);
         }
 
         void INotifyObserver.TestConnection()

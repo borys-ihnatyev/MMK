@@ -1,65 +1,68 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using System.IO;
 using System.Linq;
+using MMK.Marking;
+using MMK.Marking.Representation;
 using MMK.Notify.Observer.Tasking.Common.Base;
+using MMK.Notify.Observer.Tasking.Contexts;
+using MMK.Processing;
 
 namespace MMK.Notify.Observer.Tasking.Common
 {
     [Serializable]
-    public class NormalizeTrackNameTask : Mp3FileChangeTask
+    public class NormalizeTrackNameTask : FileTask
     {
+        public NormalizeTrackNameTask(string filePath) : base(filePath)
+        {
+        }
+
+        public NormalizeTrackNameTask()
+        {
+        }
+
+        private AudioFileContext AudioFileContext
+        {
+            get { return (AudioFileContext) FileContext; }
+        }
+
+        protected override void CheckContext()
+        {
+            base.CheckContext();
+            if (!(FileContext is AudioFileContext))
+                throw new InvalidTaskContextException("unsupported context type");
+        }
+
+        protected override INotifyable OnFileChange()
+        {
+            AudioFileContext.NameModel.HashTagModel = NormalizeHashTagModel(AudioFileContext.NameModel.HashTagModel);
+            var tagger = new Id3Tager(AudioFileContext.FileInfo.FullName, AudioFileContext.NameModel);
+            tagger.Tag();
+
+            AudioFileContext.FileInfo.MoveTo(AudioFileContext.NormalizedFilePath);
+
+            return new NotifyMessage
+            {
+                CommonDescription = "Normalize",
+                TargetObject = AudioFileContext.ToString(),
+                Type = NotifyType.Success
+            };
+        }
+
+        private static HashTagModel NormalizeHashTagModel(HashTagModel hashTagModel)
+        {
+            if (hashTagModel.Contains(KeyHashTag.Unchecked) && hashTagModel.OfType<KeyHashTag>().Any())
+                hashTagModel -= KeyHashTag.Unchecked;
+            return hashTagModel;
+        }
+
         public static IEnumerable<Task> Many(IEnumerable<string> paths)
         {
-            if(paths == null)
+            if (paths == null)
                 throw new ArgumentNullException("paths");
             Contract.EndContractBlock();
 
             return paths.Distinct().Select(p => new NormalizeTrackNameTask(p));
-        }  
-
-        public NormalizeTrackNameTask(string oldPath)
-            : base(oldPath)
-        {
-        }
-
-        protected override void Initialize()
-        {
-            BaseInitializeSkipCancel();
-       
-            var directory = OldFile.DirectoryName;
-            Contract.Assert(directory != null);
-            var newFilePath = Path.Combine(directory, NameModel + OldFile.Extension);
-            NewFile = new FileInfo(newFilePath);
-        }
-
-        private void BaseInitializeSkipCancel()
-        {
-            try
-            {
-                base.Initialize();
-            }
-            catch (Cancel)
-            {
-            }
-        }
-
-        protected override string CommonDescription
-        {
-            get { return "Track name normalization"; }
-        }
-
-        protected override string DetailedDescription
-        {
-            get
-            {
-                return string.Format(
-                    "From : \"{0}\"\nTo : \"{1}\"", 
-                    CleanName,
-                    NameModel.FullName
-                );
-            }
         }
     }
 }

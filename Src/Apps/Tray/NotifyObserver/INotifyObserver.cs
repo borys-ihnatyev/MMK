@@ -14,5 +14,7 @@ namespace MMK.Notify.Observer
 
         void Observe(IEnumerable<Task> task);
         void Observe(IEnumerable<Task> task, TimeSpan deelay);
+
+        TaskPipe Using(ITaskContext context);
     }
 }

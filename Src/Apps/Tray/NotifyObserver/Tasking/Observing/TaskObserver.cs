@@ -46,9 +46,9 @@ namespace MMK.Notify.Observer.Tasking.Observing
             {
                 ObserveTask(task);
             }
-            catch (Task.Cancel)
+            catch (Task.Cancel ex)
             {
-                OnNotifyEvent(TaskCanceled, task);
+                OnNotifyEvent(TaskCanceled, new NotifyMessage{CommonDescription = ex.Message});
             }
         }
 
@@ -59,7 +59,7 @@ namespace MMK.Notify.Observer.Tasking.Observing
             if (observedInfo.IsNeedRerun)
             {
                 observedInfo.MarkRerun();
-                AddTaskWithDeelay(observedInfo.Task);
+                AddTaskWithDeelay(task);
                 return;
             }
             

@@ -79,12 +79,7 @@ namespace MMK.KeyDrive.Services
 
         private void WatcherOnError(object sender, ErrorEventArgs e)
         {
-            observer.Observe(new NotifyTask(
-                new NotifyableException(e.GetException())
-                {
-                    CommonDescription = "MMK KeyDrive"
-                })
-                );
+            throw new NotImplementedException();
         }
 
         protected override void OnStart()

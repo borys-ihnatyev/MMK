@@ -1,5 +1,4 @@
 ﻿using System;
-using MMK.Notify.Observer.Tasking.Common;
 
 namespace MMK.Notify.Observer.Tasking
 {
@@ -12,76 +11,41 @@ namespace MMK.Notify.Observer.Tasking
             private readonly NotifyType originType;
             private string additionalDescription;
             private string detailedDescription;
+            private readonly int runCount;
 
-            public ObservedInfo(INotifyable notifyable)
+            public ObservedInfo(int runCount)
             {
-                if (!TryInitialize(notifyable))
-                    throw new ArgumentException("Unsupported type " + notifyable.GetType().FullName, "notifyable");
-                
-                originType = Type;
-                CommonDescription = notifyable.CommonDescription;
-                DetailedDescription = notifyable.DetailedDescription;
-                TargetObject = notifyable.TargetObject;
+                this.runCount = runCount;
             }
 
-            private bool TryInitialize(INotifyable notifyable)
+            public static ObservedInfo Build(INotifyable notifyable, int taskRunCount)
             {
-                return TryInitializeAsTask(notifyable) 
-                    || TryInitalizeAsException(notifyable) 
-                    || TryInitializeAsSelf(notifyable);
+                var canContinue = false;
+
+                var exception = notifyable as NotifyableException;
+                if (exception != null)
+                    canContinue = exception.CanContinue;
+
+                return new ObservedInfo(taskRunCount)
+                {
+                    CanContinue = canContinue,
+                    CommonDescription = notifyable.CommonDescription,
+                    DetailedDescription = notifyable.DetailedDescription,
+                    TargetObject = notifyable.TargetObject,
+                    Type = notifyable.Type
+                };
             }
 
-            private bool TryInitializeAsTask(INotifyable notifyable)
-            {
-                var task = notifyable as Task;
-                if (task == null) return false;
-
-                Task = task;
-                Type = ((INotifyable)task).Type;
-                return true;
-            }
-
-            private bool TryInitalizeAsException(INotifyable notifyable)
-            {
-                var failure = notifyable as NotifyableException;
-                if (failure == null) return false;
-
-                FailureReason = failure;
-                CanContinue = failure.CanContinue;
-                Type = NotifyType.Error;
-                return true;
-            }
-
-            private bool TryInitializeAsSelf(INotifyable notifyable)
-            {
-                var info = notifyable as ObservedInfo;
-                if (info == null) return false;
-
-                Task = info.Task;
-                FailureReason = info.FailureReason;
-                CanContinue = info.CanContinue;
-                return true;
-            }
-
-            
-            internal Task Task { get; set; }
-
-            public Exception FailureReason { get; private set; }
-
-
-            public bool IsFailed
-            {
-                get { return FailureReason != null; }
-            }
+            public bool IsFailed { get; private set; }
 
             public bool IsOk
             {
-                get { return FailureReason == null; }
+                get { return !IsFailed; }
             }
 
             public bool IsRerunFailed
             {
-                get { return IsFailed && Task.RunCount > 1; }
+                get { return IsFailed && runCount > 1; }
             }
 
             public bool IsNeedRerun
@@ -91,23 +55,22 @@ namespace MMK.Notify.Observer.Tasking
 
             private bool IsReachRerunLimit
             {
-                get { return Task.RunCount >= FailedTaskRerunCount; }
+                get { return runCount >= FailedTaskRerunCount; }
             }
 
-            public bool CanContinue { get; private set; }
+            public bool CanContinue { get; internal set; }
 
             public NotifyType Type { get; internal set; }
 
-            public string CommonDescription { get; private set; }
+            public string CommonDescription { get; internal set; }
 
             public string DetailedDescription
             {
                 get { return detailedDescription + additionalDescription; }
-                protected internal set { detailedDescription = value; }
+                internal set { detailedDescription = value; }
             }
 
-            public string TargetObject { get; protected internal set; }
-
+            public string TargetObject { get; internal set; }
 
             internal void MarkRerun()
             {
@@ -119,17 +82,6 @@ namespace MMK.Notify.Observer.Tasking
             {
                 additionalDescription = String.Empty;
                 Type = originType;
-            }
-
-
-            public bool IsSimilarTo(ObservedInfo info)
-            {
-                var isTypeSimilar = ((Task is ChangeHashTagModelTask) && (info.Task is ChangeHashTagModelTask))
-                                    || (Task.GetType() == info.Task.GetType());
-
-                var isStateSimilar = IsOk && info.IsOk;
-
-                return isTypeSimilar && isStateSimilar;
             }
         }
     }
