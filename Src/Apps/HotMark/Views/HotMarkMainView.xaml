@@ -8,7 +8,6 @@
                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                 xmlns:system="clr-namespace:System;assembly=mscorlib"
                 xmlns:tools="clr-namespace:MMK.Presentation.Tools;assembly=MMK.Presentation"
-                xmlns:s="clr-namespace:MMK.PresentationStyles;assembly=MMK.PresentationStyles"
                 mc:Ignorable="d"
                 AllowsTransparency="True"
                 WindowStartupLocation="CenterScreen"
