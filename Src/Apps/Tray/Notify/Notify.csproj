@@ -205,6 +205,7 @@
     </Compile>
     <Compile Include="Services\AppDomainErrorService.cs" />
     <Compile Include="Services\DownloadsObserverService.cs" />
+    <Compile Include="Services\DriveWatcherService.cs" />
     <Compile Include="Services\GlobalShortcutService.cs" />
     <Compile Include="Services\HwndSourceService.cs" />
     <Compile Include="Services\NotificationService.cs" />
@@ -214,6 +215,7 @@
     <Compile Include="Style\CustomizedWindow\LocalExtensions.cs" />
     <Compile Include="ViewModels\BalloonTipViewModel.cs" />
     <Compile Include="ViewModels\ITaskProgressViewModel.cs" />
+    <Compile Include="ViewModels\KeyDriveOptionsViewModel.cs" />
     <Compile Include="ViewModels\TaskProgressViewModel.cs" />
     <Compile Include="Views\BalloonTipWindow.xaml.cs">
       <DependentUpon>BalloonTipWindow.xaml</DependentUpon>
@@ -254,6 +256,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\KeyDriveOptionsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\TaskProgressView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -276,6 +282,9 @@
     </Compile>
     <Compile Include="Views\HashTagFoldersWindow.xaml.cs">
       <DependentUpon>HashTagFoldersWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\KeyDriveOptionsView.xaml.cs">
+      <DependentUpon>KeyDriveOptionsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TaskProgressView.xaml.cs">
       <DependentUpon>TaskProgressView.xaml</DependentUpon>
@@ -366,6 +375,10 @@
     <ProjectReference Include="..\..\HotMark\HotMark.csproj">
       <Project>{9731941A-8CE4-4610-AEDB-E6FC4D173D1B}</Project>
       <Name>HotMark</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\KeyDrive\KeyDrive.csproj">
+      <Project>{8afe6c18-58ac-4cc9-ad97-c3ba844ecf76}</Project>
+      <Name>KeyDrive</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\SwiftSearch\SwiftSearch.csproj">
       <Project>{5D735DC4-2B1B-4FC1-99E1-36D73833970F}</Project>
