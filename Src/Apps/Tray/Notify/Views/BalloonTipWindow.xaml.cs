@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics.Contracts;
 using System.Timers;
 using System.Windows;
 using System.Windows.Media.Animation;
@@ -25,8 +26,6 @@ namespace MMK.Notify.Views
 
         public BalloonTipWindow(BalloonTipViewModel viewModel)
         {
-            InitializeComponent();
-
             Hide();
 
             taskbar = new Taskbar();
@@ -38,6 +37,8 @@ namespace MMK.Notify.Views
             SizeChanged += BalloonTipWindow_SizeChanged;
             Closing += BalloonTipWindow_Closing;
             MouseDown += (s, e) => Close();
+
+            InitializeComponent();
         }
 
         private void BalloonTipWindow_Closing(object sender, CancelEventArgs e)
@@ -75,13 +76,15 @@ namespace MMK.Notify.Views
 
         public new void Show()
         {
-            SetStartupPosition();
             base.Show();
+            SetStartupPosition();
             hideTimer.Start();
         }
 
         private void SetStartupPosition()
         {
+            Contract.Assume(!Double.IsNaN(Height));
+
             switch (taskbar.Position)
             {
                 case Taskbar.TaskbarPosition.Left:
