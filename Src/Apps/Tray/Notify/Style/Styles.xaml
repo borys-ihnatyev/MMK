@@ -1,12 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <SolidColorBrush x:Key="WindowBlackGlanceBrush" Opacity="0.9" Color="#111"/>
-    
+    <SolidColorBrush x:Key="WindowBlackGlanceBrush" Opacity="0.9" Color="#111" />
+
     <Style x:Key="WindowBlackGlanceStyle" TargetType="{x:Type Window}">
         <Style.Setters>
-            <Setter Property="MinHeight" Value="120"/>
-            <Setter Property="MinWidth" Value="350"/>
+            <Setter Property="MinHeight" Value="120" />
+            <Setter Property="MinWidth" Value="350" />
             <Setter Property="WindowStyle" Value="None" />
             <Setter Property="AllowsTransparency" Value="True" />
             <Setter Property="FontSize" Value="10pt" />
@@ -15,7 +15,7 @@
             <Setter Property="Background" Value="{StaticResource WindowBlackGlanceBrush}" />
         </Style.Setters>
     </Style>
-    
+
     <Style x:Key="ClearStyle" TargetType="{x:Type Control}">
         <Setter Property="Focusable" Value="False" />
         <Setter Property="BorderThickness" Value="0" />
@@ -28,7 +28,11 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <ContentPresenter/>
+                    <Grid Background="{TemplateBinding Background}" Margin="{TemplateBinding Margin}">
+                        <ContentPresenter Margin="{TemplateBinding Padding}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -41,7 +45,7 @@
 
     <Style x:Key="ClearListBoxStyle" TargetType="{x:Type ListBox}">
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Background" Value="Transparent" />
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="ItemContainerStyle">
