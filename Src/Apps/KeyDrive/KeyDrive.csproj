@@ -154,8 +154,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Services\KeyDriveWatcherService.cs" />
+    <Compile Include="Models\IO\KeyDriveWatcher.cs" />
     <Compile Include="Services\DriveDetectorService.cs" />
+    <Compile Include="Services\DriveEventArg.cs" />
+    <Compile Include="Services\KeyDriveWatcherService.cs" />
+    <Compile Include="Services\DriveDetectorServiceBase.cs" />
     <Compile Include="Models\Holders\Holder.Exception.cs" />
     <Compile Include="Models\Layout\FilesLayoutModel.cs" />
     <Compile Include="Models\Holders\DirectoryHolder.cs" />

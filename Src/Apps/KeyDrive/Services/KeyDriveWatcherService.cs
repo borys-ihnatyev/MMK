@@ -1,95 +1,58 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
 using MMK.ApplicationServiceModel;
-using MMK.KeyDrive.Models.Holders;
-using MMK.KeyDrive.Models.Layout;
-using MMK.KeyDrive.Observing.Tasks;
-using MMK.Notify.Observer;
-using MMK.Notify.Observer.Tasking;
-using MMK.Notify.Observer.Tasking.Common;
+using MMK.KeyDrive.Models.IO;
 
 namespace MMK.KeyDrive.Services
 {
-    public class KeyDriveWatcherService : InitializableService, IDisposable
+    public class KeyDriveWatcherService : IService
     {
         private bool isDisposed;
-        private readonly string watchRoot;
+        private bool isRunning;
+        private readonly LinkedList<KeyDriveWatcher> watchers;
 
-        private readonly INotifyObserver observer;
-        private readonly FilesLayoutModel layout;
-        private readonly List<FileSystemWatcher> watchers;
-
-        public KeyDriveWatcherService(string watchRoot, string layoutRoot)
+        public KeyDriveWatcherService()
         {
-            observer = IoC.Get<INotifyObserver>();
-            isDisposed = false;
-            this.watchRoot = watchRoot;
-
-            layout = new FilesLayoutModel(layoutRoot);
-            watchers = new List<FileSystemWatcher>(FileHolder.SupportedTypes.Length);
+            watchers = new LinkedList<KeyDriveWatcher>();
         }
 
-        protected override void OnInitialize()
+        public void AddWatcher(string watchRoot, string layoutRoot)
         {
-            foreach (var supportedType in FileHolder.SupportedTypes)
-                watchers.Add(CreateWatcher("*" + supportedType));
+            var watcher = GetWatcher(watchRoot);
+            if (watcher != null)
+                return;
+            watcher = new KeyDriveWatcher(watchRoot, layoutRoot);
+            watcher.Initialize();
+            watchers.AddLast(watcher);
+            if (isRunning)
+                watcher.Start();
         }
 
-        private FileSystemWatcher CreateWatcher(string fileFilter)
+        private KeyDriveWatcher GetWatcher(string watchRoot)
         {
-            var watcher = new FileSystemWatcher(watchRoot)
-            {
-                Filter = fileFilter,
-                NotifyFilter = NotifyFilters.FileName | NotifyFilters.DirectoryName,
-                IncludeSubdirectories = true
-            };
-
-            watcher.Renamed += WatcherOnNotify;
-            watcher.Created += WatcherOnNotify;
-            watcher.Error += WatcherOnError;
-
-            return watcher;
+            return watchers.FirstOrDefault(w => w.WatchRoot == watchRoot);
         }
 
-        private void WatcherOnNotify(object sender, FileSystemEventArgs e)
+        public void RemoveWatcher(string watchRoot)
         {
-            Observe(e.FullPath);
+            var watcher = GetWatcher(watchRoot);
+            if (watcher == null)
+                return;
+            if (watcher.IsRunning)
+                watcher.Stop();
+            watchers.Remove(watcher);
         }
 
-        private void Observe(string path)
+        public void Start()
         {
-            var holder = Holder.Build(path);
-            observer.Observe(CreateHolderTasks(holder));
+            watchers.ForEach(w => w.Start());
+            isRunning = true;
         }
 
-        private IEnumerable<Task> CreateHolderTasks(Holder holder)
+        public void Stop()
         {
-            if (holder is FileHolder)
-                return new[] {new LayoutResolveTask(holder.Info.FullName, layout)};
-
-            Contract.Assume(holder is DirectoryHolder);
-
-            return ((DirectoryHolder) holder).Files
-                .Select(f => new LayoutResolveTask(f.Info.FullName, layout))
-                .ToArray();
-        }
-
-        private void WatcherOnError(object sender, ErrorEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void OnStart()
-        {
-            watchers.ForEach(w => w.EnableRaisingEvents = true);
-        }
-
-        protected override void OnStop()   
-        {
-            watchers.ForEach(w => w.EnableRaisingEvents = false);
+            watchers.ForEach(w => w.Stop());
+            isRunning = false;
         }
 
         ~KeyDriveWatcherService()
