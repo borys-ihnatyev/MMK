@@ -16,7 +16,6 @@ namespace MMK.KeyDrive.Models.Holders
         {
             if(!Directory.Exists(path))
                 throw new NotFoundException(new DirectoryNotFoundException(path));
-            Contract.EndContractBlock();
 
             DirInfo = new DirectoryInfo(path);
             includeSubdirectories = true;
