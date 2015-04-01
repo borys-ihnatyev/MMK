@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Windows;
 using MMK.ApplicationServiceModel.Locator;
+using MMK.KeyDrive.Services;
 using MMK.Notify.Model;
 using MMK.Notify.Model.Service;
 using MMK.Notify.Observer;
@@ -63,6 +64,8 @@ namespace MMK.Notify
             ServiceLocator.Bind<IDownloadsWatcher>().To<ChromeDownloadsWatcherService>().InSingletonScope();
             ServiceLocator.Bind<DownloadsObserverService>().ToSelf().InSingletonScope();
 
+            ServiceLocator.Bind<DriveDetectorServiceBase>().To<DriveWatcherService>().InSingletonScope();
+
             ServiceLocator.Bind<HashTagFolderCollection>()
                 .ToMethod(c => Settings.Default.FolderCollection)
                 .InSingletonScope();
@@ -85,6 +88,7 @@ namespace MMK.Notify
                 ServiceLocator.Get<GlobalShortcutService>().Initialize();
                 ServiceLocator.Get<TrayMenuService>().Initialize();
                 ServiceLocator.Get<TrayMenuService>().Start();
+                ServiceLocator.Get<DriveDetectorServiceBase>().Start();
             };
         }
 
