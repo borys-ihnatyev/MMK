@@ -135,6 +135,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\DependencyObjectExtension.cs" />
     <Compile Include="Windows\Input\GlobalShortcutProvider.cs" />
     <Compile Include="Windows\Input\GlobalShortcutProviderCollection.cs" />
     <Compile Include="Windows\Input\IGlobalShortcutProvider.cs" />
