@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using System.Windows.Input;
 using MMK.Presentation.Windows;
 
 namespace MMK.Notify.Views
@@ -12,15 +11,8 @@ namespace MMK.Notify.Views
         {
             Opacity = 0;
             taskbar = new Taskbar();
-            MouseDown += OnMouseDown;
             Loaded += (s, e) => SetStartupPosition();
             InitializeComponent();
-        }
-
-        private void OnMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-                DragMove();
         }
 
         private void SetStartupPosition()

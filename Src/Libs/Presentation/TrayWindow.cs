@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Interop;
 
 namespace MMK.Presentation
@@ -19,10 +20,10 @@ namespace MMK.Presentation
         {
             var wndHelper = new WindowInteropHelper(this);
 
-            var exStyle = (int)GetWindowLong(wndHelper.Handle, (int)GetWindowLongFields.GWL_EXSTYLE);
+            var exStyle = (int) GetWindowLong(wndHelper.Handle, (int) GetWindowLongFields.GWL_EXSTYLE);
 
-            exStyle |= (int)ExtendedWindowStyles.WS_EX_TOOLWINDOW;
-            SetWindowLong(wndHelper.Handle, (int)GetWindowLongFields.GWL_EXSTYLE, (IntPtr)exStyle);
+            exStyle |= (int) ExtendedWindowStyles.WS_EX_TOOLWINDOW;
+            SetWindowLong(wndHelper.Handle, (int) GetWindowLongFields.GWL_EXSTYLE, (IntPtr) exStyle);
         }
 
         #region Window styles
@@ -31,13 +32,14 @@ namespace MMK.Presentation
         [Flags]
         private enum ExtendedWindowStyles
         {
-            WS_EX_TOOLWINDOW = 0x00000080,
+            WS_EX_TOOLWINDOW = 0x00000080
         }
 
         private enum GetWindowLongFields
         {
-            GWL_EXSTYLE = (-20),
+            GWL_EXSTYLE = (-20)
         }
+
         // ReSharper enable InconsistentNaming
 
         private static void SetWindowLong(IntPtr hWnd, int nIndex, IntPtr dwNewLong)
@@ -77,7 +79,7 @@ namespace MMK.Presentation
 
         private static int IntPtrToInt32(IntPtr intPtr)
         {
-            return unchecked((int)intPtr.ToInt64());
+            return unchecked((int) intPtr.ToInt64());
         }
 
         [DllImport("kernel32.dll", EntryPoint = "SetLastError")]
@@ -86,5 +88,31 @@ namespace MMK.Presentation
         #endregion
 
         #endregion
+
+        public bool CanDragMove
+        {
+            get { return (bool) GetValue(CanDragMoveProperty); }
+            protected set { SetValue(CanDragMoveProperty, value); }
+        }
+
+        public static readonly DependencyProperty CanDragMoveProperty =
+            DependencyProperty.Register("CanDragMove", typeof (bool), typeof (TrayWindow),
+                new PropertyMetadata(false, CanDragMoveChanged));
+
+        private static void CanDragMoveChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
+        {
+            var value = (bool) e.NewValue;
+            var window = (TrayWindow) dependencyObject;
+            if (value)
+                window.MouseDown += window.OnMouseDownWhenDragMove;
+            else
+                window.MouseDown -= window.OnMouseDownWhenDragMove;
+        }
+
+        private void OnMouseDownWhenDragMove(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                DragMove();
+        }
     }
 }

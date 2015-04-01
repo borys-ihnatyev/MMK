@@ -6,6 +6,7 @@
                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                 xmlns:model="clr-namespace:MMK.Notify.Model"
                 mc:Ignorable="d"
+                CanDragMove="True"
                 Topmost="True"
                 Width="350" Height="120" d:DataContext="{d:DesignData Source=../DesignData/TaskProgressViewModel.xaml}">
 

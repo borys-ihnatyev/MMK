@@ -36,6 +36,11 @@ namespace MMK.HotMark.Views
             MouseDown += OnMouseDown;
         }
 
+        private void OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            SizeChanged -= OnSizeChanged;
+        }
+
         #region Event handlers
 
         private void OnHashTagsPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -45,6 +50,7 @@ namespace MMK.HotMark.Views
                 Keyboard.Focus(HashTagEditBox); 
                 HashTagEditBox.TextChanged += HashTagEditBoxPutCarretAtEndOnce;
             }
+
         }
 
         private void HashTagEditBoxPutCarretAtEndOnce(object sender, TextChangedEventArgs textChangedEventArgs)
@@ -61,15 +67,6 @@ namespace MMK.HotMark.Views
             Left = SystemParameters.WorkArea.Left + (SystemParameters.WorkArea.Width - e.NewSize.Width)/2;
         }
 
-        private void OnMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if(ReferenceEquals(sender, this))
-                if (e.ChangedButton == MouseButton.Left)
-                {
-                    SizeChanged -= OnSizeChanged;
-                    DragMove();
-                }
-        }
 
         #endregion
 

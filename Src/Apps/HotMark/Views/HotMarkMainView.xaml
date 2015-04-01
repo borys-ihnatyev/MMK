@@ -12,6 +12,7 @@
                 AllowsTransparency="True"
                 WindowStartupLocation="CenterScreen"
                 SizeToContent="WidthAndHeight"
+                CanDragMove="True"
                 MinWidth="400"
                 Topmost="True"
                 WindowStyle="None"
