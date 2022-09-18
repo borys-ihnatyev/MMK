@@ -15,11 +15,9 @@ namespace MMK.Notify.Observer.Remoting
         private readonly TaskObserver observer;
         private IpcChannel channel;
 
-        /// <summary>
-        ///     Only for remoting usage
-        /// </summary>
         public NotifyObserver() : this(null)
         {
+            //for remoting usage
         }
 
         public NotifyObserver(TaskObserver taskObserver)
@@ -31,7 +29,9 @@ namespace MMK.Notify.Observer.Remoting
             observer = taskObserver;
         }
 
+
         public bool IsStarted { get; private set; }
+
 
         public void Start()
         {
@@ -62,16 +62,6 @@ namespace MMK.Notify.Observer.Remoting
             return IsStarted;
         }
 
-        public void Observe(Task task)
-        {
-            observer.Add(task);
-        }
-
-        public void Observe(IEnumerable<Task> tasks)
-        {
-            observer.Add(tasks);
-        }
-
         public void Stop()
         {
             if (!IsStarted)
@@ -82,14 +72,61 @@ namespace MMK.Notify.Observer.Remoting
             IsStarted = false;
         }
 
+
+        public void Observe(Task task)
+        {
+            observer.Add(task);
+        }
+
+        public void Observe(Task task, TimeSpan deelay)
+        {
+            var deelayTimer = new System.Timers.Timer(deelay.TotalMilliseconds) { AutoReset = false };
+            deelayTimer.Elapsed += (s, e) => Observe(task);
+            deelayTimer.Start();
+        }
+
+        public void Observe(IEnumerable<Task> tasks)
+        {
+            observer.Add(tasks);
+        }
+
+        public void Observe(IEnumerable<Task> tasks, TimeSpan deelay)
+        {
+            var deelayTimer = new System.Timers.Timer(deelay.TotalMilliseconds) {AutoReset = false};
+            deelayTimer.Elapsed += (s, e) => Observe(tasks);                
+            deelayTimer.Start();
+        }
+
+        public TaskPipe Using(ITaskContext context)
+        {
+            var pipe = new TaskPipe(context, this);
+            return pipe;
+        }
+
+
         void INotifyObserver.Observe(Task task)
         {
             instance.Observe(task);
         }
 
+        void INotifyObserver.Observe(Task task, TimeSpan deelay)
+        {
+            instance.Observe(task,deelay);
+        }
+
         void INotifyObserver.Observe(IEnumerable<Task> tasks)
         {
             instance.Observe(tasks);
+        }
+
+        void INotifyObserver.Observe(IEnumerable<Task> tasks, TimeSpan deelay)
+        {
+            instance.Observe(tasks, deelay);
+        }
+
+        TaskPipe INotifyObserver.Using(ITaskContext context)
+        {
+            return instance.Using(context);
         }
 
         void INotifyObserver.TestConnection()

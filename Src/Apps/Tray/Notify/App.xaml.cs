@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.Diagnostics.Contracts;
 using System.Threading;
 using System.Windows;
 using MMK.ApplicationServiceModel.Locator;
@@ -10,6 +9,9 @@ using MMK.Notify.Observer.Remoting;
 using MMK.Notify.Observer.Tasking.Observing;
 using MMK.Notify.Properties;
 using MMK.Notify.Services;
+using MMK.Notify.Services.DownloadWatcher;
+using MMK.Presentation.Windows.Input;
+using MMK.Presentation.Windows.Interop;
 using MMK.Processing.AutoFolder;
 using Ninject;
 
@@ -23,37 +25,19 @@ namespace MMK.Notify
         [ServiceLocator]
         public static ServiceLocator ServiceLocator
         {
-            get { return (serviceLocator ?? (serviceLocator = new ServiceLocator())); }
-        }
-
-#if !DEBUG
-        static App()
-        {
-            AppDomain.CurrentDomain.UnhandledException += DomainUnhandledException;
-        }
-
-        private static void DomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            TryLogException(e.ExceptionObject);
-            Current.Shutdown();
-        }
-
-        private static void TryLogException(object error)
-        {
-            if (!(error is Exception))
-                return;
-            LogException((Exception) error);
-        }
-
-        private static void LogException(Exception exception)
-        {
-            using (var log = new StreamWriter(typeof (App).FullName + ".Error.log"))
+            get
             {
-                log.WriteLine(exception.Message);
-                log.WriteLine(exception.StackTrace);
+                Contract.Ensures(Contract.Result<ServiceLocator>() != null);
+                Contract.EndContractBlock();
+                return (serviceLocator ?? (serviceLocator = new ServiceLocator()));
             }
         }
-#endif
+
+        static App()
+        {
+            ServiceLocator.Bind<AppDomainErrorService>().ToSelf().InSingletonScope();
+            ServiceLocator.Get<AppDomainErrorService>().Start();
+        }
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -63,55 +47,65 @@ namespace MMK.Notify
                 return;
             }
 
-            Initialize();
+            BindServices();
+            InitializeServices();
             StartServices();
         }
 
-        private void Initialize()
+        private static void BindServices()
         {
-            InitializeServices();
-        }
+            ServiceLocator.Bind<HwndSourceService>().ToSelf().InSingletonScope();
+            ServiceLocator.Bind<IHwndSource>().ToMethod(c => c.Kernel.Get<HwndSourceService>()).InSingletonScope();
+            ServiceLocator.Bind<NotificationService>().ToSelf().InSingletonScope();
 
-        private static void InitializeServices()
-        {
             ServiceLocator.Bind<TaskObserver>().ToSelf().InSingletonScope();
-
-            ServiceLocator.Bind<INotifyObserver>()
-                .To<NotifyObserver>()
-                .InSingletonScope();
-
-            ServiceLocator.Bind<IDownloadsWatcher>()
-                .To<ChromeDownloadsWatcherService>()
-                .InSingletonScope();
+            ServiceLocator.Bind<INotifyObserver>().To<NotifyObserver>().InSingletonScope();
+            ServiceLocator.Bind<IDownloadsWatcher>().To<ChromeDownloadsWatcherService>().InSingletonScope();
+            ServiceLocator.Bind<DownloadsObserverService>().ToSelf().InSingletonScope();
 
             ServiceLocator.Bind<HashTagFolderCollection>()
                 .ToMethod(c => Settings.Default.FolderCollection)
                 .InSingletonScope();
 
-            ServiceLocator.Bind<NotificationService>().ToSelf().InSingletonScope();
             ServiceLocator.Bind<TaskProgressService>().ToSelf().InSingletonScope();
 
+            ServiceLocator.Bind<GlobalShortcutProviderCollection>().ToSelf().InSingletonScope();
             ServiceLocator.Bind<GlobalShortcutService>().ToSelf().InSingletonScope();
             ServiceLocator.Bind<TrayMenuService>().ToSelf().InSingletonScope();
+        }
 
-            ServiceLocator.Get<TrayMenuService>().Initialize();
+        private static void InitializeServices()
+        {
             ServiceLocator.Get<TaskProgressService>().Initialize();
+            ServiceLocator.Get<IDownloadsWatcher>().Initialize();
+
+            var hwndSourceService = ServiceLocator.Get<HwndSourceService>();
+            hwndSourceService.Initialized += (s, e) =>
+            {
+                ServiceLocator.Get<GlobalShortcutService>().Initialize();
+                ServiceLocator.Get<TrayMenuService>().Initialize();
+                ServiceLocator.Get<TrayMenuService>().Start();
+            };
         }
 
         private static void StartServices()
         {
+            ServiceLocator.Get<HwndSourceService>().Start();
             ServiceLocator.Get<TaskObserver>().Start();
             ServiceLocator.Get<NotifyObserver>().Start();
-            ServiceLocator.Get<TrayMenuService>().Start();
+            ServiceLocator.Get<DownloadsObserverService>().Start();
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
+            base.OnExit(e);
+
+            ServiceLocator.Get<DownloadsObserverService>().Stop();
             ServiceLocator.Get<TrayMenuService>().Stop();
             ServiceLocator.Get<TaskProgressService>().Stop();
             ServiceLocator.Get<NotifyObserver>().Stop();
-            ServiceLocator.Get<TaskObserver>().Cancell();
-            base.OnExit(e);
+            ServiceLocator.Get<TaskObserver>().Stop();
+            ServiceLocator.Get<HwndSourceService>().Stop();
         }
     }
 }

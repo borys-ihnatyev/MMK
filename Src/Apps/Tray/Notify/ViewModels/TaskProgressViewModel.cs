@@ -4,16 +4,13 @@ using MMK.ApplicationServiceModel;
 using MMK.Notify.Observer;
 using MMK.Notify.Observer.Tasking.Observing;
 using MMK.Notify.Services;
-using MMK.Wpf.ViewModel;
+using MMK.Presentation.ViewModel;
 
 namespace MMK.Notify.ViewModels
 {
-    public class TaskProgressViewModel : ViewModel
+    public class TaskProgressViewModel : ViewModel, ITaskProgressViewModel
     {
-        private static NotificationService Notification
-        {
-            get { return IoC.Get<NotificationService>(); }
-        }
+        private readonly NotificationService notificationService;
 
         private INotifyable currentInfo;
 
@@ -23,11 +20,18 @@ namespace MMK.Notify.ViewModels
         private int queuedCount;
         private int failedCount;
 
+        public TaskProgressViewModel(NotificationService notificationService)
+        {
+            this.notificationService = notificationService;
+        }
+
         public INotifyable CurrentInfo
         {
             get { return currentInfo; }
-            set
+            private set
             {
+                if (value == currentInfo)
+                    return;
                 currentInfo = value;
                 NotifyPropertyChanged();
             }
@@ -38,42 +42,25 @@ namespace MMK.Notify.ViewModels
             get { return isVisible; }
             set
             {
-                if(value == isVisible)
+                if (value == isVisible)
                     return;
                 isVisible = value;
                 NotifyPropertyChanged();
             }
         }
 
-
         public bool IsProgress
         {
             get { return isProgress; }
             private set
             {
-                if(value == isProgress)
+                if (value == isProgress)
                     return;
-                
+
                 isProgress = value;
 
-                IsVisible = IsProgress;
+                IsVisible = IsProgress && QueuedCount > 1;
 
-                NotifyPropertyChanged();
-            }
-        }
-
-        public int ObservedCount
-        {
-            get { return observedCount; }
-            set
-            {
-                if (value < 0)
-                    throw new ArgumentException(@"must be >= 0", "value");
-                Contract.EndContractBlock();
-
-                if (value == observedCount)
-                    return;
-                observedCount = value;
                 NotifyPropertyChanged();
             }
         }
@@ -81,7 +68,7 @@ namespace MMK.Notify.ViewModels
         public int QueuedCount
         {
             get { return queuedCount; }
-            set
+            private set
             {
                 if (value < 0)
                     throw new ArgumentException(@"must be >= 0", "value");
@@ -98,28 +85,59 @@ namespace MMK.Notify.ViewModels
             }
         }
 
+        public int ObservedCount
+        {
+            get { return observedCount; }
+            private set
+            {
+                if (value < 0)
+                    throw new ArgumentException(@"must be >= 0", "value");
+                Contract.EndContractBlock();
+
+                if (value == observedCount)
+                    return;
+                observedCount = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public int FailedCount
+        {
+            get { return failedCount; }
+            private set
+            {
+                if(value == failedCount)
+                    return;
+
+                failedCount = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         protected override void OnLoadData()
         {
             var observer = IoC.Get<TaskObserver>();
-            observer.TaskQueued += OnTaskQueued;
-            observer.QueueEmpty += OnQueueEmpty;
+            
             observer.TaskObserved += OnTaskObserved;
             observer.TaskFailed += OnTaskFailed;
+            observer.TaskCanceled += OnTaskCanceled;
+
+            observer.TaskQueued += OnTaskQueued;
+            observer.QueueEmpty += OnQueueEmpty;
         }
 
         protected override void OnUnloadData()
         {
             var observer = IoC.Get<TaskObserver>();
-            observer.TaskQueued -= OnTaskQueued;
-            observer.QueueEmpty -= OnQueueEmpty;
+            
             observer.TaskObserved -= OnTaskObserved;
             observer.TaskFailed -= OnTaskFailed;
+            observer.TaskCanceled -= OnTaskCanceled;
+            
+            observer.TaskQueued -= OnTaskQueued;
+            observer.QueueEmpty -= OnQueueEmpty;
         }
 
-        public void OnTaskQueued(object sender, TaskObserver.TaskQueuedEventArgs e)
-        {
-            QueuedCount += e.TaskCount;
-        }
 
         public void OnTaskObserved(object sender, TaskObserver.NotifyEventArgs e)
         {
@@ -129,12 +147,18 @@ namespace MMK.Notify.ViewModels
 
         private void OnTaskFailed(object sender, TaskObserver.NotifyEventArgs e)
         {
-            ++failedCount;
-            
-            if(failedCount == QueuedCount)
-                return;
-            
-            Notification.Push(e.Message);
+            ++FailedCount;
+        }
+
+        private void OnTaskCanceled(object sender, TaskObserver.NotifyEventArgs e)
+        {
+            --QueuedCount;
+        }
+
+
+        public void OnTaskQueued(object sender, TaskObserver.TaskQueuedEventArgs e)
+        {
+            QueuedCount += e.TaskCount;
         }
 
         public void OnQueueEmpty(object sender, EventArgs e)
@@ -145,29 +169,29 @@ namespace MMK.Notify.ViewModels
 
         private void Notify()
         {
-            if (QueuedCount == 0)
+            if (!CanNotify)
                 return;
 
             var message = BuildNotifyMessage();
 
-            Notification.Push(message);
+            notificationService.Push(message);
         }
 
-        private void Reset()
+        private bool CanNotify
         {
-            ObservedCount = 0;
-            QueuedCount = 0;
-            failedCount = 0;
-            IsVisible = false;
-            currentInfo = null;
+            get { return QueuedCount != 0 && ((ObservedCount != 0) || failedCount != 0); }
         }
 
         private INotifyable BuildNotifyMessage()
         {
-            if (QueuedCount == 1)
-                return CurrentInfo;
+            Contract.Ensures(Contract.Result<INotifyable>() != null);
+            Contract.EndContractBlock();
 
-            if(failedCount == 0)
+            if (QueuedCount == 1)
+                if (CurrentInfo != null)
+                    return CurrentInfo;
+
+            if (failedCount == 0)
                 return new NotifyMessage
                 {
                     Type = NotifyType.Success,
@@ -180,15 +204,25 @@ namespace MMK.Notify.ViewModels
                 {
                     Type = NotifyType.Error,
                     CommonDescription = "All tasks failed.",
-                    DetailedDescription = String.Format("{0}/{1} Tasks",failedCount, QueuedCount)
+                    DetailedDescription = String.Format("{0}/{1} Tasks", failedCount, QueuedCount)
                 };
 
             return new NotifyMessage
             {
                 Type = NotifyType.Warning,
                 CommonDescription = "Some tasks failed.",
-                DetailedDescription = String.Format("Done {1}/{0};\nFailed {2}", QueuedCount, ObservedCount - failedCount, failedCount )
+                DetailedDescription =
+                    String.Format("Done {0}/{1};\nFailed {2}", ObservedCount - failedCount, QueuedCount, failedCount)
             };
+        }
+
+        private void Reset()
+        {
+            ObservedCount = 0;
+            QueuedCount = 0;
+            failedCount = 0;
+            IsVisible = false;
+            currentInfo = null;
         }
     }
 }

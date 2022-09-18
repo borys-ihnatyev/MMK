@@ -33,10 +33,10 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
-    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
-    <CodeContractsRuntimeThrowOnFailure>False</CodeContractsRuntimeThrowOnFailure>
-    <CodeContractsRuntimeCallSiteRequires>True</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsEnableRuntimeChecking>False</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>True</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
     <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
     <CodeContractsRunCodeAnalysis>False</CodeContractsRunCodeAnalysis>
     <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
@@ -73,7 +73,7 @@
     <CodeContractsSkipAnalysisIfCannotConnectToCache>False</CodeContractsSkipAnalysisIfCannotConnectToCache>
     <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
     <CodeContractsBeingOptimisticOnExternal>True</CodeContractsBeingOptimisticOnExternal>
-    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsRuntimeCheckingLevel>Pre and Post</CodeContractsRuntimeCheckingLevel>
     <CodeContractsReferenceAssembly>DoNotBuild</CodeContractsReferenceAssembly>
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
@@ -86,14 +86,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -106,7 +100,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="SearchWindow.xaml">
+    <Page Include="Views\SwiftSearchView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -117,12 +111,13 @@
     <Compile Include="SearchHandlers\EverythingSearchHandler.cs" />
     <Compile Include="SearchHandlers\GoodleSearchHandler.cs" />
     <Compile Include="Model\SearchHandler.cs" />
-    <Compile Include="SearchHandlers\MultiSearchHandler.cs" />
+    <Compile Include="SearchHandlers\SearchHandlerFactory.cs" />
     <Compile Include="SearchHandlers\VkSearchHandler.cs" />
     <Compile Include="Model\WebSearchHandler.cs" />
     <Compile Include="SearchHandlers\ZaycevNetSearchHandler.cs" />
-    <Compile Include="SearchWindow.xaml.cs">
-      <DependentUpon>SearchWindow.xaml</DependentUpon>
+    <Compile Include="ViewModels\SwiftSearchViewModel.cs" />
+    <Compile Include="Views\SwiftSearchView.xaml.cs">
+      <DependentUpon>SwiftSearchView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -154,22 +149,25 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\search-50.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Libs\MMK\MMK.csproj">
-      <Project>{a9193781-f0f5-406c-bc5f-312ae4f516f3}</Project>
+    <ProjectReference Include="..\..\Libs\Core\ApplicationServiceModel\ApplicationServiceModel.csproj">
+      <Project>{B7D69BF7-B8F9-46FF-963C-93ED9C8D5F47}</Project>
+      <Name>ApplicationServiceModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libs\Core\MMK\MMK.csproj">
+      <Project>{A9193781-F0F5-406C-BC5F-312AE4F516F3}</Project>
       <Name>MMK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libs\Core\PresentationStyles\PresentationStyles.csproj">
+      <Project>{05F2E7A7-AE33-47AC-8073-B6F56FE3F2DC}</Project>
+      <Name>PresentationStyles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libs\Presentation\Presentation.csproj">
+      <Project>{51A0C435-391F-44F2-A4B0-3D8623C2BC6B}</Project>
+      <Name>Presentation</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Libs\Utils\Utils.csproj">
       <Project>{1a83dd41-36ab-493f-a3c1-2acad7ff152f}</Project>
       <Name>Utils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Libs\WPFUtils\WPFUtils.csproj">
-      <Project>{51a0c435-391f-44f2-a4b0-3d8623c2bc6b}</Project>
-      <Name>WPFUtils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

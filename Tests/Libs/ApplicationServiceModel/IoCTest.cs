@@ -1,5 +1,4 @@
-﻿using MMK.ApplicationServiceModel.Locator;
-using MMK.ApplicationServiceModel.Locator.Resolving;
+﻿using MMK.ApplicationServiceModel.Locator.Resolving;
 using NUnit.Framework;
 
 namespace MMK.ApplicationServiceModel
@@ -8,7 +7,7 @@ namespace MMK.ApplicationServiceModel
     public class IoCTest
     {
         [Test]
-        [ExpectedException(typeof(ServiceLocatorNotFoundException))]
+        [ExpectedException(typeof (ServiceLocatorNotFoundException))]
         public void ThrowsServiceLocatorNotFoundException()
         {
             IoC.Get<object>();

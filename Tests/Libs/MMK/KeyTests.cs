@@ -5,7 +5,7 @@ using MMK.Marking;
 using MMK.Marking.Representation;
 using NUnit.Framework;
 
-namespace MMK.Tests
+namespace MMK
 {
     [TestFixture]
     public class KeyTest

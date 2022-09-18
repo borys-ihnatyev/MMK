@@ -1,58 +1,42 @@
-﻿using System.Diagnostics.Contracts;
-using System.Windows.Forms;
+﻿using System.ComponentModel;
+using System.Diagnostics.Contracts;
 using System.Runtime.InteropServices;
+using System.Windows.Input;
 
 // ReSharper disable once CheckNamespace
+
 namespace System.Windows
 {
-    [Serializable]
-    [Flags]
-    public enum KeyModifyers
+    public class GlobalShortcut
     {
-        None = 0,
-        Alt = 1,
-        Ctrl = 2,
-        Shift = 4,
-        Win = 8,
-        Norep = 0x8000
-    }
-
-    public class GlobalShortcut 
-    {
-        public const int WM_HOTKEY = 0x0312;
+        public const int WmHotkey = 0x0312;
 
         private readonly IntPtr hwnd;
-        protected readonly KeyModifyers Modifyers;
+        protected readonly ModifierKeys Modifiers;
         protected readonly int KeyCode;
 
-        public GlobalShortcut(KeyModifyers modifyers, int keyCode, IntPtr hwnd)
-            : this()
+        public GlobalShortcut(ModifierKeys modifierKeys, Key key, IntPtr hwnd)
+            : this(modifierKeys, KeyInterop.VirtualKeyFromKey(key), hwnd)
         {
-            Modifyers = modifyers;
+        }
+
+        public GlobalShortcut(ModifierKeys modifierKeys, Key key)
+            : this(modifierKeys, KeyInterop.VirtualKeyFromKey(key), IntPtr.Zero)
+        {
+        }
+
+        public GlobalShortcut(ModifierKeys modifiers, int keyCode, IntPtr hwnd)
+        {
+            Modifiers = modifiers;
             KeyCode = keyCode;
             this.hwnd = hwnd;
         }
 
-        public GlobalShortcut(KeyModifyers modifyers, int keyCode) 
-            : this(modifyers, keyCode, IntPtr.Zero)
-        {
-        }
-
-        public GlobalShortcut(KeyModifyers modifyers, Keys keyCode, IntPtr hwnd)
-            : this(modifyers, (int)keyCode, hwnd)
-        {
-        }
-
         public GlobalShortcut(GlobalShortcut shortcut, IntPtr hwnd)
         {
-            Modifyers = shortcut.Modifyers;
+            Modifiers = shortcut.Modifiers;
             KeyCode = shortcut.KeyCode;
             this.hwnd = hwnd;
-        }
-
-        protected GlobalShortcut()
-        {
-            IsRegistred = false;
         }
 
         public int Id
@@ -62,24 +46,53 @@ namespace System.Windows
 
         public bool IsRegistred { get; private set; }
 
-        public bool Register()
+        public bool TryRegister()
         {
-            if (IsRegistred) return IsRegistred;
-            
-            IsRegistred = User32.RegisterHotKey(hwnd, Id, Modifyers, KeyCode);
+            try
+            {
+                Register();
+            }
+            catch (Win32Exception)
+            {
+            }
 
-            if (IsRegistred) return IsRegistred;
-    
-            User32.UnregisterHotKey(hwnd, Id);
-            IsRegistred = User32.RegisterHotKey(hwnd, Id, Modifyers, KeyCode);
             return IsRegistred;
         }
 
-        public bool Unregister()
+        public bool TryUnregister()
         {
-            if (IsRegistred)
-                IsRegistred = !User32.UnregisterHotKey(hwnd, Id);
+            try
+            {
+                Unregister();
+            }
+            catch (Win32Exception)
+            {
+            }
+
             return !IsRegistred;
+        }
+
+        public void Register()
+        {
+            if(IsRegistred)
+                return;
+            IsRegistred = User32.RegisterHotKey(hwnd, Id, Modifiers, KeyCode);
+
+            if(!IsRegistred)
+               throw new Win32Exception(Kernel32.GetLastError());
+        }
+
+        public void Unregister()
+        {
+            if (!IsRegistred)
+                return;
+
+            var isUnregistered = User32.UnregisterHotKey(hwnd, Id);
+            
+            if(!isUnregistered)
+                throw new Win32Exception(Kernel32.GetLastError());
+            
+            IsRegistred = false;
         }
 
         protected bool Equals(GlobalShortcut other)
@@ -87,7 +100,7 @@ namespace System.Windows
             Contract.Requires(other != null);
             Contract.EndContractBlock();
 
-            return hwnd.Equals(other.hwnd) && Modifyers == other.Modifyers && KeyCode == other.KeyCode;
+            return hwnd.Equals(other.hwnd) && Modifiers == other.Modifiers && KeyCode == other.KeyCode;
         }
 
         public override bool Equals(object obj)
@@ -103,7 +116,7 @@ namespace System.Windows
             unchecked
             {
                 var hashCode = hwnd.GetHashCode();
-                hashCode = (hashCode*397) ^ (int) Modifyers;
+                hashCode = (hashCode*397) ^ (int) Modifiers;
                 hashCode = (hashCode*397) ^ KeyCode;
                 return hashCode;
             }
@@ -112,10 +125,16 @@ namespace System.Windows
         private static class User32
         {
             [DllImport("user32.dll")]
-            public static extern bool RegisterHotKey(IntPtr hWnd, int id, KeyModifyers modifiers, int keyCode);
+            public static extern bool RegisterHotKey(IntPtr hWnd, int id, ModifierKeys modifiers, int keyCode);
 
             [DllImport("user32.dll")]
             public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
+        }
+
+        private static class Kernel32
+        {
+            [DllImport("Kernel32.dll")]
+            public static extern Int32 GetLastError();
         }
     }
 }

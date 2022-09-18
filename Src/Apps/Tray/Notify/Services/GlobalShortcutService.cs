@@ -1,45 +1,44 @@
 ﻿using System.Windows;
-using System.Windows.Forms;
+using System.Windows.Input;
 using MMK.ApplicationServiceModel;
 using MMK.Notify.Model.Launchers;
-using MMK.Notify.Observer.Remoting;
+using MMK.Notify.Observer;
 using MMK.Notify.Observer.Tasking.Common;
+using MMK.Presentation.Windows.Input;
 using MMK.Processing.AutoFolder;
-using MMK.Wpf.Providers;
+using IKey = System.Windows.Input.Key;
 
 namespace MMK.Notify.Services
 {
-    public class GlobalShortcutService : Service
+    public sealed class GlobalShortcutService : InitializableService
     {
-        private readonly GlobalShortcutProviderCollection shortcutProviders;
-        private readonly NotifyObserver observer;
+        private readonly INotifyObserver observer;
         private readonly HashTagFolderCollection folderCollection;
+        private readonly GlobalShortcutProviderCollection shortcutProviders;
 
-        public GlobalShortcutService(NotifyObserver observer, HashTagFolderCollection folderCollection)
+        public GlobalShortcutService(
+            INotifyObserver observer,
+            HashTagFolderCollection folderCollection,
+            GlobalShortcutProviderCollection shortcutProviders)
         {
-            shortcutProviders = new GlobalShortcutProviderCollection();
+            this.shortcutProviders = shortcutProviders;
             this.observer = observer;
             this.folderCollection = folderCollection;
         }
 
         protected override void OnInitialize()
         {
-            var trayWindow = IoC.Get<TrayMenuService>().TrayMenuView;
+            var hotMarkLauncher = new HotMarkLauncherGlobalShortcutProvider(ModifierKeys.Control, IKey.T);
+            shortcutProviders.Add(hotMarkLauncher);
+            shortcutProviders.Add(ModifierKeys.Control | ModifierKeys.Shift, IKey.T, AddNormalizeHotKeyTasks);
+            shortcutProviders.Add(ModifierKeys.Control | ModifierKeys.Shift, IKey.M, AddMoveFileToCollectionTasks);
 
-            (shortcutProviders as IGlobalShortcutProvider).SetWindow(trayWindow);
-
-            shortcutProviders.Add(new HotMarkLauncher(KeyModifyers.Ctrl, (int) Keys.T));
-            shortcutProviders.Add(KeyModifyers.Ctrl | KeyModifyers.Shift, (int) Keys.T, AddNormalizeHotKeyTasks);
-            shortcutProviders.Add(KeyModifyers.Ctrl | KeyModifyers.Shift, (int) Keys.M, AddMoveFileToCollectionTasks);
-
-            var swiftSearchLauncher = new SwiftSearchLauncher(trayWindow);
-
-            swiftSearchLauncher.SetStartShortcut(KeyModifyers.Ctrl, Keys.Space);
-            swiftSearchLauncher.SetStartFromClipboardShortcut(KeyModifyers.Ctrl | KeyModifyers.Shift, Keys.V);
-
+            var swiftSearchLauncher = new SwiftSearchLauncherGlobalShortcutProvider();
             shortcutProviders.Add(swiftSearchLauncher);
-        }
 
+            swiftSearchLauncher.SetStartShortcut(ModifierKeys.Control, IKey.Space);
+            swiftSearchLauncher.SetStartFromClipboardShortcut(ModifierKeys.Control | ModifierKeys.Shift, IKey.V);
+        }
 
         private void AddNormalizeHotKeyTasks()
         {
@@ -50,15 +49,15 @@ namespace MMK.Notify.Services
         private void AddMoveFileToCollectionTasks()
         {
             var filePaths = Explorer.GetForegroundSelectedItemsFileTree(".mp3");
-            observer.Observe(MoveFileToMusicFolderTask.Many(filePaths, folderCollection));
+            observer.Observe(FolderCollectionResolveFileTask.Many(filePaths, folderCollection));
         }
 
-        public override void Start()
+        protected override void OnStart()
         {
             shortcutProviders.StartListen();
         }
 
-        public override void Stop()
+        protected override void OnStop()
         {
             shortcutProviders.StopListen();
         }

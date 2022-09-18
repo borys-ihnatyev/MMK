@@ -1,16 +1,15 @@
 ﻿using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using MMK.Marking;
 using NUnit.Framework;
 
-namespace MMK.Tests.Marking
+namespace MMK.Marking
 {
     [TestFixture]
     public class HashTagTest
     {
         public void TestHashTagSerialization()
         {
-            var expectedHashTag = new HashTag("HelloWorld");
+            var expectedHashTag = new HashTag("HelloWorld","test");
             var serializer = new BinaryFormatter();
             using (var stream = new StreamWriter("HelloWorld.xml"))
             {

@@ -130,16 +130,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NotifyType.cs" />
-    <Compile Include="Tasking\Common\Base\Mp3FileChangeTask.cs" />
+    <Compile Include="Tasking\Contexts\AudioFileContext.cs" />
+    <Compile Include="Tasking\Contexts\FileContext.cs" />
+    <Compile Include="Tasking\InvalidTaskContextException.cs" />
     <Compile Include="Tasking\Observing\TaskObserver.EventArgs.cs" />
     <Compile Include="Tasking\Observing\TaskObserver.TaskQueuedEventArgs.cs" />
     <Compile Include="Tasking\Task.Cancel.cs" />
     <Compile Include="Tasking\Common\AddHashTagModelTask.cs" />
     <Compile Include="Tasking\Common\ChangeHashTagModelTask.cs" />
-    <Compile Include="Tasking\Common\Base\FileChangeTask.cs" />
-    <Compile Include="Tasking\Common\MoveFileToMusicFolderTask.cs" />
+    <Compile Include="Tasking\Common\Base\FileTask.cs" />
+    <Compile Include="Tasking\Common\FolderCollectionResolveFileTask.cs" />
     <Compile Include="Tasking\Common\NormalizeTrackNameTask.cs" />
-    <Compile Include="Tasking\Common\NotifyTask.cs" />
     <Compile Include="Tasking\Common\RewriteHashTagModelTask.cs" />
     <Compile Include="INotifyable.cs" />
     <Compile Include="INotifyObserverOwner.cs" />
@@ -153,12 +154,18 @@
     <Compile Include="Tasking\Task.cs" />
     <Compile Include="Tasking\Task.ObservedInfo.cs" />
     <Compile Include="Tasking\Observing\TaskObserver.cs" />
+    <Compile Include="Tasking\ITaskContext.cs" />
+    <Compile Include="Tasking\TaskPipe.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Tasking\Observing\TaskObserver.NotifyEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Libs\MMK\MMK.csproj">
+    <ProjectReference Include="..\..\..\Libs\Core\ApplicationServiceModel\ApplicationServiceModel.csproj">
+      <Project>{B7D69BF7-B8F9-46FF-963C-93ED9C8D5F47}</Project>
+      <Name>ApplicationServiceModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Libs\Core\MMK\MMK.csproj">
       <Project>{a9193781-f0f5-406c-bc5f-312ae4f516f3}</Project>
       <Name>MMK</Name>
     </ProjectReference>

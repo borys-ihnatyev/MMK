@@ -2,7 +2,7 @@
 using System.IO;
 using NUnit.Framework;
 
-namespace MMK.Tests.Base
+namespace MMK.Base
 {
     public abstract class FileUsageTestFixture
     {

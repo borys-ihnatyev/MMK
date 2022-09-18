@@ -1,4 +1,4 @@
-﻿namespace MMK.HotMark.PianoKeyboardUsage
+﻿namespace MMK.HotMark.Model.PianoKeyBoard
 {
     public enum MidiInstrument
     {

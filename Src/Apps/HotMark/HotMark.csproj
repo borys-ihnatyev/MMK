@@ -87,32 +87,17 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="Sanford.Collections">
-      <HintPath>..\..\..\packages\Sanford.MidiToolkit.5.0.2\lib\net40\Sanford.Collections.dll</HintPath>
-    </Reference>
     <Reference Include="Sanford.Multimedia">
       <HintPath>..\..\..\packages\Sanford.MidiToolkit.5.0.2\lib\net40\Sanford.Multimedia.dll</HintPath>
     </Reference>
     <Reference Include="Sanford.Multimedia.Midi">
       <HintPath>..\..\..\packages\Sanford.MidiToolkit.5.0.2\lib\net40\Sanford.Multimedia.Midi.dll</HintPath>
     </Reference>
-    <Reference Include="Sanford.Multimedia.Timers">
-      <HintPath>..\..\..\packages\Sanford.MidiToolkit.5.0.2\lib\net40\Sanford.Multimedia.Timers.dll</HintPath>
-    </Reference>
-    <Reference Include="Sanford.Threading">
-      <HintPath>..\..\..\packages\Sanford.MidiToolkit.5.0.2\lib\net40\Sanford.Threading.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -128,20 +113,29 @@
     <Compile Include="Behaviors\PutCursorAtEndTextBoxBehavior.cs" />
     <Compile Include="Model\ChangeHashTagModel.cs" />
     <Compile Include="Model\Files\FileHashTagCollection.cs" />
-    <Compile Include="Model\HashTagModelChangeModel.cs" />
+    <Compile Include="Model\HashTagModelChangeNotify.cs" />
     <Compile Include="Model\PianoKeyBoard\KeyRecognizer.cs" />
     <Compile Include="Model\PianoKeyBoard\MidiInstrument.cs" />
     <Compile Include="Model\PianoKeyBoard\MidiNote.cs" />
     <Compile Include="Model\PianoKeyBoard\PianoKeyBoardMidiMapper.cs" />
+    <Compile Include="ViewModels\HashTagCollectionViewModel.cs" />
     <Compile Include="ViewModels\PianoKeyBoard\NoteEventArgs.cs" />
     <Compile Include="ViewModels\PianoKeyBoard\PianoKeyBoardViewModel.cs" />
     <Compile Include="ViewModels\PianoKeyBoard\PianoKeyViewModel.cs" />
+    <Compile Include="ViewModels\PlayerViewModel.cs" />
     <Compile Include="Views\PianoKeyBoardControl.xaml.cs">
       <DependentUpon>PianoKeyBoardControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PianoKeyControl.xaml.cs">
       <DependentUpon>PianoKeyControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\PlayerControl.xaml.cs">
+      <DependentUpon>PlayerControl.xaml</DependentUpon>
+    </Compile>
+    <DesignData Include="DesignData\HotMarkViewModel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </DesignData>
     <Page Include="Style\PianoKeyBoardStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -167,6 +161,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\PianoKeyControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PlayerControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -205,28 +203,31 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Libs\ApplicationServiceModel\ApplicationServiceModel.csproj">
-      <Project>{b7d69bf7-b8f9-46ff-963c-93ed9c8d5f47}</Project>
+    <ProjectReference Include="..\..\Libs\Core\ApplicationServiceModel\ApplicationServiceModel.csproj">
+      <Project>{B7D69BF7-B8F9-46FF-963C-93ED9C8D5F47}</Project>
       <Name>ApplicationServiceModel</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Libs\MMK\MMK.csproj">
-      <Project>{a9193781-f0f5-406c-bc5f-312ae4f516f3}</Project>
+    <ProjectReference Include="..\..\Libs\Core\MMK\MMK.csproj">
+      <Project>{A9193781-F0F5-406C-BC5F-312AE4F516F3}</Project>
       <Name>MMK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libs\Core\PresentationStyles\PresentationStyles.csproj">
+      <Project>{05f2e7a7-ae33-47ac-8073-b6f56fe3f2dc}</Project>
+      <Name>PresentationStyles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libs\Presentation\Presentation.csproj">
+      <Project>{51A0C435-391F-44F2-A4B0-3D8623C2BC6B}</Project>
+      <Name>Presentation</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Libs\Utils\Utils.csproj">
       <Project>{1a83dd41-36ab-493f-a3c1-2acad7ff152f}</Project>
       <Name>Utils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Libs\WPFUtils\WPFUtils.csproj">
-      <Project>{51a0c435-391f-44f2-a4b0-3d8623c2bc6b}</Project>
-      <Name>WPFUtils</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tray\NotifyObserver\NotifyObserver.csproj">
       <Project>{4bcd57ea-bcdc-4f58-90f9-55aab0d4526d}</Project>
       <Name>NotifyObserver</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -3,7 +3,7 @@
                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                xmlns:wpf="clr-namespace:MMK.Wpf;assembly=MMK.Wpf"
+                xmlns:wpf="clr-namespace:MMK.Presentation;assembly=MMK.Presentation"
                 xmlns:model="clr-namespace:MMK.Notify.Model"
                 xmlns:view="clr-namespace:MMK.Notify.Views"
                 mc:Ignorable="d"
@@ -11,8 +11,10 @@
                 WindowStartupLocation="Manual"
                 ShowActivated="False"
                 SizeToContent="WidthAndHeight"
+                MaxWidth="400"
                 Style="{StaticResource WindowBlackGlanceStyle}"
                 d:DataContext="{d:DesignData Source=../DesignData/BalloonTipViewModel.xaml}">
+  
     <Window.Resources>
         <model:NotifyTypeColorConverter x:Key="NotifyTypeColorConverter" />
     </Window.Resources>

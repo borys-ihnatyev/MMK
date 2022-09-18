@@ -1,0 +1,13 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mscore="clr-namespace:System;assembly=mscorlib">
+    
+    <mscore:Boolean x:Key="True">
+        True
+    </mscore:Boolean>
+    
+    <mscore:Boolean x:Key="False">
+        True
+    </mscore:Boolean>
+   
+</ResourceDictionary>

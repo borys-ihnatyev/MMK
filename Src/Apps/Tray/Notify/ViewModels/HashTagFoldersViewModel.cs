@@ -2,9 +2,9 @@
 using System.Windows.Input;
 using MMK.ApplicationServiceModel;
 using MMK.Notify.ViewModels.HashTagFolders;
+using MMK.Presentation.Tools;
+using MMK.Presentation.ViewModel;
 using MMK.Processing.AutoFolder;
-using MMK.Wpf;
-using MMK.Wpf.ViewModel;
 
 namespace MMK.Notify.ViewModels
 {

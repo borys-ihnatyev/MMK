@@ -1,5 +1,5 @@
 ﻿using MMK.Marking.Representation;
-using MMK.Wpf.ViewModel;
+using MMK.Presentation.ViewModel;
 
 namespace MMK.Notify.ViewModels.HashTagFolders
 {

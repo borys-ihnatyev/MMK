@@ -1,134 +1,196 @@
-﻿<wpf:TrayWindow
-    x:Class="MMK.HotMark.Views.HotMarkMainView"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-    xmlns:wpf="clr-namespace:MMK.Wpf;assembly=MMK.Wpf"
-    xmlns:views="clr-namespace:MMK.HotMark.Views"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:tools="clr-namespace:MMK.Wpf.Tools;assembly=MMK.Wpf"
-    xmlns:viewModels="clr-namespace:MMK.HotMark.ViewModels"
-    mc:Ignorable="d"
-    AllowsTransparency="True"
-    WindowStartupLocation="CenterScreen"
-    Focusable="True"
-    Width="{DynamicResource {x:Static SystemParameters.FullPrimaryScreenWidthKey}}"
-    ShowInTaskbar="False"
-    Height="98"
-    Topmost="True"
-    WindowStyle="None"
-    WindowState="Normal"
-    SnapsToDevicePixels="True"
-    ScrollViewer.VerticalScrollBarVisibility="Disabled"
-    FontFamily="Consolas"
-    Foreground="White"
-    d:DataContext="{d:DesignInstance viewModels:HotMarkViewModel}">
-    
-    <wpf:TrayWindow.Background>
-        <SolidColorBrush x:Name="BackgroundBrush" Opacity="0.9" Color="#111"/>
-    </wpf:TrayWindow.Background>
-    
-    <wpf:TrayWindow.Resources>
+﻿<wpf:TrayWindow x:Class="MMK.HotMark.Views.HotMarkMainView"
+                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                xmlns:wpf="clr-namespace:MMK.Presentation;assembly=MMK.Presentation"
+                xmlns:views="clr-namespace:MMK.HotMark.Views"
+                xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                xmlns:system="clr-namespace:System;assembly=mscorlib"
+                xmlns:tools="clr-namespace:MMK.Presentation.Tools;assembly=MMK.Presentation"
+                xmlns:s="clr-namespace:MMK.PresentationStyles;assembly=MMK.PresentationStyles"
+                mc:Ignorable="d"
+                AllowsTransparency="True"
+                WindowStartupLocation="CenterScreen"
+                SizeToContent="WidthAndHeight"
+                MinWidth="400"
+                Topmost="True"
+                WindowStyle="None"
+                FontFamily="Consolas"
+                Foreground="White"
+                d:DataContext="{d:DesignData Source=../DesignData/HotMarkViewModel.xaml}">
+
+    <Window.Background>
+        <SolidColorBrush x:Name="BackgroundBrush" Opacity="0.9" Color="#111" />
+    </Window.Background>
+
+    <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Style/Style.xaml"/>
+                <ResourceDictionary Source="../Style/Style.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <system:Boolean x:Key="True">True</system:Boolean>
+            <system:Boolean x:Key="False">False</system:Boolean>
+
+            <tools:KeyBrushConverter x:Key="KeyColorConverter" DefaultBrush="White" />
+
+            <Storyboard x:Key="HideStoryboard">
+                <DoubleAnimation Storyboard.TargetProperty="Opacity" Duration="0:0:0.2" To="0" />
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
+                    <DiscreteObjectKeyFrame KeyTime="0:0:0.2" Value="{x:Static Visibility.Hidden}" />
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+
+            <Storyboard x:Key="ShowStoryboard">
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
+                    <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Visible}" />
+                </ObjectAnimationUsingKeyFrames>
+
+                <DoubleAnimation Storyboard.TargetProperty="Opacity" Duration="0:0:0.2" To="1" />
+            </Storyboard>
+
         </ResourceDictionary>
-    </wpf:TrayWindow.Resources>
-
-    <wpf:TrayWindow.Style>
-        <Style>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsPianoKeyboardLayout}" Value="true">
-                    <DataTrigger.EnterActions>
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation
-                                    Storyboard.TargetProperty="Height"
-                                    To="153"
-                                    Duration="0:0:0.2"/>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </DataTrigger.EnterActions>
-                    <DataTrigger.ExitActions>
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation 
-                                    Storyboard.TargetProperty="Height"
-                                    To="98"
-                                    Duration="0:0:0.2"/>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </DataTrigger.ExitActions>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-    </wpf:TrayWindow.Style>
-
-    <wpf:TrayWindow.Triggers>
-        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-            <BeginStoryboard>
-                <Storyboard x:Name="LoadStoryboard">
-                    <DoubleAnimation
-                        Storyboard.TargetProperty="Opacity"
-                        From="0"
-                        To="1"
-                        Duration="0:0:0.27" />
-                </Storyboard>
-            </BeginStoryboard>
-        </EventTrigger>
-
-        <EventTrigger RoutedEvent="views:HotMarkMainView.UserClose">
-            <BeginStoryboard>
-                <Storyboard x:Name="CloseStoryboard" Completed="CloseStoryboard_Completed">
-                    <DoubleAnimation
-                        Storyboard.TargetProperty="Opacity"
-                        To="0"
-                        Duration="0:0:0.27" />
-                </Storyboard>
-            </BeginStoryboard>
-        </EventTrigger>
-    </wpf:TrayWindow.Triggers>
+    </Window.Resources>
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="KeyDown">
-            <wpf:InvokeDelegateCommandAction
+            <tools:InvokeDelegateCommandAction
                 Command="{Binding KeyDownCommand}"
-                CommandParameter="{Binding InvokeParameter, RelativeSource={RelativeSource Self}}"/>
+                CommandParameter="{Binding InvokeParameter, RelativeSource={RelativeSource Self}}" />
         </i:EventTrigger>
 
         <i:EventTrigger EventName="KeyUp">
-            <wpf:InvokeDelegateCommandAction
+            <tools:InvokeDelegateCommandAction
                 Command="{Binding KeyUpCommand}"
-                CommandParameter="{Binding InvokeParameter, RelativeSource={RelativeSource Self}}"/>
+                CommandParameter="{Binding InvokeParameter, RelativeSource={RelativeSource Self}}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
-    <Grid IsHitTestVisible="True" Margin="5">
+    <Window.CommandBindings>
+        <CommandBinding Command="Close" Executed="OnCloseCommandExecuted" />
+    </Window.CommandBindings>
+
+    <Window.InputBindings>
+
+        <KeyBinding Key="Escape" Command="Close" CommandParameter="{StaticResource False}" />
+        <KeyBinding Key="Enter" Modifiers="Control" Command="Close" CommandParameter="{StaticResource True}" />
+
+        <KeyBinding Key="P" Modifiers="Control" Command="{Binding ChangeLayoutCommand}" />
+
+        <KeyBinding Key="N" Modifiers="Control+Shift" Command="{Binding HashTags.AddNewCommand}" />
+        <KeyBinding Key="Right" Modifiers="Control+Alt" Command="{Binding HashTags.SelectNextCommand}" />
+        <KeyBinding Key="Left" Modifiers="Control+Alt" Command="{Binding HashTags.SelectPreviousCommand}" />
+
+        <KeyBinding Key="Right" Modifiers="Alt" Command="{Binding PlayerViewModel.PositionIncreaseCommand}" />
+        <KeyBinding Key="Left" Modifiers="Alt" Command="{Binding PlayerViewModel.PositionDecreaseCommand}" />
+
+        <KeyBinding Key="Up" Modifiers="Alt" Command="{Binding PlayerViewModel.VolumeIncreaseCommand}" />
+        <KeyBinding Key="Down" Modifiers="Alt" Command="{Binding PlayerViewModel.VolumeDecreaseCommand}" />
+
+    </Window.InputBindings>
+
+    <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="26" />
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0"
-                    HorizontalAlignment="Center"
-                    Orientation="Horizontal">
+        <DockPanel Grid.Row="0" x:Name="HashTagEditContainer">
+            <DockPanel.Style>
+                <Style TargetType="{x:Type DockPanel}">
+                    <Style.Setters>
+                        <Setter Property="HorizontalAlignment" Value="Center" />
+                    </Style.Setters>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsPianoKeyboardLayout}" Value="true">
+                            <DataTrigger.Setters>
+                                <Setter Property="Visibility" Value="Hidden" />
+                            </DataTrigger.Setters>
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="0"
+                                            Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="1"
+                                            Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DockPanel.Style>
+
             <Label Style="{StaticResource HashTagEditRegionStyle}"
                    Foreground="#777"
-                   Content="#"/>
+                   FontFamily="pack://application:,,,/MMK.PresentationStyles;component/fonts/#FontAwesome"
+                   Content="&#xf02b;" />
+
             <TextBox x:Name="HashTagEditBox"
                      Style="{StaticResource HashTagEditTextBoxStyle}"
                      IsEnabled="{Binding CanDirectEditHashTags}"
-                     tools:DependencyObjectFocusExtension.IsFocused="{Binding CanDirectEditHashTags}"
-                     Foreground="{Binding SelectedHashTag.ItemBackground}"
-                     Text="{Binding SelectedHashTag.HashTagValue, UpdateSourceTrigger=PropertyChanged}"/>
-        </StackPanel>
+                     Foreground="{Binding HashTags.Selected.HashTag, Converter={StaticResource KeyColorConverter}}"
+                     Text="{Binding HashTags.Selected.HashTagValue, UpdateSourceTrigger=PropertyChanged}" />
+        </DockPanel>
 
-        <StackPanel Grid.Row="1"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Center">
+        <WrapPanel Grid.Row="0"
+                   x:Name="PianoKeyBoardEditContainer"
+                   Height="50">
+            <WrapPanel.Style>
+                <Style TargetType="{x:Type WrapPanel}">
+                    <Style.Setters>
+                        <Setter Property="Opacity" Value="0" />
+                        <Setter Property="Visibility" Value="Hidden" />
+                        <Setter Property="HorizontalAlignment" Value="Center" />
+                    </Style.Setters>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsPianoKeyboardLayout}" Value="true">
+                            <DataTrigger.Setters>
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger.Setters>
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="1"
+                                            Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="0"
+                                            Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </WrapPanel.Style>
+
+            <views:PianoKeyBoardControl Height="50"
+                                        DataContext="{Binding PianoKeyBoardViewModel}" />
+        </WrapPanel>
+
+        <DockPanel Grid.Row="1" HorizontalAlignment="Center" Height="22">
             <TextBlock
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
@@ -136,87 +198,87 @@
                 FontSize="13"
                 Text="{Binding FileItemView}" />
 
-            <ListView ItemsSource="{Binding HashTags}"
-                      BorderThickness="0"
-                      Padding="0"
-                      VerticalAlignment="Center"
-                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                      KeyboardNavigation.TabNavigation="None"
-                      Background="Transparent"
-                      Foreground="White"
-                      Height="26">
-                <ListView.ItemsPanel>
+            <ItemsControl ItemsSource="{Binding HashTags}"
+                          Background="Transparent"
+                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                          ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                          IsTabStop="False">
+                <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel />
                     </ItemsPanelTemplate>
-                </ListView.ItemsPanel>
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="{x:Type Control}">
-                        <Setter Property="BorderThickness" Value="0"/>
-                        <Setter Property="VerticalAlignment" Value="Center" />
-                        <Setter Property="HorizontalAlignment" Value="Stretch" />
-                        <Setter Property="Margin" Value="2,-1,3,0" />
-                        <Setter Property="Padding" Value="2" />
-                    </Style>
-                </ListView.ItemContainerStyle>
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Border Style="{StaticResource HashTagContainerStyle}" Height="21">
-                            <Grid Height="Auto">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="auto" />
-                                </Grid.ColumnDefinitions>
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="MouseDown">
-                                        <i:InvokeCommandAction
-                                            Command="{Binding DataContext.SelectHashTagCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                                            CommandParameter="{Binding}" />
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                                
-                                <Label Foreground="#777" 
-                                       FontSize="13" 
-                                       Content="#"/>
-                                
-                                <TextBlock Grid.Column="1"
-                                    Text="{Binding HashTagValue}"
-                                    Foreground="{Binding ItemBackground}"
-                                    Margin="0"
-                                    Padding="2"
-                                    Style="{StaticResource ClearTextBlockStyle}" HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"/>
+                </ItemsControl.ItemsPanel>
 
-                                <Button Grid.Column="2"
-                                        Command="{Binding DataContext.RemoveHashTagCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                                        CommandParameter="{Binding}"
-                                        Width="20"
-                                        Margin="0,-1,-1,-1"
-                                        Style="{StaticResource ClearButtonStyle}"
-                                        Background="Transparent"
-                                        HorizontalAlignment="Stretch"
-                                        VerticalContentAlignment="Center"
-                                        HorizontalContentAlignment="Center">
-                                    x
-                                </Button>
-                            </Grid>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Height="22" Margin="0,0,5,0" CornerRadius="11">
+                            <Border.Style>
+                                <Style TargetType="{x:Type Border}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                            <DataTrigger.Setters>
+                                                <Setter Property="Background" Value="#5a47ff" />
+                                            </DataTrigger.Setters>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseDown">
+                                    <i:InvokeCommandAction
+                                        Command="{Binding DataContext.HashTags.SelectCommand, 
+                                        RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                        CommandParameter="{Binding}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            
+                            <DockPanel VerticalAlignment="Center">
+                                <Label Content="&#xf02b;"
+                                       FontFamily="pack://application:,,,/MMK.PresentationStyles;component/fonts/#FontAwesome"
+                                       FontSize="13"
+                                       Foreground="{Binding HashTag, Converter={StaticResource KeyColorConverter}}"
+                                       VerticalContentAlignment="Center"
+                                       HorizontalContentAlignment="Center"
+                                       Padding="0"
+                                       Margin="6,0,2,0" />
+
+                                <TextBlock Text="{Binding HashTagValue}"
+                                           Foreground="{Binding HashTag, Converter={StaticResource KeyColorConverter}}"
+                                           Margin="0"
+                                           Padding="2"
+                                           Style="{StaticResource ClearTextBlockStyle}"
+                                           HorizontalAlignment="Center"/>
+                                <Button
+                                    Command="{Binding DataContext.HashTags.RemoveCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                    CommandParameter="{Binding}"
+                                    Style="{StaticResource RemoveButtonStyle}" />
+                            </DockPanel>
                         </Border>
                     </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
 
-            <Button Style="{StaticResource ClearButtonStyle}"
-                    Command="{Binding AddHashTagCommand}"
-                    Width="23"
-                    Background="Transparent"
-                    Content="#" Margin="3,1,3,2" />
-        </StackPanel>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
 
-        <views:PianoKeyBoardControl
-            DataContext="{Binding PianoKeyBoardViewModel}"
-            Grid.Row="2" 
-            Height="50px"/>
+            <Button Command="{Binding HashTags.AddNewCommand}"
+                    Style="{StaticResource TagButtonStyle}"/>
+        </DockPanel>
+
+        <views:PlayerControl Grid.Row="2"
+                             DataContext="{Binding PlayerViewModel}">
+            <views:PlayerControl.Style>
+                <Style TargetType="{x:Type views:PlayerControl}">
+
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding}" Value="{x:Null}">
+                            <DataTrigger.Setters>
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger.Setters>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </views:PlayerControl.Style>
+        </views:PlayerControl>
     </Grid>
 </wpf:TrayWindow>

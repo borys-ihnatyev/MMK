@@ -142,7 +142,7 @@
     <ApplicationIcon>Resources\logo-normal-256.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>
@@ -158,11 +158,19 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject">
       <HintPath>..\..\..\..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="policy.2.0.taglib-sharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=db62eba44689b5b0, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\taglib.2.1.0.0\lib\policy.2.0.taglib-sharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
@@ -173,6 +181,10 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="taglib-sharp, Version=2.1.0.0, Culture=neutral, PublicKeyToken=db62eba44689b5b0, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\taglib.2.1.0.0\lib\taglib-sharp.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -182,28 +194,35 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DesignData\TaskProgressViewModel.cs" />
     <Compile Include="Model\ServiceLocator.cs" />
+    <Compile Include="Model\Service\FileDownloadedEventArgs.cs" />
     <Compile Include="Model\Service\IDownloadsWatcher.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\AppDomainErrorService.cs" />
+    <Compile Include="Services\DownloadsObserverService.cs" />
     <Compile Include="Services\GlobalShortcutService.cs" />
+    <Compile Include="Services\HwndSourceService.cs" />
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\TaskProgressService.cs" />
     <Compile Include="Services\TrayMenuService.cs" />
     <Compile Include="Model\NotifyTypeColorConverter.cs" />
+    <Compile Include="Style\CustomizedWindow\LocalExtensions.cs" />
     <Compile Include="ViewModels\BalloonTipViewModel.cs" />
+    <Compile Include="ViewModels\ITaskProgressViewModel.cs" />
     <Compile Include="ViewModels\TaskProgressViewModel.cs" />
     <Compile Include="Views\BalloonTipWindow.xaml.cs">
       <DependentUpon>BalloonTipWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\BooleanToColorErrorConverter.cs" />
-    <Compile Include="Model\Launchers\HotMarkLauncher.cs" />
+    <Compile Include="Model\Launchers\HotMarkLauncherGlobalShortcutProvider.cs" />
     <Compile Include="Model\Launchers\MusicCollectionManagerLauncher.cs" />
-    <Compile Include="Services\ChromeDownloadsWatcherService.cs" />
-    <Compile Include="Model\Launchers\SwiftSearchLauncher.cs" />
+    <Compile Include="Services\DownloadWatcher\ChromeDownloadsWatcherService.cs" />
+    <Compile Include="Model\Launchers\SwiftSearchLauncherGlobalShortcutProvider.cs" />
     <Compile Include="Model\Settings\SettingsPropertyAttribute.cs" />
     <Compile Include="Properties\Settings.cs" />
     <Compile Include="Style\CustomizedWindow\VS2012WindowStyle.cs" />
@@ -319,29 +338,30 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\musiccollectionmanagerlogo.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Libs\ApplicationServiceModel\ApplicationServiceModel.csproj">
-      <Project>{b7d69bf7-b8f9-46ff-963c-93ed9c8d5f47}</Project>
+    <ProjectReference Include="..\..\..\Libs\Core\ApplicationServiceModel\ApplicationServiceModel.csproj">
+      <Project>{B7D69BF7-B8F9-46FF-963C-93ED9C8D5F47}</Project>
       <Name>ApplicationServiceModel</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Libs\MMK\MMK.csproj">
+    <ProjectReference Include="..\..\..\Libs\Core\MMK\MMK.csproj">
       <Project>{A9193781-F0F5-406C-BC5F-312AE4F516F3}</Project>
       <Name>MMK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Libs\Core\PresentationStyles\PresentationStyles.csproj">
+      <Project>{05f2e7a7-ae33-47ac-8073-b6f56fe3f2dc}</Project>
+      <Name>PresentationStyles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Libs\Presentation\Presentation.csproj">
+      <Project>{51a0c435-391f-44f2-a4b0-3d8623c2bc6b}</Project>
+      <Name>Presentation</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Libs\Utils\Utils.csproj">
       <Project>{1A83DD41-36AB-493F-A3C1-2ACAD7FF152F}</Project>
       <Name>Utils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Libs\WPFUtils\WPFUtils.csproj">
-      <Project>{51A0C435-391F-44F2-A4B0-3D8623C2BC6B}</Project>
-      <Name>WPFUtils</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\HotMark\HotMark.csproj">
       <Project>{9731941A-8CE4-4610-AEDB-E6FC4D173D1B}</Project>

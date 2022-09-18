@@ -1,13 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Windows;
 using MMK.ApplicationServiceModel;
 using MMK.Notify.ViewModels;
 using MMK.Notify.Views;
 
 namespace MMK.Notify.Services
 {
-    public class TaskProgressService : Service
+    public class TaskProgressService : InitializableService
     {
         private TaskProgressView taskProgressView;
         private readonly TaskProgressViewModel taskProgressViewModel;
@@ -16,13 +15,14 @@ namespace MMK.Notify.Services
 
         public TaskProgressService()
         {
-            taskProgressViewModel = new TaskProgressViewModel();
+            taskProgressViewModel = IoC.Get<TaskProgressViewModel>();
         }
 
         protected override void OnInitialize()
         {
             taskProgressViewModel.PropertyChanged += OnTaskProgressViewModelPropertyChanged;
             taskProgressViewModel.LoadData();
+
             taskProgressView = new TaskProgressView {DataContext = taskProgressViewModel};
             taskProgressView.Closed += (s, e) => taskProgressViewModel.UnloadData();
             taskProgressView.Show();
@@ -34,16 +34,16 @@ namespace MMK.Notify.Services
                 OnStateChanged();
         }
 
-        public override void Start()
+        protected override void OnStart()
         {
-            if(!taskProgressViewModel.IsProgress)
+            if (!taskProgressViewModel.IsProgress)
                 return;
 
             taskProgressViewModel.IsVisible = true;
             taskProgressView.Activate();
         }
 
-        public override void Stop()
+        protected override void OnStop()
         {
             taskProgressViewModel.IsVisible = false;
         }

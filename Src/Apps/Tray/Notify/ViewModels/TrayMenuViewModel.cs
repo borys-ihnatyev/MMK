@@ -1,155 +1,59 @@
-﻿using System;
-using System.ComponentModel;
-using System.Windows;
-using System.Windows.Input;
-using MMK.ApplicationServiceModel;
+﻿using System.Windows.Input;
 using MMK.Notify.Model.Service;
-using MMK.Notify.Model.Settings;
 using MMK.Notify.Properties;
 using MMK.Notify.Services;
-using MMK.Notify.Views;
-using MMK.Wpf;
-using MMK.Wpf.ViewModel;
+using MMK.Presentation.Tools;
+using MMK.Presentation.ViewModel;
 
 namespace MMK.Notify.ViewModels
 {
     public class TrayMenuViewModel : ViewModel
     {
-        private bool isVisible = true;
-        private Window hashTagFoldersWindow;
-
-        private bool isEnableHotKeys;
-        private bool isEnableDownloadsWatch;
-
-        public TrayMenuViewModel()
+        public TrayMenuViewModel(GlobalShortcutService shortcutService, IDownloadsWatcher downloadsWatcher)
         {
-            OpenHashTagFoldersWindowCommand = new Command(OpenHashTagFoldersWindowCommandAction);
+            StartListenShortcutsCommand = new Command(shortcutService.Start);
+            StopListenShortcutsCommand = new Command(shortcutService.Stop);
 
-            StartListenShortcutsCommand = new Command(IoC.Get<GlobalShortcutService>().Start);
-            StopListenShortcutsCommand = new Command(IoC.Get<GlobalShortcutService>().Stop);
-
-            StartDownloadsWatchingCommand = new Command(IoC.Get<IDownloadsWatcher>().Start);
-            StopDownloadsWatchingCommand = new Command(IoC.Get<IDownloadsWatcher>().Stop);
-
-            ExitCommand = new Command(ExitCommandAction);
-            HideCommand = new Command(HideCommandAction);
-
-            PropertyChanged += OnPropertyChanged;
+            StartDownloadsWatchCommand = new Command(downloadsWatcher.Start);
+            StopDownloadsWatchCommand = new Command(downloadsWatcher.Stop);
         }
 
-        public bool IsVisible
-        {
-            get { return isVisible; }
-            set
-            {
-                if (value == isVisible) return;
-
-                isVisible = value;
-                NotifyPropertyChanged();
-            }
-        }
-
-        [SettingsProperty]
         public bool IsEnableHotKeys
         {
-            get { return isEnableHotKeys; }
+            get { return Settings.Default.IsEnableHotKeys; }
             set
             {
-                if (value == isEnableHotKeys)
+                if (value == IsEnableHotKeys)
                     return;
-                isEnableHotKeys = value;
+                Settings.Default.IsEnableHotKeys = value;
                 NotifyPropertyChanged();
             }
         }
 
-        [SettingsProperty]
         public bool IsEnableDownloadsWatch
         {
-            get { return isEnableDownloadsWatch; }
+            get { return Settings.Default.IsEnableDownloadsWatch; }
             set
             {
-                if (value == isEnableDownloadsWatch)
+                if (value == IsEnableDownloadsWatch)
                     return;
-                isEnableDownloadsWatch = value;
+                Settings.Default.IsEnableDownloadsWatch = value;
                 NotifyPropertyChanged();
             }
         }
-
-
-        protected override void OnLoadData()
-        {
-            LoadSettings();
-        }
-
-        private void LoadSettings()
-        {
-            IsEnableHotKeys = Settings.Default.IsEnableHotKeys;
-            IsEnableDownloadsWatch = Settings.Default.IsEnableDownloadsWatch;
-
-            if (isEnableHotKeys)
-                StartListenShortcutsCommand.Execute(null);
-
-            if (IsEnableDownloadsWatch)
-                StartDownloadsWatchingCommand.Execute(null);
-        }
-
-
-        private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            var propertyName = e.PropertyName;
-
-            if (IsSettingsProperty(propertyName))
-                SaveSettings();
-        }
-
-        private bool IsSettingsProperty(string propertyName)
-        {
-            return Attribute.IsDefined(GetType().GetProperty(propertyName), typeof (SettingsPropertyAttribute));
-        }
-
-        private void SaveSettings()
-        {
-            Settings.Default.IsEnableHotKeys = IsEnableHotKeys;
-            Settings.Default.IsEnableDownloadsWatch = IsEnableDownloadsWatch;
-            Settings.Default.Save();
-        }
-
 
         public ICommand StartListenShortcutsCommand { get; set; }
         public ICommand StopListenShortcutsCommand { get; set; }
+        public ICommand StartDownloadsWatchCommand { get; private set; }
+        public ICommand StopDownloadsWatchCommand { get; private set; }
 
-        public ICommand StartDownloadsWatchingCommand { get; private set; }
-        public ICommand StopDownloadsWatchingCommand { get; private set; }
-
-        public ICommand OpenHashTagFoldersWindowCommand { get; private set; }
-
-        private void OpenHashTagFoldersWindowCommandAction()
+        protected override void OnLoadData()
         {
-            if (hashTagFoldersWindow == null)
-            {
-                hashTagFoldersWindow = new HashTagFoldersWindow();
-                hashTagFoldersWindow.Closed += (sender, args) => hashTagFoldersWindow = null;
-                hashTagFoldersWindow.Show();
-            }
-            else
-                hashTagFoldersWindow.Focus();
-        }
+            if (IsEnableHotKeys)
+                StartListenShortcutsCommand.Execute(null);
 
-
-        public ICommand ExitCommand { get; private set; }
-
-        private void ExitCommandAction()
-        {
-            IsVisible = false;
-            Application.Current.Shutdown();
-        }
-
-
-        public ICommand HideCommand { get; private set; }
-
-        private void HideCommandAction()
-        {
-            IsVisible = false;
+            if (IsEnableDownloadsWatch)
+                StartDownloadsWatchCommand.Execute(null);
         }
     }
 }

@@ -6,8 +6,8 @@
     <ProjectGuid>{6173B716-B8CA-439C-8E57-68309510CC0E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MMK.Tests</RootNamespace>
-    <AssemblyName>MMK.Tests</AssemblyName>
+    <RootNamespace>MMK</RootNamespace>
+    <AssemblyName>MMK.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -35,6 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Moq, Version=4.2.1409.1722, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Moq.4.2.1409.1722\lib\net40\Moq.dll</HintPath>
@@ -71,12 +72,15 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Base\FileUsageTestFixture.cs" />
+    <Compile Include="Marking\Parsing\HashTagParserTest.cs" />
+    <Compile Include="Marking\Parsing\KeyHashTagParserTest.cs" />
     <Compile Include="Processing\AutoFolder\HashTagFolderCollectionTest.cs" />
     <Compile Include="KeyTests.cs" />
     <Compile Include="Marking\HashTagModelTest.cs" />
     <Compile Include="Marking\HashTagTest.cs" />
     <Compile Include="Marking\Parsing\HashTagModelParserTest.cs" />
     <Compile Include="Processing\AutoFolder\MusicFolderLocationParserTest.cs" />
+    <Compile Include="Processing\CoverArtResolverTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuintCircleTests.cs" />
   </ItemGroup>
@@ -84,8 +88,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Src\Libs\MMK\MMK.csproj">
-      <Project>{a9193781-f0f5-406c-bc5f-312ae4f516f3}</Project>
+    <ProjectReference Include="..\..\..\Src\Libs\Core\MMK\MMK.csproj">
+      <Project>{A9193781-F0F5-406C-BC5F-312AE4F516F3}</Project>
       <Name>MMK</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Src\Libs\Utils\Utils.csproj">

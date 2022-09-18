@@ -2,14 +2,14 @@
                          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                          xmlns:viewModels="clr-namespace:MMK.Notify.ViewModels">
     <viewModels:HashTagFoldersViewModel.Folders>
-        <FolderViewModel Path="D:\music\main">
+        <FolderViewModel Path="H:\music\main">
             <FolderViewModel.Patterns>
                 <FolderPatternViewModel PatternString="#deep" Priority="3" />
                 <FolderPatternViewModel PatternString="#newdisco" Priority="3" />
             </FolderViewModel.Patterns>
         </FolderViewModel>
 
-        <FolderViewModel Path="D:\music\pop">
+        <FolderViewModel Path="H:\music\pop">
             <FolderViewModel.Patterns>
                 <FolderPatternViewModel PatternString="#pop" />
                 <FolderPatternViewModel PatternString="#rus" />
@@ -17,7 +17,7 @@
             </FolderViewModel.Patterns>
         </FolderViewModel>
 
-        <FolderViewModel Path="D:\music\spec">
+        <FolderViewModel Path="H:\music\spec">
             <FolderViewModel.Patterns>
                 <FolderPatternViewModel PatternString="#spec" Priority="2" />
                 <FolderPatternViewModel PatternString="#rnb" Priority="4" />

@@ -1,6 +1,6 @@
-﻿using System.Windows.Forms;
+﻿using System.Windows;
 using System.Windows.Input;
-using MMK.Wpf.Windows;
+using MMK.Presentation.Windows;
 
 namespace MMK.Notify.Views
 {
@@ -29,16 +29,16 @@ namespace MMK.Notify.Views
             {
                 case Taskbar.TaskbarPosition.Bottom:
                 case Taskbar.TaskbarPosition.Right:
-                    Top = Screen.PrimaryScreen.WorkingArea.Bottom - Height - 7;
-                    Left = Screen.PrimaryScreen.WorkingArea.Right - Width - 7;
+                    Top = SystemParameters.WorkArea.Bottom - Height - 7;
+                    Left = SystemParameters.WorkArea.Right - Width - 7;
                     break;
                 case Taskbar.TaskbarPosition.Left:
-                    Top = Screen.PrimaryScreen.WorkingArea.Bottom - Height - 7;
-                    Left = Screen.PrimaryScreen.WorkingArea.Left + 7;
+                    Top = SystemParameters.WorkArea.Bottom - Height - 7;
+                    Left = SystemParameters.WorkArea.Left + 7;
                     break;
                 case Taskbar.TaskbarPosition.Top:
-                    Top = Screen.PrimaryScreen.WorkingArea.Top + 7;
-                    Left = Screen.PrimaryScreen.WorkingArea.Right - Width - 7;
+                    Top = SystemParameters.WorkArea.Top + 7;
+                    Left = SystemParameters.WorkArea.Right - Width - 7;
                     break;
             }
         }

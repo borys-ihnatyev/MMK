@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace MMK.Tests
+namespace MMK
 {
     [TestFixture]
     public class QuintCircleTest

@@ -2,12 +2,9 @@
 using System.ComponentModel;
 using System.Timers;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Media.Animation;
 using MMK.Notify.ViewModels;
-using MMK.Wpf.Windows;
-using Application = System.Windows.Application;
-using Timer = System.Timers.Timer;
+using MMK.Presentation.Windows;
 
 namespace MMK.Notify.Views
 {
@@ -56,10 +53,10 @@ namespace MMK.Notify.Views
                 case Taskbar.TaskbarPosition.Bottom:
                 case Taskbar.TaskbarPosition.Right:
                 case Taskbar.TaskbarPosition.Top:
-                    Left = Screen.PrimaryScreen.WorkingArea.Right - e.NewSize.Width - 5;
+                    Left = SystemParameters.WorkArea.Right - e.NewSize.Width - 5;
                     break;
                 case Taskbar.TaskbarPosition.Left:
-                    Left = Screen.PrimaryScreen.WorkingArea.Left + 5;
+                    Left = SystemParameters.WorkArea.Left + 5;
                     break;
             }
         }
@@ -90,10 +87,10 @@ namespace MMK.Notify.Views
                 case Taskbar.TaskbarPosition.Left:
                 case Taskbar.TaskbarPosition.Bottom:
                 case Taskbar.TaskbarPosition.Right:
-                    Top = Screen.PrimaryScreen.WorkingArea.Bottom - Height - 7;
+                    Top = SystemParameters.WorkArea.Bottom - Height - 7;
                     break;
                 case Taskbar.TaskbarPosition.Top:
-                    Top = Screen.PrimaryScreen.WorkingArea.Top + 7;
+                    Top = SystemParameters.WorkArea.Top + 7;
                     break;
             }
         }

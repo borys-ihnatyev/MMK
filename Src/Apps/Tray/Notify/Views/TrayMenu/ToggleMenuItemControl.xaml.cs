@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Input;
-using MMK.Wpf;
+using MMK.Presentation.Tools;
 
 namespace MMK.Notify.Views.TrayMenu
 {

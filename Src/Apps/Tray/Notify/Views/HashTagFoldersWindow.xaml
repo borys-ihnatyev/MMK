@@ -8,7 +8,7 @@
         Title="# FolderCollection collection" Height="300" Width="600"
         Icon="pack://siteoforigin:,,,/Resources/settings-26.png"
         d:DataContext="{d:DesignData Source=../DesignData/HashTagFoldersViewModel.xaml}"
-        Style="{StaticResource VS2012WindowStyle}">
+        Style="{StaticResource Vs2012WindowStyle}">
     <Window.Resources>
 
         <m:BooleanToColorErrorConverter x:Key="ErrorColorConverter"

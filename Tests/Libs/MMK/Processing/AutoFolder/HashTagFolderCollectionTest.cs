@@ -1,10 +1,9 @@
 ﻿using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using MMK.Marking.Representation;
-using MMK.Processing.AutoFolder;
 using NUnit.Framework;
 
-namespace MMK.Tests.Processing.AutoFolder
+namespace MMK.Processing.AutoFolder
 {
     [TestFixture]
     public class HashTagFolderCollectionTest
@@ -17,8 +16,8 @@ namespace MMK.Tests.Processing.AutoFolder
         {
             new HashTagFolderCollection
             {
-                {@"D:\music\pop\", "#pop"},
-                {@"D:\music\deep\", "#pop"},
+                {@"H:\music\pop\", "#pop"},
+                {@"H:\music\deep\", "#pop"},
             };
         }
 
@@ -29,10 +28,10 @@ namespace MMK.Tests.Processing.AutoFolder
         {
             new HashTagFolderCollection
             {
-                {@"D:\music\house\", "#pop #house"},
-                {@"D:\music\house\", "#house"},
-                {@"D:\music\pop\", "#pop #house"},
-                {@"D:\music\pop\", "#pop"}
+                {@"H:\music\house\", "#pop #house"},
+                {@"H:\music\house\", "#house"},
+                {@"H:\music\pop\", "#pop #house"},
+                {@"H:\music\pop\", "#pop"}
             };
         }
 
@@ -42,8 +41,8 @@ namespace MMK.Tests.Processing.AutoFolder
         {
             new HashTagFolderCollection
             {
-                {@"D:\music\pop\", "#pop #house"},
-                {@"D:\music\deep\", "#house #pop"}
+                {@"H:\music\pop\", "#pop #house"},
+                {@"H:\music\deep\", "#house #pop"}
             };
         }
 
@@ -54,18 +53,18 @@ namespace MMK.Tests.Processing.AutoFolder
         {
             var collection = new HashTagFolderCollection
             {
-                {@"D:\music\pop\", "#pop #house"}
+                {@"H:\music\pop\", "#pop #house"}
             };
-            collection.Add(@"D:\music\deep\", "#pop");
+            collection.Add(@"H:\music\deep\", "#pop");
         }
 
         [Test]
         public void GetMatchPath_WhenExists_1()
         {
-            var popFolderPath = PathExtension.Normalize(@"D:\music\pop\");
-            var houseFolderPath = PathExtension.Normalize(@"D:\music\house\");
-            var mainFolderPath = PathExtension.Normalize(@"D:\music\deep\");
-            var specFolderPath = PathExtension.Normalize(@"D:\music\spec\");
+            var popFolderPath = PathExtension.Normalize(@"H:\music\pop\");
+            var houseFolderPath = PathExtension.Normalize(@"H:\music\house\");
+            var mainFolderPath = PathExtension.Normalize(@"H:\music\deep\");
+            var specFolderPath = PathExtension.Normalize(@"H:\music\spec\");
 
             var collection = new HashTagFolderCollection
             {
@@ -99,9 +98,9 @@ namespace MMK.Tests.Processing.AutoFolder
         [Test]
         public void MustMoveToMorePrioritySubsetofModel()
         {
-            const string popPath = @"d:\music\pop";
-            const string housePath = @"d:\music\house";
-            const string mainPath = @"d:\music\deep";
+            const string popPath = @"H:\music\pop";
+            const string housePath = @"H:\music\house";
+            const string mainPath = @"H:\music\deep";
 
             var collection = new HashTagFolderCollection
             {
@@ -148,11 +147,11 @@ namespace MMK.Tests.Processing.AutoFolder
 
         private static HashTagFolderCollection MakeTestCollection()
         {
-            var popFolderPath = PathExtension.Normalize(@"D:\music\pop\");
-            var houseFolderPath = PathExtension.Normalize(@"D:\music\house\");
-            var mainFolderPath = PathExtension.Normalize(@"D:\music\deep\");
-            var specFolderPath = PathExtension.Normalize(@"D:\music\spec\");
-            var mixesFolderPath = PathExtension.Normalize(@"D:\music\mixes\");
+            var popFolderPath = PathExtension.Normalize(@"H:\music\pop\");
+            var houseFolderPath = PathExtension.Normalize(@"H:\music\house\");
+            var mainFolderPath = PathExtension.Normalize(@"H:\music\deep\");
+            var specFolderPath = PathExtension.Normalize(@"H:\music\spec\");
+            var mixesFolderPath = PathExtension.Normalize(@"H:\music\mixes\");
 
             return new HashTagFolderCollection
             {

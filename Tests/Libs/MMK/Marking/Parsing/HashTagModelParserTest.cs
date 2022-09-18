@@ -1,9 +1,8 @@
 ﻿using System.Linq;
-using MMK.Marking;
 using MMK.Marking.Representation;
 using NUnit.Framework;
 
-namespace MMK.Tests.Marking.Parsing
+namespace MMK.Marking.Parsing
 {
     public class HashTagModelParserTest
     {
@@ -20,7 +19,14 @@ namespace MMK.Tests.Marking.Parsing
         public void Parsing_WithMergedHashTags()
         {
             const string hashTagModelString = " #amoll  #pop#dance  #gift";
+            var hashTagModel = HashTagModel.Parser.All(hashTagModelString);
+            Assert.AreEqual(3, hashTagModel.Count);
+        }
 
+        [Test]
+        public void Parsing_WithMetaHashTags()
+        {
+            const string hashTagModelString = " #amoll  #pop@dance  #gift";
             var hashTagModel = HashTagModel.Parser.All(hashTagModelString);
             Assert.AreEqual(3, hashTagModel.Count);
         }

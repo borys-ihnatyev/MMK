@@ -8,7 +8,7 @@ using MMK.Notify.Observer.Tasking.Common;
 
 namespace MMK.HotMark.Model
 {
-    public sealed class ChangeHashTagModel : HashTagModelChangeModel
+    public sealed class ChangeHashTagModel : HashTagModelChangeNotify
     {
         public ChangeHashTagModel(IEnumerable<string> paths, IEnumerable<HashTag> initialConjointHashTagModel)
             : base(paths, initialConjointHashTagModel)

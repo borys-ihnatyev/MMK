@@ -4,67 +4,26 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Threading;
+using MMK.ApplicationServiceModel;
 using Timer = System.Timers.Timer;
 
 namespace MMK.Notify.Observer.Tasking.Observing
 {
-    public sealed partial class TaskObserver : IDisposable
+    public sealed partial class TaskObserver : IService, IDisposable
     {
         public const int FailedTaskRerunPauseSeconds = 5;
 
+        private readonly ConcurrentQueue<Task> tasks;
         private readonly ManualResetEvent taskRunEvent;
         private readonly AutoResetEvent taskCancelEvent;
-
-        public event EventHandler<TaskQueuedEventArgs> TaskQueued;
-        public event EventHandler<EventArgs> QueueEmpty;
-
-
-        public event EventHandler<NotifyEventArgs> TaskDone;
-
-        public event EventHandler<NotifyEventArgs> TaskObserved;
-
-        public event EventHandler<NotifyEventArgs> TaskFailed;
-
         private Thread thread;
-
-        private readonly ConcurrentQueue<Task> tasks;
 
         public TaskObserver()
         {
             tasks = new ConcurrentQueue<Task>();
-
             taskRunEvent = new ManualResetEvent(false);
             taskCancelEvent = new AutoResetEvent(false);
-
             thread = new Thread(TaskObserverProc);
-        }
-
-        private void OnQueueEmpty()
-        {
-            var handler = QueueEmpty;
-            if (handler != null) 
-                handler(this, new EventArgs(this));
-        }
-
-        private void OnTaskQueued(int taskCount)
-        {
-            var handler = TaskQueued;
-            if(handler!= null)
-                handler(this, new TaskQueuedEventArgs(this, taskCount));
-        }
-
-        private void OnTaskObserved(Task.ObservedInfo info)
-        {
-            Contract.Requires(info != null);
-
-            OnNotifyEvent(TaskObserved, info);
-            OnNotifyEvent(info.IsOk ? TaskDone : TaskFailed, info);
-        }
-
-        private void OnNotifyEvent(EventHandler<NotifyEventArgs> handler, INotifyable message)
-        {
-            if (handler != null)
-                handler(this, new NotifyEventArgs(this, message));
         }
 
         #region Flow
@@ -87,8 +46,9 @@ namespace MMK.Notify.Observer.Tasking.Observing
             {
                 ObserveTask(task);
             }
-            catch (Task.Cancel)
+            catch (Task.Cancel ex)
             {
+                OnNotifyEvent(TaskCanceled, new NotifyMessage{CommonDescription = ex.Message});
             }
         }
 
@@ -99,16 +59,13 @@ namespace MMK.Notify.Observer.Tasking.Observing
             if (observedInfo.IsNeedRerun)
             {
                 observedInfo.MarkRerun();
-                AddTaskWithDeelay(observedInfo.Task);
-
-                if (task.RunCount < 1)
-                    return;
+                AddTaskWithDeelay(task);
+                return;
             }
-            else
-            {
-                if (observedInfo.IsRerunFailed)
-                    observedInfo.UnmarkRerun();
-            }
+            
+            if (observedInfo.IsRerunFailed)
+                observedInfo.UnmarkRerun();
+            
 
             OnTaskObserved(observedInfo);
         }
@@ -176,14 +133,7 @@ namespace MMK.Notify.Observer.Tasking.Observing
                 taskRunEvent.Set();
         }
 
-        public void Pause()
-        {
-            if (!IsRunning) return;
-
-            taskRunEvent.Reset();
-        }
-
-        public void Cancell()
+        public void Stop()
         {
             if (!IsStarted) return;
 
@@ -196,6 +146,13 @@ namespace MMK.Notify.Observer.Tasking.Observing
             thread.Join();
             taskRunEvent.Reset();
             thread = new Thread(TaskObserverProc);
+        }
+
+        public void Pause()
+        {
+            if (!IsRunning) return;
+
+            taskRunEvent.Reset();
         }
 
         #endregion
@@ -221,14 +178,52 @@ namespace MMK.Notify.Observer.Tasking.Observing
                 taskRunEvent.Set();
         }
 
-
         #endregion
 
         public void Dispose()
         {
-            Cancell();
+            Stop();
             taskRunEvent.Dispose();
             taskCancelEvent.Dispose();
         }
+
+        #region Events
+
+        public event EventHandler<TaskQueuedEventArgs> TaskQueued;
+        public event EventHandler<EventArgs> QueueEmpty;
+
+        public event EventHandler<NotifyEventArgs> TaskDone;
+        public event EventHandler<NotifyEventArgs> TaskCanceled;
+        public event EventHandler<NotifyEventArgs> TaskObserved;
+        public event EventHandler<NotifyEventArgs> TaskFailed;
+
+        private void OnQueueEmpty()
+        {
+            var handler = QueueEmpty;
+            if (handler != null)
+                handler(this, new EventArgs(this));
+        }
+
+        private void OnTaskQueued(int taskCount)
+        {
+            var handler = TaskQueued;
+            if (handler != null)
+                handler(this, new TaskQueuedEventArgs(this, taskCount));
+        }
+
+        private void OnTaskObserved(Task.ObservedInfo info)
+        {
+            Contract.Requires(info != null);
+
+            OnNotifyEvent(TaskObserved, info);
+            OnNotifyEvent(info.IsOk ? TaskDone : TaskFailed, info);
+        }
+
+        private void OnNotifyEvent(EventHandler<NotifyEventArgs> handler, INotifyable message)
+        {
+            if (handler != null)
+                handler(this, new NotifyEventArgs(this, message));
+        }
+        #endregion
     }
 }

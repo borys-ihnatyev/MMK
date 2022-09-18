@@ -1,80 +1,99 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics.Contracts;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media.Animation;
 using MMK.HotMark.ViewModels;
 
 namespace MMK.HotMark.Views
 {
     public partial class HotMarkMainView
     {
+        private readonly Action applyChangesAction; 
+
+        private readonly Storyboard showStoryboard;
+        private readonly Storyboard hideStoryboard;
+
         public HotMarkMainView(HotMarkViewModel viewModel)
         {
             InitializeComponent();
-            
+
             DataContext = viewModel;
-
+            (viewModel.HashTags as INotifyPropertyChanged).PropertyChanged += OnHashTagsPropertyChanged;
             Loaded += (s, e) => viewModel.LoadData();
-            Loaded += Window_Loaded;
+            Closed += (s, e) => viewModel.UnloadData();
 
-            Closing += (s, e) => viewModel.UnloadData();
+            applyChangesAction = viewModel.NotifyChange;
 
-            isCloseStoryboardStarted = false;
-            isCloseStoryboardCompletted = false;
+            showStoryboard = FindResource("ShowStoryboard") as Storyboard;
+            Contract.Assume(showStoryboard != null);
+            showStoryboard.Completed += (s, e) => Activate();
+            hideStoryboard = FindResource("HideStoryboard") as Storyboard;
+
+            SizeChanged += OnSizeChanged;
+            MouseDown += OnMouseDown;
         }
 
-        #region Animation Flags
+        #region Event handlers
 
-        private bool isCloseStoryboardStarted;
-        private bool isCloseStoryboardCompletted;
-
-        #endregion
-
-        #region Event Handlers
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void OnHashTagsPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            Focus();
-            Activate();
-        }
-
-        private void CloseStoryboard_Completed(object sender, EventArgs e)
-        {
-            isCloseStoryboardCompletted = true;
-            Close();
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            if (!isCloseStoryboardStarted)
+            if (e.PropertyName == "Selected")
             {
-                isCloseStoryboardStarted = true;
-                RaiseEvent(new RoutedEventArgs(UserCloseEvent));
-                e.Cancel = true;
+                Keyboard.Focus(HashTagEditBox); 
+                HashTagEditBox.TextChanged += HashTagEditBoxPutCarretAtEndOnce;
             }
-            else if (!isCloseStoryboardCompletted)
-                e.Cancel = true;
-
-            base.OnClosing(e);
         }
 
-        #endregion
-
-        #region Events
-
-        public static readonly RoutedEvent UserCloseEvent =
-            EventManager.RegisterRoutedEvent(
-                "UserClose",
-                RoutingStrategy.Direct,
-                typeof (RoutedEventHandler),
-                typeof (HotMarkMainView)
-                );
-
-        public event RoutedEventHandler UserClose
+        private void HashTagEditBoxPutCarretAtEndOnce(object sender, TextChangedEventArgs textChangedEventArgs)
         {
-            add { AddHandler(UserCloseEvent, value); }
-            remove { RemoveHandler(UserCloseEvent, value); }
+            HashTagEditBox.CaretIndex = Int32.MaxValue;
+            HashTagEditBox.TextChanged -= HashTagEditBoxPutCarretAtEndOnce;
+        }
+ 
+
+        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (!e.WidthChanged)
+                return;
+            Left = SystemParameters.WorkArea.Left + (SystemParameters.WorkArea.Width - e.NewSize.Width)/2;
+        }
+
+        private void OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if(ReferenceEquals(sender, this))
+                if (e.ChangedButton == MouseButton.Left)
+                {
+                    SizeChanged -= OnSizeChanged;
+                    DragMove();
+                }
         }
 
         #endregion
+
+        public new void Show()
+        {
+            hideStoryboard.Stop();
+            showStoryboard.Begin(this);
+        }
+
+        public new void Hide()
+        {
+            showStoryboard.Stop();
+            hideStoryboard.Begin(this);
+        }
+
+        private void OnCloseCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            var applyChanges = (bool)e.Parameter;
+            
+            if(applyChanges)
+                Closed += (s, a) => applyChangesAction();
+
+            hideStoryboard.Completed += (s, a) => Close();
+            Hide();
+        }
     }
 }

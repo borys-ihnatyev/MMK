@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 
+// ReSharper disable once CheckNamespace
 namespace System
 {
     public static class StringExtension
@@ -65,6 +66,12 @@ namespace System
             }
 
             return index;
+        }
+
+        public static string RemoveNewLines(this string value)
+        {
+            return value.Replace("\r", "")
+                .Replace("\n", " ");
         }
     }
 }

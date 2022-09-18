@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using System.IO;
 
 namespace MMK.Utils
@@ -7,6 +8,12 @@ namespace MMK.Utils
     {
         public static bool HasExtension(string filePath, string extension)
         {
+            if (filePath == null) 
+                throw new ArgumentNullException("filePath");
+            if(extension == null)
+                throw new ArgumentNullException("extension");
+            Contract.EndContractBlock();
+
             extension = extension.Trim(' ','*');
             var fileExtension = Path.GetExtension(filePath);
             return extension.Equals(fileExtension, StringComparison.OrdinalIgnoreCase);

@@ -1,16 +1,16 @@
 <ResourceDictionary
-    x:Class="Whush.Demo.Styles.CustomizedWindow.Vs2012WindowStyle"
+    x:Class="MMK.Notify.Style.CustomizedWindow.Vs2012WindowStyle"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <SolidColorBrush x:Key="TitleBarBackgroundBrush" Color="#EFEFF2" />
-    <SolidColorBrush x:Key="VS2012WindowBorderBrush" Color="#5A47FF" />
-    <SolidColorBrush x:Key="VS2012WindowBusyBorderBrush" Color="#CA5100" />
-    <SolidColorBrush x:Key="VS2012WindowBorderBrushInactive" Color="#999999" />
-    <SolidColorBrush x:Key="VS2012WindowStatusForeground" Color="#FFFFFF" />
-    <SolidColorBrush x:Key="VS2012WindowStatusForegroundInactive" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="Vs2012WindowBorderBrush" Color="#5A47FF" />
+    <SolidColorBrush x:Key="Vs2012WindowBusyBorderBrush" Color="#CA5100" />
+    <SolidColorBrush x:Key="Vs2012WindowBorderBrushInactive" Color="#999999" />
+    <SolidColorBrush x:Key="Vs2012WindowStatusForeground" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="Vs2012WindowStatusForegroundInactive" Color="#FFFFFF" />
 
-    <Style x:Key="VS2012WindowStyleTitleBarButton" TargetType="{x:Type Button}">
+    <Style x:Key="Vs2012WindowStyleTitleBarButton" TargetType="{x:Type Button}">
         <Setter Property="Focusable" Value="false" />
         <Setter Property="Template">
             <Setter.Value>
@@ -28,7 +28,7 @@
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="PART_border" Property="Background"
-                                    Value="{StaticResource VS2012WindowBorderBrush}" />
+                                    Value="{StaticResource Vs2012WindowBorderBrush}" />
                             <Setter TargetName="PART_border" Property="Opacity" Value="1" />
                             <Setter Property="Foreground" Value="#FFF" />
                         </Trigger>
@@ -38,11 +38,12 @@
         </Setter>
     </Style>
 
-    <Style x:Key="VS2012WindowStyle" TargetType="{x:Type Window}">
+    <Style x:Key="Vs2012WindowStyle" TargetType="{x:Type Window}">
         <Setter Property="AllowsTransparency" Value="true" />
         <Setter Property="WindowStyle" Value="None" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="ResizeMode" Value="CanResizeWithGrip" />
+        
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Window}">
@@ -52,6 +53,7 @@
                     between maximized window and screen edges; smaller numbers show parts of
                     the window outside of the current monitor on multi-display computers.
                     -->
+                    
                     <Grid
                         Margin="7"
                         TextOptions.TextRenderingMode="ClearType"
@@ -61,19 +63,10 @@
                             Width="Auto"
                             Height="Auto"
                             Background="#EFEFF2"
+                            BorderBrush="{StaticResource Vs2012WindowBorderBrush}"
                             BorderThickness="1"
                             Padding="0">
-                            <Border.Style>
-                                <Style TargetType="Border">
-                                    <Setter Property="BorderBrush" Value="{StaticResource VS2012WindowBorderBrush}" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsProcessingStarted}" Value="True">
-                                            <Setter Property="BorderBrush"
-                                                    Value="{StaticResource VS2012WindowBusyBorderBrush}" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Border.Style>
+                            
                             <Border.Effect>
                                 <DropShadowEffect
                                     Color="black"
@@ -82,6 +75,7 @@
                                     ShadowDepth="2"
                                     Direction="315" />
                             </Border.Effect>
+                            
                             <DockPanel
                                 HorizontalAlignment="Stretch"
                                 Background="Transparent"
@@ -126,7 +120,7 @@
                                             VerticalAlignment="Top"
                                             Width="34"
                                             Height="26"
-                                            Style="{StaticResource VS2012WindowStyleTitleBarButton}"
+                                            Style="{StaticResource Vs2012WindowStyleTitleBarButton}"
                                             Click="MinButtonClick">
                                             <Grid MaxHeight="9" MaxWidth="9">
                                                 <Path
@@ -143,7 +137,7 @@
                                             VerticalAlignment="Top"
                                             Width="34"
                                             Height="26"
-                                            Style="{StaticResource VS2012WindowStyleTitleBarButton}"
+                                            Style="{StaticResource Vs2012WindowStyleTitleBarButton}"
                                             Click="MaxButtonClick">
                                             <Grid MaxHeight="9" MaxWidth="9">
                                                 <Path
@@ -161,7 +155,7 @@
                                             VerticalAlignment="Top"
                                             Width="34"
                                             Height="26"
-                                            Style="{StaticResource VS2012WindowStyleTitleBarButton}"
+                                            Style="{StaticResource Vs2012WindowStyleTitleBarButton}"
                                             Click="CloseButtonClick">
                                             <Grid MaxHeight="9" MaxWidth="9">
                                                 <Path
@@ -208,19 +202,25 @@
                             X1="{TemplateBinding ActualWidth}" X2="{TemplateBinding ActualWidth}" Y1="1"
                             Y2="{TemplateBinding ActualHeight}"
                             StrokeThickness="3" />
+                        
                         <Rectangle MouseDown="OnSizeNorthWest" x:Name="rectSizeNorthWest" Cursor="SizeNWSE"
-                                   Fill="Transparent" Width="5" Height="5" VerticalAlignment="Top"
+                                   Fill="Transparent" Width="5" Height="5" 
+                                   VerticalAlignment="Top"
                                    HorizontalAlignment="Left" />
                         <Rectangle MouseDown="OnSizeNorthEast" x:Name="rectSizeNorthEast" Cursor="SizeNESW"
-                                   Fill="Transparent" Width="5" Height="5" VerticalAlignment="Top"
+                                   Fill="Transparent" Width="5" Height="5" 
+                                   VerticalAlignment="Top"
                                    HorizontalAlignment="Right" />
                         <Rectangle MouseDown="OnSizeSouthWest" x:Name="rectSizeSouthWest" Cursor="SizeNESW"
-                                   Fill="Transparent" Width="5" Height="5" VerticalAlignment="Bottom"
+                                   Fill="Transparent" Width="5" Height="5" 
+                                   VerticalAlignment="Bottom"
                                    HorizontalAlignment="Left" />
                         <Rectangle MouseDown="OnSizeSouthEast" x:Name="rectSizeSouthEast" Cursor="SizeNWSE"
-                                   Fill="Transparent" Width="5" Height="5" VerticalAlignment="Bottom"
+                                   Fill="Transparent" Width="5" Height="5" 
+                                   VerticalAlignment="Bottom"
                                    HorizontalAlignment="Right" />
                     </Grid>
+                    
                     <ControlTemplate.Triggers>
                         <Trigger Property="WindowState" Value="Maximized">
                             <Setter TargetName="PART_MaxButton_Path" Property="Data"
@@ -228,33 +228,33 @@
                         </Trigger>
                         <Trigger Property="IsActive" Value="False">
                             <Setter TargetName="PART_Border" Property="BorderBrush"
-                                    Value="{StaticResource VS2012WindowBorderBrushInactive}" />
+                                    Value="{StaticResource Vs2012WindowBorderBrushInactive}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
+                    
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        
         <Style.Resources>
+            
             <Style TargetType="{x:Type StatusBar}">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding IsActive, RelativeSource={RelativeSource AncestorType=Window}}"
                                  Value="True">
-                        <Setter Property="Foreground" Value="{StaticResource VS2012WindowStatusForeground}" />
-                        <Setter Property="Background" Value="{StaticResource VS2012WindowBorderBrush}" />
-                    </DataTrigger>
-
-
-                    <DataTrigger Binding="{Binding IsProcessingStarted}" Value="True">
-                        <Setter Property="Background" Value="{StaticResource VS2012WindowBusyBorderBrush}" />
+                        <Setter Property="Foreground" Value="{StaticResource Vs2012WindowStatusForeground}" />
+                        <Setter Property="Background" Value="{StaticResource Vs2012WindowBorderBrush}" />
                     </DataTrigger>
 
                     <DataTrigger Binding="{Binding IsActive, RelativeSource={RelativeSource AncestorType=Window}}"
                                  Value="False">
-                        <Setter Property="Foreground" Value="{StaticResource VS2012WindowStatusForegroundInactive}" />
-                        <Setter Property="Background" Value="{StaticResource VS2012WindowBorderBrushInactive}" />
+                        <Setter Property="Foreground" Value="{StaticResource Vs2012WindowStatusForegroundInactive}" />
+                        <Setter Property="Background" Value="{StaticResource Vs2012WindowBorderBrushInactive}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
+            
         </Style.Resources>
+        
     </Style>
 </ResourceDictionary>

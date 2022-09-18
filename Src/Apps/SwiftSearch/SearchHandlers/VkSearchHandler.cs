@@ -2,17 +2,10 @@
 
 namespace MMK.SwiftSearch.SearchHandlers
 {
-    sealed public class VkSearchHandler : WebSearchHandler
+    sealed class VkSearchHandler : WebSearchHandler
     {
-        public const string Identifyer = "@vk";
-
         public VkSearchHandler(string searchModel) : base(searchModel)
         {
-        }
-
-        public override string IdentifyerTag
-        {
-            get { return Identifyer; }
         }
 
         protected override string UrlFormat

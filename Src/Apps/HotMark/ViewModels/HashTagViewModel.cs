@@ -1,7 +1,6 @@
-﻿using System.Windows.Media;
+﻿using System;
 using MMK.Marking;
-using MMK.Wpf;
-using MMK.Wpf.ViewModel;
+using MMK.Presentation.ViewModel;
 
 namespace MMK.HotMark.ViewModels
 {
@@ -10,7 +9,6 @@ namespace MMK.HotMark.ViewModels
         private HashTag hashTag;
         private string hashTagValue;
         private bool isSelected;
-        private SolidColorBrush itemBackground;
 
         public HashTagViewModel(string hashTagValue)
         {
@@ -39,27 +37,14 @@ namespace MMK.HotMark.ViewModels
             get { return hashTagValue; }
             set
             {
-                value = value.Replace(" ", "").ToLower();
+                value = value.Trim().ToLower();
                 if (value == hashTagValue) return;
 
                 hashTagValue = value;
 
                 var hashTagEntry = HashTag.Parser.First(HashTag.Hash + hashTagValue);
-                    
-                HashTag = hashTagEntry == null ? new HashTag() : hashTagEntry.HashTag ;
+                HashTag = hashTagEntry == null ? new HashTag() : hashTagEntry.HashTag;
 
-                NotifyPropertyChanged();
-            }
-        }
-
-        public SolidColorBrush ItemBackground
-        {
-            get { return itemBackground; }
-            set
-            {
-                if (Equals(value, itemBackground)) return;
-
-                itemBackground = value;
                 NotifyPropertyChanged();
             }
         }
@@ -72,13 +57,18 @@ namespace MMK.HotMark.ViewModels
                 if (Equals(value, hashTag)) return;
 
                 hashTag = value;
-                if (hashTag is KeyHashTag)
-                    ItemBackground = KeyColorConverter.Convert((hashTag as KeyHashTag).Key);
-                else
-                    ItemBackground = Brushes.White;
-
                 NotifyPropertyChanged();
             }
+        }
+
+        public bool IsEmpty
+        {
+            get { return String.IsNullOrWhiteSpace(HashTagValue); }
+        }
+
+        public override string ToString()
+        {
+            return HashTag.ToString();
         }
     }
 }

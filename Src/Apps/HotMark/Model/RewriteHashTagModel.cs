@@ -6,7 +6,7 @@ using MMK.Notify.Observer.Tasking.Common;
 
 namespace MMK.HotMark.Model
 {
-    public sealed class RewriteHashTagModel : HashTagModelChangeModel
+    public sealed class RewriteHashTagModel : HashTagModelChangeNotify
     {
         public RewriteHashTagModel(IEnumerable<string> paths, IEnumerable<HashTag> initialConjointHashTagModel)
             : base(paths, initialConjointHashTagModel)

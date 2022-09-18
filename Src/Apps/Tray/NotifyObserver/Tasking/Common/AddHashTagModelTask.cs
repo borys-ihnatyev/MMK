@@ -1,27 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using MMK.Marking.Representation;
 
 namespace MMK.Notify.Observer.Tasking.Common
 {
-    [Serializable]
     public sealed class AddHashTagModelTask : ChangeHashTagModelTask
     {
-        public static IEnumerable<Task> Many(IEnumerable<string> paths, HashTagModel add)
+        public AddHashTagModelTask(string filePath, HashTagModel add) : base(filePath, add, null)
         {
-            return paths.Select(p => new AddHashTagModelTask(p, add));
-        }  
-
-        public AddHashTagModelTask(string oldPath, HashTagModel hashTags) 
-            : base(oldPath, hashTags, null)
-        {
-
         }
 
-        protected override HashTagModel MakeNewHashTagModel()
+        public AddHashTagModelTask(HashTagModel add) : base(add, null)
         {
-            return new HashTagModel(AddHashTagModel) + NameModel.HashTagModel;
+        }
+
+        protected override HashTagModel ChangeHashTagModel(HashTagModel hashTagModel)
+        {
+            hashTagModel += Add;
+            return hashTagModel;
+        }
+
+        public static IEnumerable<Task> Many(IEnumerable<string> paths, HashTagModel add)
+        {
+            if (paths == null)
+                throw new ArgumentNullException("paths");
+            if (add == null)
+                throw new ArgumentNullException("add");
+            Contract.EndContractBlock();
+            return paths.Distinct().Select(p => new AddHashTagModelTask(p, add));
         }
     }
 }
